@@ -1398,15 +1398,6 @@ class TrainingScreen(Screen):
         advice_premis_1 = self.first_formula_values(first_formula)
         advice_premis_2 = self.second_formula_values(second_formula)
         function_output_list = self.output2(my_text, my_text2)
-        self.advice_premises_and_conclusion = '  1. premis: ' + advice_premis_1[0] + '-' + advice_premis_1[0] + ' ' + \
-                                      advice_premis_1[
-                                          1] + '-' + advice_premis_1[1] + ' ' + advice_premis_1[2] + '-' + \
-                                      advice_premis_1[2] + ' ' + advice_premis_1[
-                                          3] + '-' + advice_premis_1[3] + "\n" + '  2. premis: ' + advice_premis_2[
-                                          0] + ' ' + \
-                                      advice_premis_2[1] + ' ' + advice_premis_2[2] + ' ' + advice_premis_2[3] + ',' + \
-                                      advice_premis_2[0] + ' ' + advice_premis_2[1] + ' ' + advice_premis_2[2] + ' ' + \
-                                      advice_premis_2[3] + "\n" + '-------------------------------------------' + "\n" + 'conclusion: ' + function_output_list[3][0] + ' ' + function_output_list[3][1] + ' ' + function_output_list[3][0] + ' ' + function_output_list[3][1] + ' ' + function_output_list[3][2] + ' ' + function_output_list[3][3] + ' ' + function_output_list[3][2] + ' ' + function_output_list[3][3]
 
         if function_output_list[4] == 1:
             self.conclusion_label.text = "Contradiction!"
