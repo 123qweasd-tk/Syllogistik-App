@@ -276,19 +276,20 @@ Builder.load_string("""
         Button:
             text: 'P vs. NP-Problem'
             font_size: dp(25)
-            background_normal: ''
-            background_color: 1, 0, .5, .3
+            on_press:
+                import webbrowser
+                webbrowser.open('https://en.wikiversity.org/w/index.php?title=User:123qweasd-tk/Proof_for_NP_unequal_P_by_Thomas_K%C3%A4fer&oldid=2614943')
         Button:
             text: 'SAT'
             font_size: dp(25)
             background_normal: ''
             background_color: 1, 0, .5, .3
         Button:
-            text: 'Syllogism Version from 19:04, 21 May 2018'
+            text: 'Pure Strict syllogistic, Version from 16:44, 15 January 2024'
             font_size: dp(25)
             on_press:
                 import webbrowser
-                webbrowser.open('https://en.wikipedia.org/w/index.php?oldid=842329272#Strict_syllogistic')
+                webbrowser.open('https://en.wikipedia.org/w/index.php?oldid=1195852979#Pure_Strict_syllogistic')
     Button:
         text: "Menu"
         on_press: root.manager.current = 'menu'
