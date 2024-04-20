@@ -15,13 +15,13 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.widget import Widget
 from kivy.graphics import Color
+from kivy.graphics import Rectangle
 from kivy.base import runTouchApp
 from kivy.vector import Vector
 from kivy.uix.scrollview import ScrollView
 
 from kivy.config import Config
 from kivy.config import ConfigParser
-
 
 from settingsjson import settings_json
 import webbrowser
@@ -43,29 +43,37 @@ Builder.load_string("""
             background_normal: ''
             background_color: 1, .3, .4, .85
         Button:
-            text: 'Conclusions (M•P, S•M -> S•P)'
+            text: root.button_conclusion_in_main_menu
+            text_size: self.size
+            halign: 'center'
             font_size: dp(25)
             on_press: root.manager.current = 'menu_conclusions'
             background_normal: ''
-            background_color: 1, .1, .1, .2
+            background_color: 255, 255, 0, .8
         Button:
-            text: 'Total-formulas (M•P, S•M, S•P <-> S•M•P)'
+            text: root.button_total_formulas_in_main_menu
+            text_size: self.size
+            halign: 'center'
             font_size: dp(25)
             on_press: root.manager.current = 'menu-total-formulas'
             background_normal: ''
-            background_color: 1, .1, .1, .2
+            background_color: 0, 1, 0, .2
         Button:
-            text: 'Transformations (S•P <-> S•P)'
+            text: root.button_transformations_in_main_menu
+            text_size: self.size
+            halign: 'center'
             font_size: dp(25)
             on_press: root.manager.current = 'menu_transformations'
             background_normal: ''
             background_color: 1, .2, .4, .3
         Button:
-            text: 'Conditional-Statements (^c)'
+            text: root.button_conditional_statements_in_main_menu
+            text_size: self.size
+            halign: 'center'
             font_size: dp(25)
             on_press: root.manager.current = 'conditional-statements'
             background_normal: ''
-            background_color: 1, .2, .4, .3
+            background_color: .5, .3, .6, .3
         Button:
             text: 'Ressources'
             font_size: dp(25)
@@ -76,6 +84,8 @@ Builder.load_string("""
             text: 'Quit'
             font_size: dp(25)
             on_press: app.stop()
+            background_normal: ''
+            background_color: 1, .5, .3, .3
 
 <GeneralScreen>:
     BoxLayout:
@@ -148,6 +158,7 @@ Builder.load_string("""
         Button:
             text: 'Introduction'
             font_size: dp(25)
+            on_press: root.manager.current = 'menu_conclusion_introduction'
             background_normal: ''
             background_color: 1, .1, .1, .2
         Button:
@@ -169,6 +180,18 @@ Builder.load_string("""
         size_hint: "0.1", "0.1"
         pos_hint: {"x":0.9,"y":0.9}
 
+<Menu_conclusion_introductionScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        Button:
+            text: 'Table overview'
+            on_press: root.manager.current = 'table_overview'
+            font_size: dp(25)
+            background_normal: ''
+            background_color: 1, .1, .1, .2
+
+<Table_overviewScreen>:
+
 <ConclusionsScreen>:
     Button:
         text: 'Menu'
@@ -182,6 +205,11 @@ Builder.load_string("""
         on_press: root.manager.current = 'menu'
         size_hint: "0.1", "0.1"
         pos_hint: {"x":0.9,"y":0.9}
+    Button:
+        text: 'Generate!'
+        on_press: root.refresh_function()
+        size_hint: "0.1", "0.1"
+        pos_hint: {"x":0.9,"y":0.8}
     Button:
         id: 'settings_button'
         text: 'Settings'
@@ -285,7 +313,9 @@ Builder.load_string("""
             background_normal: ''
             background_color: 1, 0, .5, .3
         Button:
-            text: 'Pure Strict syllogistic, Version from 16:44, 15 January 2024'
+            text: root.text_syllogism_ressource
+            text_size: self.size
+            halign: 'center'
             font_size: dp(25)
             on_press:
                 import webbrowser
@@ -299,7 +329,13 @@ Builder.load_string("""
 """)
 
 class MenuScreen(Screen):
-    pass
+    button_conclusion_in_main_menu = StringProperty('Conclusion\n(M•P, S•M -> S•P)')
+    button_total_formulas_in_main_menu = StringProperty('Total-formulas\n(M•P, S•M, S•P <-> S•M•P)')
+    button_transformations_in_main_menu = StringProperty('Transformations\n(S•P <-> S•P)')
+    button_conditional_statements_in_main_menu = StringProperty('Conditional-Statements\n(^c)')
+
+    def __init__(self, **kwargs):
+        super(RelativeLayout, self).__init__(**kwargs)
 
 class GeneralScreen(Screen):
     pass
@@ -308,25 +344,91 @@ class Menu_introductionScreen(Screen):
     pass
 
 class Menu_introductionScreen_1(Screen):
-    label_Menu_introductionScreen_1_text = StringProperty('Die logischen Prinzipien: \n\nAm Anfang des logischen Denkens ist alles eins (AiAi): \n  B   ~B \n---------\n Ai | Ai \n\n1. Die erste Stufe: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien (das Prinzip der Identität und das Prinzip der Limitation) definiert wird, teilt das Eins in Zwei. Es entstehen vier Möglichkeiten, die sich alle ausschließen. Zudem entstehen Kollektiv-Kennzeichnungen (Au und uN bzw. Nu und uA (unmittelbare Schlüsse)): \n B | ~B \n------------------------------\n A |  u | AiAi | \n u |  N |          | AiAi \n N |  u | AiAi | \n u |  A |          | \n\n Unmittelbare Schlüsse (auf derselben Stufe): \nAN -> Au \nNN -> uN \nusw. \n\n2. Die zweite Stufe: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Zwei in Vier. Es entstehen 16 Möglichkeiten, die sich alle ausschließen. Es entstehen mittelbare Schlüsse zwischen Stufen: \n\nMittelbare Schlüsse zwischen Stufen: \n\n   a) Ganzformel -> Teilformeln: \nANNA -> auau \n            -> aauu \n\n   b) Teilformeln -> Ganzformel: \nuaua und \nuuaa und \n nunu und \nnnuu        -> NNNA \n\n3. Die dritte Stufe: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Vier in Acht. Es entstehen 256 Möglichkeiten, die sich alle ausschließen. Es entstehen mittelbare Schlüsse innerhalb einer Stufe (z. B. die traditionelle (und die vollständige traditionelle) Syllogistik): \n\nMittelbare Schlüsse innerhalb einer Stufe (über Mittelbegriff): \n   c) Teilformeln -> Teilformel: \naauunnaa und \naunaauna           -> auaunana \n\n\n\n\n')
+    label_Menu_introductionScreen_1_text = StringProperty('Die logischen Prinzipien: \n\nAm Anfang des logischen Denkens ist alles eins (AiAi): \n  B   ~B \n---------\n Ai | Ai \n\n1. Die erste Stufe: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien (das Prinzip der Identität und das Prinzip der Limitation) definiert wird, teilt das Eins in Zwei. Es entstehen vier Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen zudem Kollektiv-Kennzeichnungen (Au und uN bzw. Nu und uA (unmittelbare Schlüsse)): \n B | ~B \n------------------------------\n A |  u | AiAi | \n u |  N |          | AiAi \n N |  u | AiAi | \n u |  A |          | \n\n Unmittelbare Schlüsse (auf derselben Stufe): \nAN -> Au \nNN -> uN \nusw. \n\n2. Die zweite Stufe: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Zwei in Vier. Ab nun überschneiden sich Begriffe. Jetzt sind es Zwei. Es entstehen 16 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen mittelbare Schlüsse zwischen Stufen: \n\nMittelbare Schlüsse zwischen Stufen: \n\n   a) Ganzformel -> Teilformeln: \nANNA -> auau \n            -> aauu \n\n   b) Teilformeln -> Ganzformel: \nuaua und \nuuaa und \nnunu und \nnnuu        -> NNNA \n\n3. Die dritte Stufe: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Vier in Acht. Jetzt überschneiden sich drei Begriffe. Es entstehen 256 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen mittelbare Schlüsse innerhalb einer Stufe (z. B. die traditionelle (und die vollständige traditionelle) Syllogistik): \n\nMittelbare Schlüsse innerhalb einer Stufe (über Mittelbegriff): \n   c) Teilformeln -> Teilformel: \naauunnaa und \naunaauna           -> auaunana \n\n\n\n\n')
     
     def __init__(self, **kwargs):
         super(RelativeLayout, self).__init__(**kwargs)
         
+class Menu_conclusion_introductionScreen(Screen):
+    pass
 
-    
+class Table_overviewScreen(Screen):
+
+    def change_screen_menu(self, *args):
+        self.parent.current = 'menu'
+ 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
+        layout = GridLayout(cols = 9)
+        
+        list_text = ['M•P,', 'SaM', 'SäM', 'SeM', 'SëM', 'SiM', 'SïM', 'SoM', 'SöM',
+                     'S•M', ' ', ' ', ' ', '<=>', ' ', '<=>', ' ', ' ',
+                     '->S•P', ' ', ' ', ' ', 'MeS', ' ', 'MiS', ' ', ' ',
+                     'MaP', 'a', 'i', 'ö', 'ë', 'i', '-', '-', 'ö',
+                     ' ', '->i', ' ', ' ', '->o', ' ', ' ', ' ', ' ',
+                     ' ', '->ï', ' ', ' ', '->ö', ' ', ' ', ' ', ' ',
+                     'MäP', 'ï', 'ä', 'e', 'o', '-', 'ï', 'o', '-',
+                     ' ', ' ', '->i', '->o', ' ', ' ', ' ', ' ', ' ',
+                     ' ', ' ', '->ï', '->ö', ' ', ' ', ' ', ' ', ' ',
+                     'MeP', 'e', 'o', 'ï', 'ä', 'o', '-', '-', 'ï',
+                     ' ', '->o', ' ', ' ', '->i', ' ', ' ', ' ', ' ',
+                     ' ', '->ö', ' ', ' ', '->ï', ' ', ' ', ' ', ' ',
+                     'MëP', 'ö', 'ë', 'a', 'i', '-', 'ö', 'i', '-',
+                     '<=>', ' ', '->o', '->i', ' ', ' ', ' ', ' ', ' ',
+                     'PeM', ' ', '->ö', '->ï', ' ', ' ', ' ', ' ', ' ',
+                     'MiP', '-', 'i', 'ö', '-', '-', '-', '-', '-',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     'MïP', 'ï', '-', '-', 'o', '-', '-', '-', '-',
+                     '<=>', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     'PiM', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     'MoP', '-', 'o', 'ï', '-', '-', '-', '-', '-',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     'MöP', 'ö', '-', '-', 'i', '-', '-', '-', '-',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+        
+        for r in range(1,244):
+            lbl = Button(color= (0, 0, 0, 1), background_normal= '', text=(list_text[r-1]))
+            layout.add_widget(lbl)
+
+            if r==2 or r==3 or r==4 or r==5 or r==6 or r==7 or r==8 or r==9 or\
+            r==11 or r==12 or r==13 or r==14 or r==15 or r==16 or r==17 or r==18 or\
+            r==20 or r==21 or r==22 or r==23 or r==24 or r==25 or r==26 or r==27 or\
+            r==28 or r==37 or r==46 or r==55 or r==64 or r==73 or r==82 or r==91 or\
+            r==100 or r==109 or r==118 or r==127 or r==136 or r==145 or r==154 or r==163 or\
+            r==172 or r==181 or r==190 or r==199 or r==208 or r==217 or r==226 or r==235:
+                lbl.background_color=(.7, .6, 1, 1) #synthetic judges
+                
+            elif r==29 or r==30 or r==31 or r==32 or r==33 or r==34 or r==35 or r==36 or\
+            r==56 or r==57 or r==58 or r==59 or r==60 or r==61 or r==62 or r==63 or\
+            r==83 or r==84 or r==85 or r==86 or r==87 or r==88 or r==89 or r==90 or\
+            r==110 or r==111 or r==112 or r==113 or r==114 or r==115 or r==116 or r==117 or\
+            r==137 or r==138 or r==139 or r==140 or r==141 or r==142 or r==143 or r==144 or\
+            r==164 or r==165 or r==166 or r==167 or r==168 or r==169 or r==170 or r==171 or\
+            r==191 or r==192 or r==193 or r==194 or r==195 or r==196 or r==197 or r==198 or\
+            r==218 or r==219 or r==220 or r==221 or r==222 or r==223 or r==224 or r==225:
+                lbl.background_color=(.2, 7, .5, 1) #conclusion judges
+                
+            elif r==38 or r==41 or r==47 or r==50 or r==66 or r==67 or r==75 or r==76 or\
+            r==92 or r==95 or r==101 or r==104 or r==120 or r==121 or r==129 or r==130:
+                lbl.background_color=(.7, 1, .2, 1) #subaltern conclusion judges
+
+        for r in range(1,19):
+            self.menu_button = Button(text=' ', background_normal= '', background_color=(1, 1, 1, .5))
+            layout.add_widget(self.menu_button)
+            self.menu_button.bind(on_press=self.change_screen_menu)        
+
+        self.add_widget(layout)
+
 class TrainingScreen(Screen):
     global foo_1
-    foo_1 = []
-    k = ConfigParser.get_configparser('app')
-    premisissentences_ = ConfigParserProperty(1, 'trainer', 'premisissentences', k, val_type=int)
-    print('llll', premisissentences_)
+    global active_4_dummy
     
-    #print(premisissentences_)
-        #premisissentences_2 = get(premisissentences_)
-        #print(premisissentences_2)
-    print('hhhhhhhhh')
-
+    foo_1 = []
+    active_4_dummy = False
 
     def syllogism_example_function(self, premis_one, premis_two, solution):
         if premis_one == "MaP" and premis_two == "SaM": # example-sentences - traditional syllogistic
@@ -373,7 +475,7 @@ class TrainingScreen(Screen):
             return ("Wenn keine Pflanze Bewusstsein hat \nund alles mit Bewusstsein ein Lebewesen ist, \nso sind einige Lebewesen keine Pflanzen.")
         elif premis_one == "PaM" and premis_two == "MaS":
             return ("Wenn alle Quadrate Rechtecke sind \nund alle Rechtecke Trapeze sind, \nso sind einige Trapeze Quadrate.")
-        elif premis_one == "MëP" and premis_two == "SeM":  # example-sentences - completed syllogistic (page 127 - Einführung in die formale Logik)
+        elif premis_one == "MëP" and premis_two == "SeM":  # example-sentences - completed syllogistic (page 127 - "Einführung in die formale Logik")
             return ("Wenn alle Nicht-Mitglieder doppelten EIntritt bezahlen und \keine Frau Mitglied ist, \so bezahlen alle Frauen doppelten Eintritt.")
         elif premis_one == "MaP" and premis_two == "SëM":
             return ("Wenn alle weniger Krebsgefährdeten eine längere Lebenserwartung haben \nund alle Nichtraucher weniger Krebsgefährdete sind, \nso haben alle Nichtraucher eine längere Lebenserwartung.")
@@ -717,156 +819,155 @@ class TrainingScreen(Screen):
             if button == self.btn_n:
                 z = foo_1.append('n')
                 self.btn_1_p1.text ='n'
-                self.btn_1_p1.background_color=(1, 0, 0, .7)
+                self.btn_1_p1.background_color=(1, 0, 0, 1)
                 self.btn_2_p1.text ='n'
-                self.btn_2_p1.background_color=(1, 0, 0, .7)
+                self.btn_2_p1.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_1.append('a')
                 self.btn_1_p1.text ='a'
-                self.btn_1_p1.background_color=(0, 1, 0, .7)
+                self.btn_1_p1.background_color=(0, 1, 0, 1)
                 self.btn_2_p1.text ='a'
-                self.btn_2_p1.background_color=(0, 1, 0, .7)
+                self.btn_2_p1.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_1.append('u')
                 self.btn_1_p1.text ='u'
-                self.btn_1_p1.background_color=(1, 1, 1, .7)
+                self.btn_1_p1.background_color=(1, 1, 1, 1)
                 self.btn_2_p1.text ='u'
-                self.btn_2_p1.background_color=(1, 1, 1, .7)
+                self.btn_2_p1.background_color=(1, 1, 1, 1)
         elif len(foo_1) == 1:
             if button == self.btn_n:
                 z = foo_1.append('n')
                 self.btn_3_p1.text ='n'
-                self.btn_3_p1.background_color=(1, 0, 0, .7)
+                self.btn_3_p1.background_color=(1, 0, 0, 1)
                 self.btn_4_p1.text ='n'
-                self.btn_4_p1.background_color=(1, 0, 0, .7)
+                self.btn_4_p1.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_1.append('a')
                 self.btn_3_p1.text ='a'
-                self.btn_3_p1.background_color=(0, 1, 0, .7)
+                self.btn_3_p1.background_color=(0, 1, 0, 1)
                 self.btn_4_p1.text ='a'
-                self.btn_4_p1.background_color=(0, 1, 0, .7)
+                self.btn_4_p1.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_1.append('u')
                 self.btn_3_p1.text ='u'
-                self.btn_3_p1.background_color=(1, 1, 1, .7)
+                self.btn_3_p1.background_color=(1, 1, 1, 1)
                 self.btn_4_p1.text ='u'
-                self.btn_4_p1.background_color=(1, 1, 1, .7)
+                self.btn_4_p1.background_color=(1, 1, 1, 1)
         elif len(foo_1) == 2:
             if button == self.btn_n:
                 z = foo_1.append('n')
                 self.btn_5_p1.text ='n'
-                self.btn_5_p1.background_color=(1, 0, 0, .7)
+                self.btn_5_p1.background_color=(1, 0, 0, 1)
                 self.btn_6_p1.text ='n'
-                self.btn_6_p1.background_color=(1, 0, 0, .7)
+                self.btn_6_p1.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_1.append('a')
                 self.btn_5_p1.text ='a'
-                self.btn_5_p1.background_color=(0, 1, 0, .7)
+                self.btn_5_p1.background_color=(0, 1, 0, 1)
                 self.btn_6_p1.text ='a'
-                self.btn_6_p1.background_color=(0, 1, 0, .7)
+                self.btn_6_p1.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_1.append('u')
                 self.btn_5_p1.text ='u'
-                self.btn_5_p1.background_color=(1, 1, 1, .7)
+                self.btn_5_p1.background_color=(1, 1, 1, 1)
                 self.btn_6_p1.text ='u'
-                self.btn_6_p1.background_color=(1, 1, 1, .7)
+                self.btn_6_p1.background_color=(1, 1, 1, 1)
         elif len(foo_1) == 3:
             if button == self.btn_n:
                 z = foo_1.append('n')
                 self.btn_7_p1.text ='n'
-                self.btn_7_p1.background_color=(1, 0, 0, .7)
+                self.btn_7_p1.background_color=(1, 0, 0, 1)
                 self.btn_8_p1.text ='n'
-                self.btn_8_p1.background_color=(1, 0, 0, .7)
+                self.btn_8_p1.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_1.append('a')
                 self.btn_7_p1.text ='a'
-                self.btn_7_p1.background_color=(0, 1, 0, .7)
+                self.btn_7_p1.background_color=(0, 1, 0, 1)
                 self.btn_8_p1.text ='a'
-                self.btn_8_p1.background_color=(0, 1, 0, .7)
+                self.btn_8_p1.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_1.append('u')
                 self.btn_7_p1.text ='u'
-                self.btn_7_p1.background_color=(1, 1, 1, .7)
+                self.btn_7_p1.background_color=(1, 1, 1, 1)
                 self.btn_8_p1.text ='u'
-                self.btn_8_p1.background_color=(1, 1, 1, .7)
+                self.btn_8_p1.background_color=(1, 1, 1, 1)
         elif len(foo_1) == 4:
-            print('test')
             self.first_formula = foo_1
             if button == self.btn_n:
                 z = foo_1.append('n')
                 self.btn_1_p2.text ='n'
-                self.btn_1_p2.background_color=(1, 0, 0, .7)
+                self.btn_1_p2.background_color=(1, 0, 0, 1)
                 self.btn_5_p2.text ='n'
-                self.btn_5_p2.background_color=(1, 0, 0, .7)
+                self.btn_5_p2.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_1.append('a')
                 self.btn_1_p2.text ='a'
-                self.btn_1_p2.background_color=(0, 1, 0, .7)
+                self.btn_1_p2.background_color=(0, 1, 0, 1)
                 self.btn_5_p2.text ='a'
-                self.btn_5_p2.background_color=(0, 1, 0, .7)
+                self.btn_5_p2.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_1.append('u')
                 self.btn_1_p2.text ='u'
-                self.btn_1_p2.background_color=(1, 1, 1, .7)
+                self.btn_1_p2.background_color=(1, 1, 1, 1)
                 self.btn_5_p2.text ='u'
-                self.btn_5_p2.background_color=(1, 1, 1, .7)
+                self.btn_5_p2.background_color=(1, 1, 1, 1)
         elif len(foo_1) == 5:
             if button == self.btn_n:
                 z = foo_1.append('n')
                 self.btn_2_p2.text ='n'
-                self.btn_2_p2.background_color=(1, 0, 0, .7)
+                self.btn_2_p2.background_color=(1, 0, 0, 1)
                 self.btn_6_p2.text ='n'
-                self.btn_6_p2.background_color=(1, 0, 0, .7)
+                self.btn_6_p2.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_1.append('a')
                 self.btn_2_p2.text ='a'
-                self.btn_2_p2.background_color=(0, 1, 0, .7)
+                self.btn_2_p2.background_color=(0, 1, 0, 1)
                 self.btn_6_p2.text ='a'
-                self.btn_6_p2.background_color=(0, 1, 0, .7)
+                self.btn_6_p2.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_1.append('u')
                 self.btn_2_p2.text ='u'
-                self.btn_2_p2.background_color=(1, 1, 1, .7)
+                self.btn_2_p2.background_color=(1, 1, 1, 1)
                 self.btn_6_p2.text ='u'
-                self.btn_6_p2.background_color=(1, 1, 1, .7)
+                self.btn_6_p2.background_color=(1, 1, 1, 1)
         elif len(foo_1) == 6:
             if button == self.btn_n:
                 z = foo_1.append('n')
                 self.btn_3_p2.text ='n'
-                self.btn_3_p2.background_color=(1, 0, 0, .7)
+                self.btn_3_p2.background_color=(1, 0, 0, 1)
                 self.btn_7_p2.text ='n'
-                self.btn_7_p2.background_color=(1, 0, 0, .7)
+                self.btn_7_p2.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_1.append('a')
                 self.btn_3_p2.text ='a'
-                self.btn_3_p2.background_color=(0, 1, 0, .7)
+                self.btn_3_p2.background_color=(0, 1, 0, 1)
                 self.btn_7_p2.text ='a'
-                self.btn_7_p2.background_color=(0, 1, 0, .7)
+                self.btn_7_p2.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_1.append('u')
                 self.btn_3_p2.text ='u'
-                self.btn_3_p2.background_color=(1, 1, 1, .7)
+                self.btn_3_p2.background_color=(1, 1, 1, 1)
                 self.btn_7_p2.text ='u'
-                self.btn_7_p2.background_color=(1, 1, 1, .7)
+                self.btn_7_p2.background_color=(1, 1, 1, 1)
         elif len(foo_1) == 7:
             if button == self.btn_n:
                 z = foo_1.append('n')
                 self.btn_4_p2.text ='n'
-                self.btn_4_p2.background_color=(1, 0, 0, .7)
+                self.btn_4_p2.background_color=(1, 0, 0, 1)
                 self.btn_8_p2.text ='n'
-                self.btn_8_p2.background_color=(1, 0, 0, .7)
+                self.btn_8_p2.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_1.append('a')
                 self.btn_4_p2.text ='a'
-                self.btn_4_p2.background_color=(0, 1, 0, .7)
+                self.btn_4_p2.background_color=(0, 1, 0, 1)
                 self.btn_8_p2.text ='a'
-                self.btn_8_p2.background_color=(0, 1, 0, .7)
+                self.btn_8_p2.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_1.append('u')
                 self.btn_4_p2.text ='u'
-                self.btn_4_p2.background_color=(1, 1, 1, .7)
+                self.btn_4_p2.background_color=(1, 1, 1, 1)
                 self.btn_8_p2.text ='u'
-                self.btn_8_p2.background_color=(1, 1, 1, .7)
+                self.btn_8_p2.background_color=(1, 1, 1, 1)
         if len(foo_1) == 8:
             self.second_formula = foo_1[4:8]
             self.btn_n.disabled = True
@@ -884,11 +985,11 @@ class TrainingScreen(Screen):
         ]
 
     def right_answer(self, button):
-        right_label = Label(text='Right!', font_size= 35, size_hint=(.5, .3), pos_hint={'x': .25, 'y': .35})
+        right_label = Label(color= (0, 1, 0, 1), text='Right!', font_size= 35, size_hint=(.5, .3), pos_hint={'x': .25, 'y': .35})
         self.add_widget(right_label)
 
     def wrong_answer(self, button):
-        wrong_label = Label(text='Wrong!', font_size=30, size_hint=(.5, .3), pos_hint={'x': .25, 'y': .25})
+        wrong_label = Label(color= (1, 0, 0, 1), text='Wrong!', font_size=30, size_hint=(.5, .3), pos_hint={'x': .25, 'y': .25})
         self.add_widget(wrong_label)
 
     def on_checkbox_Active(self, checkboxInstance, isActive):
@@ -910,6 +1011,10 @@ class TrainingScreen(Screen):
             self.lbl_active_example.text = "OFF"
         
     def on_checkbox_Active_4(self, checkboxInstance, isActive):
+        global active_4_dummy
+        
+        active_4_dummy = isActive
+        
         if isActive:
             self.label_first_premis.text = self.premises_to_sentences_function_premis_one(self.my_text)
             self.label_second_premis.text = self.premises_to_sentences_function_premis_two(self.my_text2)
@@ -1010,6 +1115,29 @@ class TrainingScreen(Screen):
         self.add_widget(self.settings_button)
         self.settings_button.bind(on_press=self.open_settings)
         
+
+        
+        self.refresh2_button.bind(on_press=self.clear_widgets_function)
+    
+    def function_completed_syllogistic_settings(self, *args):
+        config = ConfigParser.get_configparser('app')
+        value = config.getint('trainer', 'completedsyllogistic')
+        return value
+
+    def function_particularpremis_settings(self, *args):
+        config = ConfigParser.get_configparser('app')
+        value = config.getint('trainer', 'particularpremis')
+        return value
+
+    def refresh_function_1(self, *args):
+        a = args[0]
+        b = args[1]
+
+
+
+    def refresh_function(self, *args):
+        global active_4_dummy
+
         completedsyllogistic = self.function_completed_syllogistic_settings()#looks for setting
         particularpremis = self.function_particularpremis_settings()#looks for setting
 
@@ -1033,40 +1161,17 @@ class TrainingScreen(Screen):
             self.refresh2_button = Button(text='Generate!', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .8})
             self.add_widget(self.refresh2_button)
             self.refresh2_button.bind(on_press=lambda x:self.refresh_function(a, b))
-        
-        self.refresh2_button.bind(on_press=self.clear_widgets_function)
-    
-    def function_completed_syllogistic_settings(self, *args):
-        config = ConfigParser.get_configparser('app')
-        value = config.getint('trainer', 'completedsyllogistic')
-        return value
-
-    def function_particularpremis_settings(self, *args):
-        config = ConfigParser.get_configparser('app')
-        value = config.getint('trainer', 'particularpremis')
-        return value
-
-    def refresh_function_1(self, *args):
-        a = args[0]
-        b = args[1]
-
-        self.active_4 = CheckBox(active=False)
-        self.add_widget(self.active_4)
-        self.active_4.bind(active=self.on_checkbox_Active_4)
-        self.refresh_function(a, b)
-
-    def refresh_function(self, *args):
-        y = args[0]
-        x = args[1]
 
         judges_premis_one = ["MaP", "MeP", "PaM", "PeM", "MiP", "MoP", "PiM", "PoM",  #traditionelle Syllogistik
                              "MãP", "MëP",  "PãM", "PëM", "MïP", "MõP","PïM", "PõM"]  #vervollständigte Syllogistik
         judges_premis_second = ["SaM", "SeM", "MaS", "MeS", "MiS", "MoS","SiM", "SoM", #traditionelle Syllogistik
                                 "SãM", "SëM", "MãS", "MëS", "SïM", "SõM", "MïS", "MõS"] #vervollständigte Syllogistik
         
-        second_formula = judges_premis_second[y]
+
+        
+        second_formula = judges_premis_second[a]
         self.my_text2 = second_formula
-        first_formula = judges_premis_one[x]
+        first_formula = judges_premis_one[b]
         self.my_text = first_formula
 
         advice_premis_1 = self.first_formula_values(first_formula)
@@ -1157,8 +1262,7 @@ class TrainingScreen(Screen):
         self.boxlayout_Checkbox_4.add_widget(self.label_sentences)
         self.boxlayout_Checkbox_4.add_widget(self.checkbox_4_dummy_label)
         
-        self.active_4.pos_hint = {'x': .825, 'y': .6} # not beautiful code
-        self.active_4.size_hint = (.1, .1)
+
         
         self.active.bind(active=self.on_checkbox_Active)
         self.active_2.bind(active=self.on_checkbox_Active_2)
@@ -1242,21 +1346,21 @@ class TrainingScreen(Screen):
         self.premis_one_label = Label(text='premis one', size_hint_x = 2.0)
         self.syllogism_box_row_4.add_widget(self.premis_one_label)
 
-        self.btn_1_p1 = Button(background_normal='')
+        self.btn_1_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_1_p1)
-        self.btn_2_p1 = Button(background_normal='')
+        self.btn_2_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_2_p1)
-        self.btn_3_p1 = Button(background_normal='')
+        self.btn_3_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_3_p1)
-        self.btn_4_p1 = Button(background_normal='')
+        self.btn_4_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_4_p1)
-        self.btn_5_p1 = Button(background_normal='')
+        self.btn_5_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_5_p1)
-        self.btn_6_p1 = Button(background_normal='')
+        self.btn_6_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_6_p1)
-        self.btn_7_p1 = Button(background_normal='')
+        self.btn_7_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_7_p1)
-        self.btn_8_p1 = Button(background_normal='')
+        self.btn_8_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_8_p1)
 
         self.syllogism_box_row_5 = BoxLayout(orientation='horizontal')
@@ -1265,21 +1369,21 @@ class TrainingScreen(Screen):
         self.premis_two_label = Label(text='premis two', size_hint_x = 2.0)
         self.syllogism_box_row_5.add_widget(self.premis_two_label)
 
-        self.btn_1_p2 = Button(background_normal='')
+        self.btn_1_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_1_p2)
-        self.btn_2_p2 = Button(background_normal='')
+        self.btn_2_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_2_p2)
-        self.btn_3_p2 = Button(background_normal='')
+        self.btn_3_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_3_p2)
-        self.btn_4_p2 = Button(background_normal='')
+        self.btn_4_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_4_p2)
-        self.btn_5_p2 = Button(background_normal='')
+        self.btn_5_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_5_p2)
-        self.btn_6_p2 = Button(background_normal='')
+        self.btn_6_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_6_p2)
-        self.btn_7_p2 = Button(background_normal='')
+        self.btn_7_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_7_p2)
-        self.btn_8_p2 = Button(background_normal='')
+        self.btn_8_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_8_p2)
         
         self.syllogism_box_row_6 = BoxLayout(orientation='horizontal')
@@ -1288,21 +1392,21 @@ class TrainingScreen(Screen):
         self.conclusion_label = Label(text='conclusion', size_hint_x = 2.0)
         self.syllogism_box_row_6.add_widget(self.conclusion_label)
 
-        self.btn_1_c = Button(background_normal='')
+        self.btn_1_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_1_c)
-        self.btn_2_c = Button(background_normal='')
+        self.btn_2_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_2_c)
-        self.btn_3_c = Button(background_normal='')
+        self.btn_3_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_3_c)
-        self.btn_4_c = Button(background_normal='')
+        self.btn_4_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_4_c)
-        self.btn_5_c = Button(background_normal='')
+        self.btn_5_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_5_c)
-        self.btn_6_c = Button(background_normal='')
+        self.btn_6_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_6_c)
-        self.btn_7_c = Button(background_normal='')
+        self.btn_7_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_7_c)
-        self.btn_8_c = Button(background_normal='')
+        self.btn_8_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_8_c)
         
         self.answer_buttons_and_advices = BoxLayout(orientation='horizontal')
@@ -1321,7 +1425,6 @@ class TrainingScreen(Screen):
 
         self.buttons = [self.button1, self.button2, self.button3]
         correct_answer = random.randrange(len(self.buttons))
-        print(correct_answer)
 
         print(function_output_list[3])
         button_text = function_output_list[0]
@@ -1371,22 +1474,22 @@ class TrainingScreen(Screen):
         self.box_horizontal_buttons_down = BoxLayout(orientation='horizontal')
         vertical.add_widget(self.box_horizontal_buttons_down)
 
-        self.btn_n = Button(text='n', background_normal='', background_color=(1, 0, 0, .7))
+        self.btn_n = Button(text='n', color= (0, 0, 0, 1), background_normal='', background_color=(1, 0, 0, 1))
         self.box_horizontal_buttons_down.add_widget(self.btn_n)
         variable_btn_n ='n'
         self.btn_n.bind(on_press=self.append_function)
 
-        self.btn_a = Button(text='a', background_normal='', background_color=(0, 1, 0, .7))
+        self.btn_a = Button(text='a', color= (0, 0, 0, 1), background_normal='', background_color=(0, 1, 0, 1))
         self.box_horizontal_buttons_down.add_widget(self.btn_a)
         variable_btn_a ='a'
         self.btn_a.bind(on_press=self.append_function)
 
-        self.btn_u = Button(text='u', background_normal='', background_color=(1, 1, 1, .7))
+        self.btn_u = Button(text='u', color= (0, 0, 0, 1), background_normal='', background_color=(1, 1, 1, 1))
         self.box_horizontal_buttons_down.add_widget(self.btn_u)
         variable_btn_u ='u'
         self.btn_u.bind(on_press=self.append_function)
   
-        self.refresh_button.bind(on_press=self.clear_widgets_function)
+        self.refresh2_button.bind(on_press=self.clear_widgets_function)
 
     def change_screen_menu(self, *args):
         self.parent.current = 'menu'
@@ -1412,70 +1515,55 @@ class TrainingScreen(Screen):
             self.btn_6_c.text = function_output_list[3][3]
             self.btn_8_c.text = function_output_list[3][3]
             if function_output_list[3][0] == 'n':
-                self.btn_1_c.background_color=(1, 0, 0, .7)
-                self.btn_3_c.background_color=(1, 0, 0, .7)
+                self.btn_1_c.background_color=(1, 0, 0, 1)
+                self.btn_3_c.background_color=(1, 0, 0, 1)
             elif function_output_list[3][0] == 'a':
-                self.btn_1_c.background_color=(0, 1, 0, .7)
-                self.btn_3_c.background_color=(0, 1, 0, .7)
+                self.btn_1_c.background_color=(0, 1, 0, 1)
+                self.btn_3_c.background_color=(0, 1, 0, 1)
             elif function_output_list[3][0] == 'u':
-                self.btn_1_c.background_color=(1, 1, 1, .7)
-                self.btn_3_c.background_color=(1, 1, 1, .7)
+                self.btn_1_c.background_color=(1, 1, 1, 1)
+                self.btn_3_c.background_color=(1, 1, 1, 1)
             if function_output_list[3][1] == 'n':
-                self.btn_2_c.background_color=(1, 0, 0, .7)
-                self.btn_4_c.background_color=(1, 0, 0, .7)
+                self.btn_2_c.background_color=(1, 0, 0, 1)
+                self.btn_4_c.background_color=(1, 0, 0, 1)
             elif function_output_list[3][1] == 'a':
-                self.btn_2_c.background_color=(0, 1, 0, .7)
-                self.btn_4_c.background_color=(0, 1, 0, .7)
+                self.btn_2_c.background_color=(0, 1, 0, 1)
+                self.btn_4_c.background_color=(0, 1, 0, 1)
             elif function_output_list[3][1] == 'u':
-                self.btn_2_c.background_color=(1, 1, 1, .7)
-                self.btn_4_c.background_color=(1, 1, 1, .7)
+                self.btn_2_c.background_color=(1, 1, 1, 1)
+                self.btn_4_c.background_color=(1, 1, 1, 1)
             if function_output_list[3][2] == 'n':
-                self.btn_5_c.background_color=(1, 0, 0, .7)
-                self.btn_7_c.background_color=(1, 0, 0, .7)
+                self.btn_5_c.background_color=(1, 0, 0, 1)
+                self.btn_7_c.background_color=(1, 0, 0, 1)
             elif function_output_list[3][2] == 'a':
-                self.btn_5_c.background_color=(0, 1, 0, .7)
-                self.btn_7_c.background_color=(0, 1, 0, .7)
+                self.btn_5_c.background_color=(0, 1, 0, 1)
+                self.btn_7_c.background_color=(0, 1, 0, 1)
             elif function_output_list[3][2] == 'u':
-                self.btn_5_c.background_color=(1, 1, 1, .7)
-                self.btn_7_c.background_color=(1, 1, 1, .7)
+                self.btn_5_c.background_color=(1, 1, 1, 1)
+                self.btn_7_c.background_color=(1, 1, 1, 1)
             if function_output_list[3][3] == 'n':
-                self.btn_6_c.background_color=(1, 0, 0, .7)
-                self.btn_8_c.background_color=(1, 0, 0, .7)
+                self.btn_6_c.background_color=(1, 0, 0, 1)
+                self.btn_8_c.background_color=(1, 0, 0, 1)
             elif function_output_list[3][3] == 'a':
-                self.btn_6_c.background_color=(0, 1, 0, .7)
-                self.btn_8_c.background_color=(0, 1, 0, .7)
+                self.btn_6_c.background_color=(0, 1, 0, 1)
+                self.btn_8_c.background_color=(0, 1, 0, 1)
             elif function_output_list[3][3] == 'u':
-                self.btn_6_c.background_color=(1, 1, 1, .7)
-                self.btn_8_c.background_color=(1, 1, 1, .7)
+                self.btn_6_c.background_color=(1, 1, 1, 1)
+                self.btn_8_c.background_color=(1, 1, 1, 1)
 
 
 
     def __init__(self, **kwargs):
         super(RelativeLayout, self).__init__(**kwargs)
-        
-        completedsyllogistic = self.function_completed_syllogistic_settings()
-        particularpremis = self.function_particularpremis_settings()
 
-        if completedsyllogistic == 1:
-            a = random.randint(0, 15)
-            b = random.randint(0, 15)
-            if particularpremis == 0:
-                while (((a == 4) or (a == 5) or (a == 6) or (a == 7) or (a == 12) or (a == 13) or (a == 14) or (a == 15)) and ((b == 4) or (b == 5) or (b == 6) or (b == 7) or (b == 12) or (b == 13) or (b == 14) or (b == 15))):
-                    a = random.randint(0, 15)
-                    b = random.randint(0, 15)
-            self.refresh_button = Button(text='Generate!', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .8})
-            self.add_widget(self.refresh_button)
-            self.refresh_button.bind(on_press=lambda x:self.refresh_function_1(a, b))
-        else:
-            a = random.randint(0, 7)
-            b = random.randint(0, 7)
-            if particularpremis == 0:
-                while (((a == 4) or (a == 5) or (a == 6) or (a == 7)) and ((b == 4) or (b == 5) or (b == 6) or (b == 7))):
-                    a = random.randint(0, 7)
-                    b = random.randint(0, 7)
-            self.refresh_button = Button(text='Generate!', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .8})
-            self.add_widget(self.refresh_button)
-            self.refresh_button.bind(on_press=lambda x:self.refresh_function_1(a, b))
+        self.active_4 = CheckBox(active=False)
+        self.add_widget(self.active_4)
+        self.active_4.bind(active=self.on_checkbox_Active_4)
+
+        self.active_4.pos_hint = {'x': .825, 'y': .6} # not beautiful code
+        self.active_4.size_hint = (.1, .1)
+
+        lambda x:self.clear_widgets_function
 
 class Menu_conclusionsScreen(Screen):
     pass   
@@ -1859,161 +1947,159 @@ class ConclusionsScreen(Screen):
         return [output_, advice_premis_1, advice_premis_2, solution, result_contradiction_test]
 
     def append_function(self, button):
-        print(button)
         if foo == []:
             if button == self.btn_n:
                 z = foo.append('n')
                 self.btn_1_p1.text ='n'
-                self.btn_1_p1.background_color=(1, 0, 0, .7)
+                self.btn_1_p1.background_color=(1, 0, 0, 1)
                 self.btn_2_p1.text ='n'
-                self.btn_2_p1.background_color=(1, 0, 0, .7)
+                self.btn_2_p1.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo.append('a')
                 self.btn_1_p1.text ='a'
-                self.btn_1_p1.background_color=(0, 1, 0, .7)
+                self.btn_1_p1.background_color=(0, 1, 0, 1)
                 self.btn_2_p1.text ='a'
-                self.btn_2_p1.background_color=(0, 1, 0, .7)
+                self.btn_2_p1.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo.append('u')
                 self.btn_1_p1.text ='u'
-                self.btn_1_p1.background_color=(1, 1, 1, .7)
+                self.btn_1_p1.background_color=(1, 1, 1, 1)
                 self.btn_2_p1.text ='u'
-                self.btn_2_p1.background_color=(1, 1, 1, .7)
+                self.btn_2_p1.background_color=(1, 1, 1, 1)
         elif len(foo) == 1:
             if button == self.btn_n:
                 z = foo.append('n')
                 self.btn_3_p1.text ='n'
-                self.btn_3_p1.background_color=(1, 0, 0, .7)
+                self.btn_3_p1.background_color=(1, 0, 0, 1)
                 self.btn_4_p1.text ='n'
-                self.btn_4_p1.background_color=(1, 0, 0, .7)
+                self.btn_4_p1.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo.append('a')
                 self.btn_3_p1.text ='a'
-                self.btn_3_p1.background_color=(0, 1, 0, .7)
+                self.btn_3_p1.background_color=(0, 1, 0, 1)
                 self.btn_4_p1.text ='a'
-                self.btn_4_p1.background_color=(0, 1, 0, .7)
+                self.btn_4_p1.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo.append('u')
                 self.btn_3_p1.text ='u'
-                self.btn_3_p1.background_color=(1, 1, 1, .7)
+                self.btn_3_p1.background_color=(1, 1, 1, 1)
                 self.btn_4_p1.text ='u'
-                self.btn_4_p1.background_color=(1, 1, 1, .7)
+                self.btn_4_p1.background_color=(1, 1, 1, 1)
         elif len(foo) == 2:
             if button == self.btn_n:
                 z = foo.append('n')
                 self.btn_5_p1.text ='n'
-                self.btn_5_p1.background_color=(1, 0, 0, .7)
+                self.btn_5_p1.background_color=(1, 0, 0, 1)
                 self.btn_6_p1.text ='n'
-                self.btn_6_p1.background_color=(1, 0, 0, .7)
+                self.btn_6_p1.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo.append('a')
                 self.btn_5_p1.text ='a'
-                self.btn_5_p1.background_color=(0, 1, 0, .7)
+                self.btn_5_p1.background_color=(0, 1, 0, 1)
                 self.btn_6_p1.text ='a'
-                self.btn_6_p1.background_color=(0, 1, 0, .7)
+                self.btn_6_p1.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo.append('u')
                 self.btn_5_p1.text ='u'
-                self.btn_5_p1.background_color=(1, 1, 1, .7)
+                self.btn_5_p1.background_color=(1, 1, 1, 1)
                 self.btn_6_p1.text ='u'
-                self.btn_6_p1.background_color=(1, 1, 1, .7)
+                self.btn_6_p1.background_color=(1, 1, 1, 1)
         elif len(foo) == 3:
             if button == self.btn_n:
                 z = foo.append('n')
                 self.btn_7_p1.text ='n'
-                self.btn_7_p1.background_color=(1, 0, 0, .7)
+                self.btn_7_p1.background_color=(1, 0, 0, 1)
                 self.btn_8_p1.text ='n'
-                self.btn_8_p1.background_color=(1, 0, 0, .7)
+                self.btn_8_p1.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo.append('a')
                 self.btn_7_p1.text ='a'
-                self.btn_7_p1.background_color=(0, 1, 0, .7)
+                self.btn_7_p1.background_color=(0, 1, 0, 1)
                 self.btn_8_p1.text ='a'
-                self.btn_8_p1.background_color=(0, 1, 0, .7)
+                self.btn_8_p1.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo.append('u')
                 self.btn_7_p1.text ='u'
-                self.btn_7_p1.background_color=(1, 1, 1, .7)
+                self.btn_7_p1.background_color=(1, 1, 1, 1)
                 self.btn_8_p1.text ='u'
-                self.btn_8_p1.background_color=(1, 1, 1, .7)
+                self.btn_8_p1.background_color=(1, 1, 1, 1)
         elif len(foo) == 4:
-            print('test')
             self.first_formula = foo
             if button == self.btn_n:
                 z = foo.append('n')
                 self.btn_1_p2.text ='n'
-                self.btn_1_p2.background_color=(1, 0, 0, .7)
+                self.btn_1_p2.background_color=(1, 0, 0, 1)
                 self.btn_5_p2.text ='n'
-                self.btn_5_p2.background_color=(1, 0, 0, .7)
+                self.btn_5_p2.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo.append('a')
                 self.btn_1_p2.text ='a'
-                self.btn_1_p2.background_color=(0, 1, 0, .7)
+                self.btn_1_p2.background_color=(0, 1, 0, 1)
                 self.btn_5_p2.text ='a'
-                self.btn_5_p2.background_color=(0, 1, 0, .7)
+                self.btn_5_p2.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo.append('u')
                 self.btn_1_p2.text ='u'
-                self.btn_1_p2.background_color=(1, 1, 1, .7)
+                self.btn_1_p2.background_color=(1, 1, 1, 1)
                 self.btn_5_p2.text ='u'
-                self.btn_5_p2.background_color=(1, 1, 1, .7)
+                self.btn_5_p2.background_color=(1, 1, 1, 1)
         elif len(foo) == 5:
             if button == self.btn_n:
                 z = foo.append('n')
                 self.btn_2_p2.text ='n'
-                self.btn_2_p2.background_color=(1, 0, 0, .7)
+                self.btn_2_p2.background_color=(1, 0, 0, 1)
                 self.btn_6_p2.text ='n'
-                self.btn_6_p2.background_color=(1, 0, 0, .7)
+                self.btn_6_p2.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo.append('a')
                 self.btn_2_p2.text ='a'
-                self.btn_2_p2.background_color=(0, 1, 0, .7)
+                self.btn_2_p2.background_color=(0, 1, 0, 1)
                 self.btn_6_p2.text ='a'
-                self.btn_6_p2.background_color=(0, 1, 0, .7)
+                self.btn_6_p2.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo.append('u')
                 self.btn_2_p2.text ='u'
-                self.btn_2_p2.background_color=(1, 1, 1, .7)
+                self.btn_2_p2.background_color=(1, 1, 1, 1)
                 self.btn_6_p2.text ='u'
-                self.btn_6_p2.background_color=(1, 1, 1, .7)
+                self.btn_6_p2.background_color=(1, 1, 1, 1)
         elif len(foo) == 6:
             if button == self.btn_n:
                 z = foo.append('n')
                 self.btn_3_p2.text ='n'
-                self.btn_3_p2.background_color=(1, 0, 0, .7)
+                self.btn_3_p2.background_color=(1, 0, 0, 1)
                 self.btn_7_p2.text ='n'
-                self.btn_7_p2.background_color=(1, 0, 0, .7)
+                self.btn_7_p2.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo.append('a')
                 self.btn_3_p2.text ='a'
-                self.btn_3_p2.background_color=(0, 1, 0, .7)
+                self.btn_3_p2.background_color=(0, 1, 0, 1)
                 self.btn_7_p2.text ='a'
-                self.btn_7_p2.background_color=(0, 1, 0, .7)
+                self.btn_7_p2.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo.append('u')
                 self.btn_3_p2.text ='u'
-                self.btn_3_p2.background_color=(1, 1, 1, .7)
+                self.btn_3_p2.background_color=(1, 1, 1, 1)
                 self.btn_7_p2.text ='u'
-                self.btn_7_p2.background_color=(1, 1, 1, .7)
+                self.btn_7_p2.background_color=(1, 1, 1, 1)
         elif len(foo) == 7:
             if button == self.btn_n:
                 z = foo.append('n')
                 self.btn_4_p2.text ='n'
-                self.btn_4_p2.background_color=(1, 0, 0, .7)
+                self.btn_4_p2.background_color=(1, 0, 0, 1)
                 self.btn_8_p2.text ='n'
-                self.btn_8_p2.background_color=(1, 0, 0, .7)
+                self.btn_8_p2.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo.append('a')
                 self.btn_4_p2.text ='a'
-                self.btn_4_p2.background_color=(0, 1, 0, .7)
+                self.btn_4_p2.background_color=(0, 1, 0, 1)
                 self.btn_8_p2.text ='a'
-                self.btn_8_p2.background_color=(0, 1, 0, .7)
+                self.btn_8_p2.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo.append('u')
                 self.btn_4_p2.text ='u'
-                self.btn_4_p2.background_color=(1, 1, 1, .7)
+                self.btn_4_p2.background_color=(1, 1, 1, 1)
                 self.btn_8_p2.text ='u'
-                self.btn_8_p2.background_color=(1, 1, 1, .7)
+                self.btn_8_p2.background_color=(1, 1, 1, 1)
         if len(foo) == 8:
             self.second_formula = foo[4:8]
             self.btn_n.disabled = True
@@ -2113,21 +2199,21 @@ class ConclusionsScreen(Screen):
         self.premis_one_label = Label(text='premis one', size_hint_x = 2.0)
         self.syllogism_box_row_4.add_widget(self.premis_one_label)
 
-        self.btn_1_p1 = Button(background_normal='')
+        self.btn_1_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_1_p1)
-        self.btn_2_p1 = Button(background_normal='')
+        self.btn_2_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_2_p1)
-        self.btn_3_p1 = Button(background_normal='')
+        self.btn_3_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_3_p1)
-        self.btn_4_p1 = Button(background_normal='')
+        self.btn_4_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_4_p1)
-        self.btn_5_p1 = Button(background_normal='')
+        self.btn_5_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_5_p1)
-        self.btn_6_p1 = Button(background_normal='')
+        self.btn_6_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_6_p1)
-        self.btn_7_p1 = Button(background_normal='')
+        self.btn_7_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_7_p1)
-        self.btn_8_p1 = Button(background_normal='')
+        self.btn_8_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_8_p1)
 
         self.syllogism_box_row_5 = BoxLayout(orientation='horizontal')
@@ -2136,21 +2222,21 @@ class ConclusionsScreen(Screen):
         self.premis_two_label = Label(text='premis two', size_hint_x = 2.0)
         self.syllogism_box_row_5.add_widget(self.premis_two_label)
 
-        self.btn_1_p2 = Button(background_normal='')
+        self.btn_1_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_1_p2)
-        self.btn_2_p2 = Button(background_normal='')
+        self.btn_2_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_2_p2)
-        self.btn_3_p2 = Button(background_normal='')
+        self.btn_3_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_3_p2)
-        self.btn_4_p2 = Button(background_normal='')
+        self.btn_4_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_4_p2)
-        self.btn_5_p2 = Button(background_normal='')
+        self.btn_5_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_5_p2)
-        self.btn_6_p2 = Button(background_normal='')
+        self.btn_6_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_6_p2)
-        self.btn_7_p2 = Button(background_normal='')
+        self.btn_7_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_7_p2)
-        self.btn_8_p2 = Button(background_normal='')
+        self.btn_8_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_8_p2)
         
         self.syllogism_box_row_6 = BoxLayout(orientation='horizontal')
@@ -2159,21 +2245,21 @@ class ConclusionsScreen(Screen):
         self.conclusion_label = Label(text='conclusion', size_hint_x = 2.0)
         self.syllogism_box_row_6.add_widget(self.conclusion_label)
 
-        self.btn_1_c = Button(background_normal='')
+        self.btn_1_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_1_c)
-        self.btn_2_c = Button(background_normal='')
+        self.btn_2_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_2_c)
-        self.btn_3_c = Button(background_normal='')
+        self.btn_3_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_3_c)
-        self.btn_4_c = Button(background_normal='')
+        self.btn_4_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_4_c)
-        self.btn_5_c = Button(background_normal='')
+        self.btn_5_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_5_c)
-        self.btn_6_c = Button(background_normal='')
+        self.btn_6_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_6_c)
-        self.btn_7_c = Button(background_normal='')
+        self.btn_7_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_7_c)
-        self.btn_8_c = Button(background_normal='')
+        self.btn_8_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_8_c)
 
         self.syllogism_box_col_2 = BoxLayout(orientation='vertical')
@@ -2185,17 +2271,17 @@ class ConclusionsScreen(Screen):
         self.box_horizontal_buttons_down = BoxLayout(orientation='horizontal')
         vertical.add_widget(self.box_horizontal_buttons_down)
 
-        self.btn_n = Button(text='n', background_normal='', background_color=(1, 0, 0, .7))
+        self.btn_n = Button(text='n', color= (0, 0, 0, 1), background_normal='', background_color=(1, 0, 0, 1))
         self.box_horizontal_buttons_down.add_widget(self.btn_n)
         variable_btn_n ='n'
         self.btn_n.bind(on_press=self.append_function)
 
-        self.btn_a = Button(text='a', background_normal='', background_color=(0, 1, 0, .7))
+        self.btn_a = Button(text='a', color= (0, 0, 0, 1), background_normal='', background_color=(0, 1, 0, 1))
         self.box_horizontal_buttons_down.add_widget(self.btn_a)
         variable_btn_a ='a'
         self.btn_a.bind(on_press=self.append_function)
 
-        self.btn_u = Button(text='u', background_normal='', background_color=(1, 1, 1, .7))
+        self.btn_u = Button(text='u', color= (0, 0, 0, 1), background_normal='', background_color=(1, 1, 1, 1))
         self.box_horizontal_buttons_down.add_widget(self.btn_u)
         variable_btn_u ='u'
         self.btn_u.bind(on_press=self.append_function)
@@ -2262,41 +2348,41 @@ class ConclusionsScreen(Screen):
             self.btn_6_c.text = function_output_list[3][3]
             self.btn_8_c.text = function_output_list[3][3]
             if function_output_list[3][0] == 'n':
-                self.btn_1_c.background_color=(1, 0, 0, .7)
-                self.btn_3_c.background_color=(1, 0, 0, .7)
+                self.btn_1_c.background_color=(1, 0, 0, 1)
+                self.btn_3_c.background_color=(1, 0, 0, 1)
             elif function_output_list[3][0] == 'a':
-                self.btn_1_c.background_color=(0, 1, 0, .7)
-                self.btn_3_c.background_color=(0, 1, 0, .7)
+                self.btn_1_c.background_color=(0, 1, 0, 1)
+                self.btn_3_c.background_color=(0, 1, 0, 1)
             elif function_output_list[3][0] == 'u':
-                self.btn_1_c.background_color=(1, 1, 1, .7)
-                self.btn_3_c.background_color=(1, 1, 1, .7)
+                self.btn_1_c.background_color=(1, 1, 1, 1)
+                self.btn_3_c.background_color=(1, 1, 1, 1)
             if function_output_list[3][1] == 'n':
-                self.btn_2_c.background_color=(1, 0, 0, .7)
-                self.btn_4_c.background_color=(1, 0, 0, .7)
+                self.btn_2_c.background_color=(1, 0, 0, 1)
+                self.btn_4_c.background_color=(1, 0, 0, 1)
             elif function_output_list[3][1] == 'a':
-                self.btn_2_c.background_color=(0, 1, 0, .7)
-                self.btn_4_c.background_color=(0, 1, 0, .7)
+                self.btn_2_c.background_color=(0, 1, 0, 1)
+                self.btn_4_c.background_color=(0, 1, 0, 1)
             elif function_output_list[3][1] == 'u':
-                self.btn_2_c.background_color=(1, 1, 1, .7)
-                self.btn_4_c.background_color=(1, 1, 1, .7)
+                self.btn_2_c.background_color=(1, 1, 1, 1)
+                self.btn_4_c.background_color=(1, 1, 1, 1)
             if function_output_list[3][2] == 'n':
-                self.btn_5_c.background_color=(1, 0, 0, .7)
-                self.btn_7_c.background_color=(1, 0, 0, .7)
+                self.btn_5_c.background_color=(1, 0, 0, 1)
+                self.btn_7_c.background_color=(1, 0, 0, 1)
             elif function_output_list[3][2] == 'a':
-                self.btn_5_c.background_color=(0, 1, 0, .7)
-                self.btn_7_c.background_color=(0, 1, 0, .7)
+                self.btn_5_c.background_color=(0, 1, 0, 1)
+                self.btn_7_c.background_color=(0, 1, 0, 1)
             elif function_output_list[3][2] == 'u':
-                self.btn_5_c.background_color=(1, 1, 1, .7)
-                self.btn_7_c.background_color=(1, 1, 1, .7)
+                self.btn_5_c.background_color=(1, 1, 1, 1)
+                self.btn_7_c.background_color=(1, 1, 1, 1)
             if function_output_list[3][3] == 'n':
-                self.btn_6_c.background_color=(1, 0, 0, .7)
-                self.btn_8_c.background_color=(1, 0, 0, .7)
+                self.btn_6_c.background_color=(1, 0, 0, 1)
+                self.btn_8_c.background_color=(1, 0, 0, 1)
             elif function_output_list[3][3] == 'a':
-                self.btn_6_c.background_color=(0, 1, 0, .7)
-                self.btn_8_c.background_color=(0, 1, 0, .7)
+                self.btn_6_c.background_color=(0, 1, 0, 1)
+                self.btn_8_c.background_color=(0, 1, 0, 1)
             elif function_output_list[3][3] == 'u':
-                self.btn_6_c.background_color=(1, 1, 1, .7)
-                self.btn_8_c.background_color=(1, 1, 1, .7)
+                self.btn_6_c.background_color=(1, 1, 1, 1)
+                self.btn_8_c.background_color=(1, 1, 1, 1)
 
 class Menu_total_formulas_Screen(Screen):
     pass
@@ -2824,234 +2910,234 @@ class Total_formulas_QuizScreen(Screen):
             if button == self.btn_n:
                 z = foo_3.append('n')
                 self.btn_1_p1.text ='n'
-                self.btn_1_p1.background_color=(1, 0, 0, .7)
+                self.btn_1_p1.background_color=(1, 0, 0, 1)
                 self.btn_2_p1.text ='n'
-                self.btn_2_p1.background_color=(1, 0, 0, .7)
+                self.btn_2_p1.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_3.append('a')
                 self.btn_1_p1.text ='a'
-                self.btn_1_p1.background_color=(0, 1, 0, .7)
+                self.btn_1_p1.background_color=(0, 1, 0, 1)
                 self.btn_2_p1.text ='a'
-                self.btn_2_p1.background_color=(0, 1, 0, .7)
+                self.btn_2_p1.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_3.append('u')
                 self.btn_1_p1.text ='u'
-                self.btn_1_p1.background_color=(1, 1, 1, .7)
+                self.btn_1_p1.background_color=(1, 1, 1, 1)
                 self.btn_2_p1.text ='u'
-                self.btn_2_p1.background_color=(1, 1, 1, .7)
+                self.btn_2_p1.background_color=(1, 1, 1, 1)
         elif len(foo_3) == 1:
             if button == self.btn_n:
                 z = foo_3.append('n')
                 self.btn_3_p1.text ='n'
-                self.btn_3_p1.background_color=(1, 0, 0, .7)
+                self.btn_3_p1.background_color=(1, 0, 0, 1)
                 self.btn_4_p1.text ='n'
-                self.btn_4_p1.background_color=(1, 0, 0, .7)
+                self.btn_4_p1.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_3.append('a')
                 self.btn_3_p1.text ='a'
-                self.btn_3_p1.background_color=(0, 1, 0, .7)
+                self.btn_3_p1.background_color=(0, 1, 0, 1)
                 self.btn_4_p1.text ='a'
-                self.btn_4_p1.background_color=(0, 1, 0, .7)
+                self.btn_4_p1.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_3.append('u')
                 self.btn_3_p1.text ='u'
-                self.btn_3_p1.background_color=(1, 1, 1, .7)
+                self.btn_3_p1.background_color=(1, 1, 1, 1)
                 self.btn_4_p1.text ='u'
-                self.btn_4_p1.background_color=(1, 1, 1, .7)
+                self.btn_4_p1.background_color=(1, 1, 1, 1)
         elif len(foo_3) == 2:
             if button == self.btn_n:
                 z = foo_3.append('n')
                 self.btn_5_p1.text ='n'
-                self.btn_5_p1.background_color=(1, 0, 0, .7)
+                self.btn_5_p1.background_color=(1, 0, 0, 1)
                 self.btn_6_p1.text ='n'
-                self.btn_6_p1.background_color=(1, 0, 0, .7)
+                self.btn_6_p1.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_3.append('a')
                 self.btn_5_p1.text ='a'
-                self.btn_5_p1.background_color=(0, 1, 0, .7)
+                self.btn_5_p1.background_color=(0, 1, 0, 1)
                 self.btn_6_p1.text ='a'
-                self.btn_6_p1.background_color=(0, 1, 0, .7)
+                self.btn_6_p1.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_3.append('u')
                 self.btn_5_p1.text ='u'
-                self.btn_5_p1.background_color=(1, 1, 1, .7)
+                self.btn_5_p1.background_color=(1, 1, 1, 1)
                 self.btn_6_p1.text ='u'
-                self.btn_6_p1.background_color=(1, 1, 1, .7)
+                self.btn_6_p1.background_color=(1, 1, 1, 1)
         elif len(foo_3) == 3:
             if button == self.btn_n:
                 z = foo_3.append('n')
                 self.btn_7_p1.text ='n'
-                self.btn_7_p1.background_color=(1, 0, 0, .7)
+                self.btn_7_p1.background_color=(1, 0, 0, 1)
                 self.btn_8_p1.text ='n'
-                self.btn_8_p1.background_color=(1, 0, 0, .7)
+                self.btn_8_p1.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_3.append('a')
                 self.btn_7_p1.text ='a'
-                self.btn_7_p1.background_color=(0, 1, 0, .7)
+                self.btn_7_p1.background_color=(0, 1, 0, 1)
                 self.btn_8_p1.text ='a'
-                self.btn_8_p1.background_color=(0, 1, 0, .7)
+                self.btn_8_p1.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_3.append('u')
                 self.btn_7_p1.text ='u'
-                self.btn_7_p1.background_color=(1, 1, 1, .7)
+                self.btn_7_p1.background_color=(1, 1, 1, 1)
                 self.btn_8_p1.text ='u'
-                self.btn_8_p1.background_color=(1, 1, 1, .7)
+                self.btn_8_p1.background_color=(1, 1, 1, 1)
         elif len(foo_3) == 4:
             print('test')
             self.first_formula = foo_3
             if button == self.btn_n:
                 z = foo_3.append('n')
                 self.btn_1_p2.text ='n'
-                self.btn_1_p2.background_color=(1, 0, 0, .7)
+                self.btn_1_p2.background_color=(1, 0, 0, 1)
                 self.btn_5_p2.text ='n'
-                self.btn_5_p2.background_color=(1, 0, 0, .7)
+                self.btn_5_p2.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_3.append('a')
                 self.btn_1_p2.text ='a'
-                self.btn_1_p2.background_color=(0, 1, 0, .7)
+                self.btn_1_p2.background_color=(0, 1, 0, 1)
                 self.btn_5_p2.text ='a'
-                self.btn_5_p2.background_color=(0, 1, 0, .7)
+                self.btn_5_p2.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_3.append('u')
                 self.btn_1_p2.text ='u'
-                self.btn_1_p2.background_color=(1, 1, 1, .7)
+                self.btn_1_p2.background_color=(1, 1, 1, 1)
                 self.btn_5_p2.text ='u'
-                self.btn_5_p2.background_color=(1, 1, 1, .7)
+                self.btn_5_p2.background_color=(1, 1, 1, 1)
         elif len(foo_3) == 5:
             if button == self.btn_n:
                 z = foo_3.append('n')
                 self.btn_2_p2.text ='n'
-                self.btn_2_p2.background_color=(1, 0, 0, .7)
+                self.btn_2_p2.background_color=(1, 0, 0, 1)
                 self.btn_6_p2.text ='n'
-                self.btn_6_p2.background_color=(1, 0, 0, .7)
+                self.btn_6_p2.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_3.append('a')
                 self.btn_2_p2.text ='a'
-                self.btn_2_p2.background_color=(0, 1, 0, .7)
+                self.btn_2_p2.background_color=(0, 1, 0, 1)
                 self.btn_6_p2.text ='a'
-                self.btn_6_p2.background_color=(0, 1, 0, .7)
+                self.btn_6_p2.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_3.append('u')
                 self.btn_2_p2.text ='u'
-                self.btn_2_p2.background_color=(1, 1, 1, .7)
+                self.btn_2_p2.background_color=(1, 1, 1, 1)
                 self.btn_6_p2.text ='u'
-                self.btn_6_p2.background_color=(1, 1, 1, .7)
+                self.btn_6_p2.background_color=(1, 1, 1, 1)
         elif len(foo_3) == 6:
             if button == self.btn_n:
                 z = foo_3.append('n')
                 self.btn_3_p2.text ='n'
-                self.btn_3_p2.background_color=(1, 0, 0, .7)
+                self.btn_3_p2.background_color=(1, 0, 0, 1)
                 self.btn_7_p2.text ='n'
-                self.btn_7_p2.background_color=(1, 0, 0, .7)
+                self.btn_7_p2.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_3.append('a')
                 self.btn_3_p2.text ='a'
-                self.btn_3_p2.background_color=(0, 1, 0, .7)
+                self.btn_3_p2.background_color=(0, 1, 0, 1)
                 self.btn_7_p2.text ='a'
-                self.btn_7_p2.background_color=(0, 1, 0, .7)
+                self.btn_7_p2.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_3.append('u')
                 self.btn_3_p2.text ='u'
-                self.btn_3_p2.background_color=(1, 1, 1, .7)
+                self.btn_3_p2.background_color=(1, 1, 1, 1)
                 self.btn_7_p2.text ='u'
-                self.btn_7_p2.background_color=(1, 1, 1, .7)
+                self.btn_7_p2.background_color=(1, 1, 1, 1)
         elif len(foo_3) == 7:
             if button == self.btn_n:
                 z = foo_3.append('n')
                 self.btn_4_p2.text ='n'
-                self.btn_4_p2.background_color=(1, 0, 0, .7)
+                self.btn_4_p2.background_color=(1, 0, 0, 1)
                 self.btn_8_p2.text ='n'
-                self.btn_8_p2.background_color=(1, 0, 0, .7)
+                self.btn_8_p2.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_3.append('a')
                 self.btn_4_p2.text ='a'
-                self.btn_4_p2.background_color=(0, 1, 0, .7)
+                self.btn_4_p2.background_color=(0, 1, 0, 1)
                 self.btn_8_p2.text ='a'
-                self.btn_8_p2.background_color=(0, 1, 0, .7)
+                self.btn_8_p2.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_3.append('u')
                 self.btn_4_p2.text ='u'
-                self.btn_4_p2.background_color=(1, 1, 1, .7)
+                self.btn_4_p2.background_color=(1, 1, 1, 1)
                 self.btn_8_p2.text ='u'
-                self.btn_8_p2.background_color=(1, 1, 1, .7)
+                self.btn_8_p2.background_color=(1, 1, 1, 1)
         elif len(foo_3) == 8:
             print('test')
             self.second_formula = foo_3[4:8]
             if button == self.btn_n:
                 z = foo_3.append('n')
                 self.btn_1_p3.text ='n'
-                self.btn_1_p3.background_color=(1, 0, 0, .7)
+                self.btn_1_p3.background_color=(1, 0, 0, 1)
                 self.btn_3_p3.text ='n'
-                self.btn_3_p3.background_color=(1, 0, 0, .7)
+                self.btn_3_p3.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_3.append('a')
                 self.btn_1_p3.text ='a'
-                self.btn_1_p3.background_color=(0, 1, 0, .7)
+                self.btn_1_p3.background_color=(0, 1, 0, 1)
                 self.btn_3_p3.text ='a'
-                self.btn_3_p3.background_color=(0, 1, 0, .7)
+                self.btn_3_p3.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_3.append('u')
                 self.btn_1_p3.text ='u'
-                self.btn_1_p3.background_color=(1, 1, 1, .7)
+                self.btn_1_p3.background_color=(1, 1, 1, 1)
                 self.btn_3_p3.text ='u'
-                self.btn_3_p3.background_color=(1, 1, 1, .7)
+                self.btn_3_p3.background_color=(1, 1, 1, 1)
         elif len(foo_3) == 9:
             if button == self.btn_n:
                 z = foo_3.append('n')
                 self.btn_2_p3.text ='n'
-                self.btn_2_p3.background_color=(1, 0, 0, .7)
+                self.btn_2_p3.background_color=(1, 0, 0, 1)
                 self.btn_4_p3.text ='n'
-                self.btn_4_p3.background_color=(1, 0, 0, .7)
+                self.btn_4_p3.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_3.append('a')
                 self.btn_2_p3.text ='a'
-                self.btn_2_p3.background_color=(0, 1, 0, .7)
+                self.btn_2_p3.background_color=(0, 1, 0, 1)
                 self.btn_4_p3.text ='a'
-                self.btn_4_p3.background_color=(0, 1, 0, .7)
+                self.btn_4_p3.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_3.append('u')
                 self.btn_2_p3.text ='u'
-                self.btn_2_p3.background_color=(1, 1, 1, .7)
+                self.btn_2_p3.background_color=(1, 1, 1, 1)
                 self.btn_4_p3.text ='u'
-                self.btn_4_p3.background_color=(1, 1, 1, .7)
+                self.btn_4_p3.background_color=(1, 1, 1, 1)
         elif len(foo_3) == 10:
             if button == self.btn_n:
                 z = foo_3.append('n')
                 self.btn_5_p3.text ='n'
-                self.btn_5_p3.background_color=(1, 0, 0, .7)
+                self.btn_5_p3.background_color=(1, 0, 0, 1)
                 self.btn_7_p3.text ='n'
-                self.btn_7_p3.background_color=(1, 0, 0, .7)
+                self.btn_7_p3.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_3.append('a')
                 self.btn_5_p3.text ='a'
-                self.btn_5_p3.background_color=(0, 1, 0, .7)
+                self.btn_5_p3.background_color=(0, 1, 0, 1)
                 self.btn_7_p3.text ='a'
-                self.btn_7_p3.background_color=(0, 1, 0, .7)
+                self.btn_7_p3.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_3.append('u')
                 self.btn_5_p3.text ='u'
-                self.btn_5_p3.background_color=(1, 1, 1, .7)
+                self.btn_5_p3.background_color=(1, 1, 1, 1)
                 self.btn_7_p3.text ='u'
-                self.btn_7_p3.background_color=(1, 1, 1, .7)
+                self.btn_7_p3.background_color=(1, 1, 1, 1)
         elif len(foo_3) == 11:
             if button == self.btn_n:
                 z = foo_3.append('n')
                 self.btn_6_p3.text ='n'
-                self.btn_6_p3.background_color=(1, 0, 0, .7)
+                self.btn_6_p3.background_color=(1, 0, 0, 1)
                 self.btn_8_p3.text ='n'
-                self.btn_8_p3.background_color=(1, 0, 0, .7)
+                self.btn_8_p3.background_color=(1, 0, 0, 1)
             elif button == self.btn_a:
                 z = foo_3.append('a')
                 self.btn_6_p3.text ='a'
-                self.btn_6_p3.background_color=(0, 1, 0, .7)
+                self.btn_6_p3.background_color=(0, 1, 0, 1)
                 self.btn_8_p3.text ='a'
-                self.btn_8_p3.background_color=(0, 1, 0, .7)
+                self.btn_8_p3.background_color=(0, 1, 0, 1)
             elif button == self.btn_u:
                 z = foo_3.append('u')
                 self.btn_6_p3.text ='u'
-                self.btn_6_p3.background_color=(1, 1, 1, .7)
+                self.btn_6_p3.background_color=(1, 1, 1, 1)
                 self.btn_8_p3.text ='u'
-                self.btn_8_p3.background_color=(1, 1, 1, .7)
+                self.btn_8_p3.background_color=(1, 1, 1, 1)
         if len(foo_3) == 12:
             self.third_formula = foo_3[8:12]
             self.btn_n.disabled = True
@@ -3134,77 +3220,77 @@ class Total_formulas_QuizScreen(Screen):
             self.btn_7_c.text = function_output_list_upper_value_seven
             self.btn_8_c.text = function_output_list_upper_value_eight
             if function_output_list[0][0] == 'n':
-                self.btn_1_c.background_color=(1, 0, 0, .7)
-                self.btn_1_c.background_color=(1, 0, 0, .7)
+                self.btn_1_c.background_color=(1, 0, 0, 1)
+                self.btn_1_c.background_color=(1, 0, 0, 1)
             elif function_output_list[0][0] == 'a':
-                self.btn_1_c.background_color=(0, 1, 0, .7)
-                self.btn_1_c.background_color=(0, 1, 0, .7)
+                self.btn_1_c.background_color=(0, 1, 0, 1)
+                self.btn_1_c.background_color=(0, 1, 0, 1)
             elif function_output_list[0][0] == 'u':
-                self.btn_1_c.background_color=(1, 1, 1, .7)
-                self.btn_1_c.background_color=(1, 1, 1, .7)
+                self.btn_1_c.background_color=(1, 1, 1, 1)
+                self.btn_1_c.background_color=(1, 1, 1, 1)
             if function_output_list[0][1] == 'n':
-                self.btn_2_c.background_color=(1, 0, 0, .7)
-                self.btn_2_c.background_color=(1, 0, 0, .7)
+                self.btn_2_c.background_color=(1, 0, 0, 1)
+                self.btn_2_c.background_color=(1, 0, 0, 1)
             elif function_output_list[0][1] == 'a':
-                self.btn_2_c.background_color=(0, 1, 0, .7)
-                self.btn_2_c.background_color=(0, 1, 0, .7)
+                self.btn_2_c.background_color=(0, 1, 0, 1)
+                self.btn_2_c.background_color=(0, 1, 0, 1)
             elif function_output_list[0][1] == 'u':
-                self.btn_2_c.background_color=(1, 1, 1, .7)
-                self.btn_2_c.background_color=(1, 1, 1, .7)
+                self.btn_2_c.background_color=(1, 1, 1, 1)
+                self.btn_2_c.background_color=(1, 1, 1, 1)
             if function_output_list[0][2] == 'n':
-                self.btn_3_c.background_color=(1, 0, 0, .7)
-                self.btn_3_c.background_color=(1, 0, 0, .7)
+                self.btn_3_c.background_color=(1, 0, 0, 1)
+                self.btn_3_c.background_color=(1, 0, 0, 1)
             elif function_output_list[0][2] == 'a':
-                self.btn_3_c.background_color=(0, 1, 0, .7)
-                self.btn_3_c.background_color=(0, 1, 0, .7)
+                self.btn_3_c.background_color=(0, 1, 0, 1)
+                self.btn_3_c.background_color=(0, 1, 0, 1)
             elif function_output_list[0][2] == 'u':
-                self.btn_3_c.background_color=(1, 1, 1, .7)
-                self.btn_3_c.background_color=(1, 1, 1, .7)
+                self.btn_3_c.background_color=(1, 1, 1, 1)
+                self.btn_3_c.background_color=(1, 1, 1, 1)
             if function_output_list[0][3] == 'n':
-                self.btn_4_c.background_color=(1, 0, 0, .7)
-                self.btn_4_c.background_color=(1, 0, 0, .7)
+                self.btn_4_c.background_color=(1, 0, 0, 1)
+                self.btn_4_c.background_color=(1, 0, 0, 1)
             elif function_output_list[0][3] == 'a':
-                self.btn_4_c.background_color=(0, 1, 0, .7)
-                self.btn_4_c.background_color=(0, 1, 0, .7)
+                self.btn_4_c.background_color=(0, 1, 0, 1)
+                self.btn_4_c.background_color=(0, 1, 0, 1)
             elif function_output_list[0][3] == 'u':
-                self.btn_4_c.background_color=(1, 1, 1, .7)
-                self.btn_4_c.background_color=(1, 1, 1, .7)
+                self.btn_4_c.background_color=(1, 1, 1, 1)
+                self.btn_4_c.background_color=(1, 1, 1, 1)
             if function_output_list[0][4] == 'n':
-                self.btn_5_c.background_color=(1, 0, 0, .7)
-                self.btn_5_c.background_color=(1, 0, 0, .7)
+                self.btn_5_c.background_color=(1, 0, 0, 1)
+                self.btn_5_c.background_color=(1, 0, 0, 1)
             elif function_output_list[0][4] == 'a':
-                self.btn_5_c.background_color=(0, 1, 0, .7)
-                self.btn_5_c.background_color=(0, 1, 0, .7)
+                self.btn_5_c.background_color=(0, 1, 0, 1)
+                self.btn_5_c.background_color=(0, 1, 0, 1)
             elif function_output_list[0][4] == 'u':
-                self.btn_5_c.background_color=(1, 1, 1, .7)
-                self.btn_5_c.background_color=(1, 1, 1, .7)
+                self.btn_5_c.background_color=(1, 1, 1, 1)
+                self.btn_5_c.background_color=(1, 1, 1, 1)
             if function_output_list[0][5] == 'n':
-                self.btn_6_c.background_color=(1, 0, 0, .7)
-                self.btn_6_c.background_color=(1, 0, 0, .7)
+                self.btn_6_c.background_color=(1, 0, 0, 1)
+                self.btn_6_c.background_color=(1, 0, 0, 1)
             elif function_output_list[0][5] == 'a':
-                self.btn_6_c.background_color=(0, 1, 0, .7)
-                self.btn_6_c.background_color=(0, 1, 0, .7)
+                self.btn_6_c.background_color=(0, 1, 0, 1)
+                self.btn_6_c.background_color=(0, 1, 0, 1)
             elif function_output_list[0][5] == 'u':
-                self.btn_6_c.background_color=(1, 1, 1, .7)
-                self.btn_6_c.background_color=(1, 1, 1, .7)
+                self.btn_6_c.background_color=(1, 1, 1, 1)
+                self.btn_6_c.background_color=(1, 1, 1, 1)
             if function_output_list[0][6] == 'n':
-                self.btn_7_c.background_color=(1, 0, 0, .7)
-                self.btn_7_c.background_color=(1, 0, 0, .7)
+                self.btn_7_c.background_color=(1, 0, 0, 1)
+                self.btn_7_c.background_color=(1, 0, 0, 1)
             elif function_output_list[0][6] == 'a':
-                self.btn_7_c.background_color=(0, 1, 0, .7)
-                self.btn_7_c.background_color=(0, 1, 0, .7)
+                self.btn_7_c.background_color=(0, 1, 0, 1)
+                self.btn_7_c.background_color=(0, 1, 0, 1)
             elif function_output_list[0][6] == 'u':
-                self.btn_7_c.background_color=(1, 1, 1, .7)
-                self.btn_7_c.background_color=(1, 1, 1, .7)
+                self.btn_7_c.background_color=(1, 1, 1, 1)
+                self.btn_7_c.background_color=(1, 1, 1, 1)
             if function_output_list[0][7] == 'n':
-                self.btn_8_c.background_color=(1, 0, 0, .7)
-                self.btn_8_c.background_color=(1, 0, 0, .7)
+                self.btn_8_c.background_color=(1, 0, 0, 1)
+                self.btn_8_c.background_color=(1, 0, 0, 1)
             elif function_output_list[0][7] == 'a':
-                self.btn_8_c.background_color=(0, 1, 0, .7)
-                self.btn_8_c.background_color=(0, 1, 0, .7)
+                self.btn_8_c.background_color=(0, 1, 0, 1)
+                self.btn_8_c.background_color=(0, 1, 0, 1)
             elif function_output_list[0][7] == 'u':
-                self.btn_8_c.background_color=(1, 1, 1, .7)
-                self.btn_8_c.background_color=(1, 1, 1, .7)
+                self.btn_8_c.background_color=(1, 1, 1, 1)
+                self.btn_8_c.background_color=(1, 1, 1, 1)
                 
     def refresh_function(self, button):
         
@@ -3298,21 +3384,21 @@ class Total_formulas_QuizScreen(Screen):
         self.premis_one_label = Label(text='1. Formula', size_hint_x = 2.5)
         self.syllogism_box_row_4.add_widget(self.premis_one_label)
 
-        self.btn_1_p1 = Button(background_normal='')
+        self.btn_1_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_1_p1)
-        self.btn_2_p1 = Button(background_normal='')
+        self.btn_2_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_2_p1)
-        self.btn_3_p1 = Button(background_normal='')
+        self.btn_3_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_3_p1)
-        self.btn_4_p1 = Button(background_normal='')
+        self.btn_4_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_4_p1)
-        self.btn_5_p1 = Button(background_normal='')
+        self.btn_5_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_5_p1)
-        self.btn_6_p1 = Button(background_normal='')
+        self.btn_6_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_6_p1)
-        self.btn_7_p1 = Button(background_normal='')
+        self.btn_7_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_7_p1)
-        self.btn_8_p1 = Button(background_normal='')
+        self.btn_8_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_8_p1)
 
         self.syllogism_box_row_5 = BoxLayout(orientation='horizontal')
@@ -3321,21 +3407,21 @@ class Total_formulas_QuizScreen(Screen):
         self.premis_two_label = Label(text='2. Formula', size_hint_x = 2.5)
         self.syllogism_box_row_5.add_widget(self.premis_two_label)
 
-        self.btn_1_p2 = Button(background_normal='')
+        self.btn_1_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_1_p2)
-        self.btn_2_p2 = Button(background_normal='')
+        self.btn_2_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_2_p2)
-        self.btn_3_p2 = Button(background_normal='')
+        self.btn_3_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_3_p2)
-        self.btn_4_p2 = Button(background_normal='')
+        self.btn_4_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_4_p2)
-        self.btn_5_p2 = Button(background_normal='')
+        self.btn_5_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_5_p2)
-        self.btn_6_p2 = Button(background_normal='')
+        self.btn_6_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_6_p2)
-        self.btn_7_p2 = Button(background_normal='')
+        self.btn_7_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_7_p2)
-        self.btn_8_p2 = Button(background_normal='')
+        self.btn_8_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_8_p2)
 
         self.syllogism_box_row_6 = BoxLayout(orientation='horizontal')
@@ -3344,21 +3430,21 @@ class Total_formulas_QuizScreen(Screen):
         self.premis_three_label = Label(text='3. Formula', size_hint_x = 2.5)
         self.syllogism_box_row_6.add_widget(self.premis_three_label)
 
-        self.btn_1_p3 = Button(background_normal='')
+        self.btn_1_p3 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_1_p3)
-        self.btn_2_p3 = Button(background_normal='')
+        self.btn_2_p3 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_2_p3)
-        self.btn_3_p3 = Button(background_normal='')
+        self.btn_3_p3 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_3_p3)
-        self.btn_4_p3 = Button(background_normal='')
+        self.btn_4_p3 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_4_p3)
-        self.btn_5_p3 = Button(background_normal='')
+        self.btn_5_p3 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_5_p3)
-        self.btn_6_p3 = Button(background_normal='')
+        self.btn_6_p3 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_6_p3)
-        self.btn_7_p3 = Button(background_normal='')
+        self.btn_7_p3 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_7_p3)
-        self.btn_8_p3 = Button(background_normal='')
+        self.btn_8_p3 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_8_p3)
 
         self.syllogism_box_row_6 = BoxLayout(orientation='horizontal')
@@ -3367,21 +3453,21 @@ class Total_formulas_QuizScreen(Screen):
         self.conclusion_label = Label(text='Total-formula', size_hint_x = 2.5)
         self.syllogism_box_row_6.add_widget(self.conclusion_label)
 
-        self.btn_1_c = Button(background_normal='')
+        self.btn_1_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_1_c)
-        self.btn_2_c = Button(background_normal='')
+        self.btn_2_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_2_c)
-        self.btn_3_c = Button(background_normal='')
+        self.btn_3_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_3_c)
-        self.btn_4_c = Button(background_normal='')
+        self.btn_4_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_4_c)
-        self.btn_5_c = Button(background_normal='')
+        self.btn_5_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_5_c)
-        self.btn_6_c = Button(background_normal='')
+        self.btn_6_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_6_c)
-        self.btn_7_c = Button(background_normal='')
+        self.btn_7_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_7_c)
-        self.btn_8_c = Button(background_normal='')
+        self.btn_8_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_8_c)
 
         self.syllogism_box_col_2 = BoxLayout(orientation='vertical')
@@ -3393,17 +3479,17 @@ class Total_formulas_QuizScreen(Screen):
         self.box_horizontal_buttons_down = BoxLayout(orientation='horizontal')
         vertical.add_widget(self.box_horizontal_buttons_down)
 
-        self.btn_n = Button(text='n', background_normal='', background_color=(1, 0, 0, .7))
+        self.btn_n = Button(text='n', color= (0, 0, 0, 1), background_normal='', background_color=(1, 0, 0, 1))
         self.box_horizontal_buttons_down.add_widget(self.btn_n)
         variable_btn_n ='n'
         self.btn_n.bind(on_press=self.append_function)
 
-        self.btn_a = Button(text='a', background_normal='', background_color=(0, 1, 0, .7))
+        self.btn_a = Button(text='a', color= (0, 0, 0, 1), background_normal='', background_color=(0, 1, 0, 1))
         self.box_horizontal_buttons_down.add_widget(self.btn_a)
         variable_btn_a ='a'
         self.btn_a.bind(on_press=self.append_function)
 
-        self.btn_u = Button(text='u', background_normal='', background_color=(1, 1, 1, .7))
+        self.btn_u = Button(text='u', color= (0, 0, 0, 1), background_normal='', background_color=(1, 1, 1, 1))
         self.box_horizontal_buttons_down.add_widget(self.btn_u)
         variable_btn_u ='u'
         self.btn_u.bind(on_press=self.append_function)
@@ -3479,7 +3565,7 @@ class TransformationsScreen(Screen):
         self.obversion_btn.bind(on_press=self.obversion_fn)
         layout_in_layout_2.add_widget(self.obversion_btn)
 
-        self.contradiction_btn = Button(text= 'Contradiction', font_size= 20)
+        self.contradiction_btn = Button(text= 'Contraposition', font_size= 20)
         self.contradiction_btn.bind(on_press=self.contradiction_fn)
         layout_in_layout_2.add_widget(self.contradiction_btn)
 
@@ -3541,7 +3627,10 @@ class Conditional_StatementsScreen(Screen):
     pass
 
 class RessourcesScreen(Screen):
-    pass
+    text_syllogism_ressource = 'Pure Strict syllogistic,\n Version from 16:44,\n 15 January 2024'
+            
+    def __init__(self, **kwargs):
+        super(RelativeLayout, self).__init__(**kwargs)
 
 class TestApp(App):
     
@@ -3552,6 +3641,8 @@ class TestApp(App):
         sm.add_widget(GeneralScreen(name='general'))
         sm.add_widget(Menu_introductionScreen(name='menu_introduction'))
         sm.add_widget(Menu_introductionScreen_1(name='menu_introduction_1'))
+        sm.add_widget(Menu_conclusion_introductionScreen(name='menu_conclusion_introduction'))
+        sm.add_widget(Table_overviewScreen(name='table_overview'))
         sm.add_widget(TrainingScreen(name='training'))
         sm.add_widget(Menu_total_formulas_Screen(name='menu-total-formulas'))
         sm.add_widget(Total_formulas_QuizScreen(name='total-formulas-quiz'))
