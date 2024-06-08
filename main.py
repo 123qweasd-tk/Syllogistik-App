@@ -85,6 +85,8 @@ Builder.load_string("""
             color: 0,1,0.5
         Button:
             text: 'General'
+            halign: 'center'
+            valign: 'center'
             font_size: dp(27)
             on_press: root.manager.current = 'general'
             background_normal: ''
@@ -93,6 +95,7 @@ Builder.load_string("""
             text: root.button_conclusion_in_main_menu
             text_size: self.size
             halign: 'center'
+            valign: 'center'
             font_size: dp(27)
             on_press: root.manager.current = 'menu_conclusions'
             background_normal: ''
@@ -101,6 +104,7 @@ Builder.load_string("""
             text: root.button_total_formulas_in_main_menu
             text_size: self.size
             halign: 'center'
+            valign: 'center'
             font_size: dp(27)
             on_press: root.manager.current = 'menu-total-formulas'
             background_normal: ''
@@ -109,6 +113,7 @@ Builder.load_string("""
             text: root.button_transformations_in_main_menu
             text_size: self.size
             halign: 'center'
+            valign: 'center'
             font_size: dp(27)
             on_press: root.manager.current = 'menu_transformations'
             background_normal: ''
@@ -277,6 +282,8 @@ Builder.load_string("""
             orientation: "vertical"
             Label:
                 text: root.label_left_menu_total_formulas
+                halign: 'center'
+                valign: 'center'
                 font_size: dp(27)
                 color: (.5, .6, .8, 1)
                 text_size: self.size
@@ -302,6 +309,8 @@ Builder.load_string("""
             orientation: "vertical"
             Label:
                 text: root.label_right_menu_total_formulas
+                halign: 'center'
+                valign: 'center'
                 font_size: dp(27)
                 color: (.5, .6, .8, 1)
                 text_size: self.size
@@ -393,6 +402,7 @@ Builder.load_string("""
             text: root.text_syllogism_ressource
             text_size: self.size
             halign: 'center'
+            valign: 'center'
             font_size: dp(27)
             on_press:
                 import webbrowser
@@ -921,8 +931,8 @@ class Table_overviewScreen_2(Screen):
         window_one = screen_manager.get_screen('calculating_quiz')
         self.enlonged_list = window_one.enlonged_list
 
-        self.dyadic_formulas_list = ['B#C', 'BÄC', 'BÖC', 'B&C', 'B@C', 'B%C', 'B$C', 'BÜC',\
-                                "BÜ'C", "B$'C", "B%'C", "B@'C", "B&'C", "BÖ'C", "BÄ'C", "B#'C"]
+        self.dyadic_formulas_list = ['B#C', 'BÄC', 'B@C', 'B%C', 'BÖC', 'B&C', 'B$C', 'BÜC',\
+                                "BÜ'C", "B$'C", "B&'C", "BÖ'C", "B%'C", "B@'C",  "BÄ'C", "B#'C"]
 
         self.dyadic_formulas_list_2 = ['C#D', 'CÄD', 'CÖD', 'C&D', 'C@D', 'C%D', 'C$D', 'CÜD',\
                                 "CÜ'D", "C$'D", "C%'D", "C@'D", "C&'D", "CÖ'D", "CÄ'D", "C#'D"]
@@ -961,15 +971,15 @@ class Table_overviewScreen_2(Screen):
             self.col_x.add_widget(self.c_d)
             #self.label_test = Label(text= self.dyadic_formulas_list[k], font_name= 'my_custom_font')
             #self.col_x.add_widget(self.label_test)
+
             for i in range(len(self.enlonged_list)):
                 #print(self.enlonged_list[i][0])
-                
+            
                 if self.enlonged_list[i][0][1] == self.dyadic_formulas_list_2[j]:
                     for k in range(len(self.dyadic_formulas_list_2)):
                         if self.enlonged_list[i][0][0] == self.dyadic_formulas_list[k]:
                             count_1 = count_1 + 1
                             
-                            #print(count_1, self.enlonged_list[i])
                             #print(self.enlonged_list[i])
                             if self.enlonged_list[i][1][1] != [0]:
                                 self.label_test_2 = CustomLabel_red(text= str(len(self.enlonged_list[i][1][1])), font_name= 'my_custom_font')
@@ -1010,6 +1020,230 @@ class TrainingScreen(Screen):
     
     foo_1 = []
     active_4_dummy = False
+    
+    def dyadic_name_first_formula(self, formula):
+        if formula == ['a', 'u', 'n', 'a']: # traditionelle Syllogistik
+            return "MaP"
+        elif formula == ['n', 'a', 'a', 'u']:
+            return "MeP"
+        elif formula == ['a', 'u', 'n', 'a']:
+            return "MiP"
+        elif formula == ['u', 'u', 'a', 'u']:
+            return "MoP"
+        elif formula == ['a', 'n', 'u', 'a']:
+            return "PaM"
+        elif formula == ['n', 'a', 'a', 'u']:
+            return "PeM"
+        elif formula == ['a', 'u', 'u', 'u']:
+            return "PiM"
+        elif formula == ['u', 'a', 'u', 'u']:
+            return "PoM"
+        elif formula == ['a', 'n', 'u', 'a']:
+            return "MãP" # vervollständigte Syllogistik
+        elif formula == ['u', 'a', 'a', 'n']:
+            return "MëP"
+        elif formula == ['u', 'u', 'u', 'a']:
+            return "MïP"
+        elif formula == ['u', 'a', 'u', 'u']:
+            return "MõP"
+        elif formula == ['a', 'u', 'n', 'a']:
+            return "PãM"
+        elif formula == ['u', 'a', 'a', 'n']:
+            return "PëM"
+        elif formula == ['u', 'u', 'u', 'a']:
+            return "PïM"
+        elif formula == ['u', 'u', 'a', 'u']:
+            return "PõM"
+        elif formula == ['a', 'a', 'a', 'a']: # Dyadische Formeln
+            return "M#P"
+        elif formula == ['a', 'a', 'a', 'n']:
+            return "MÄP"
+        elif formula == ['a', 'n', 'a', 'a']:
+            return "MÖP"
+        elif formula == ['a', 'n', 'a', 'n']:
+            return "M&P"
+        elif formula == ['a', 'a', 'n', 'a']:
+            return "M@P"
+        elif formula == ['a', 'a', 'n', 'n']:
+            return "M%P"
+        elif formula == ['a', 'n', 'n', 'a']:
+            return "M$P"
+        elif formula == ['a', 'n', 'n', 'n']:
+            return "MÜP"
+        elif formula == ['n', 'a', 'a', 'a']:
+            return "MÜ'P"
+        elif formula == ['n', 'a', 'a', 'n']:
+            return "M$'P"
+        elif formula == ['n', 'n', 'a', 'a']:
+            return "M%'P"
+        elif formula == ['n', 'n', 'a', 'n']:
+            return "M@'P"
+        elif formula == ['n', 'a', 'n', 'a']:
+            return "M&'P"
+        elif formula == ['n', 'a', 'n', 'n']:
+            return "MÖ'P"
+        elif formula == ['n', 'n', 'n', 'a']:
+            return "MÄ'P"
+        elif formula == ['n', 'n', 'n', 'n']:
+            return "M#'P"
+        elif formula == ['a', 'u', 'a', 'u']: # erweiterte Syllogistik
+            return "MioP"
+        elif formula == ['a', 'a', 'u', 'u']:
+            return "MiõP"
+        elif formula == ['u', 'a', 'a', 'u']:
+            return "MoõP"
+        elif formula == ['u', 'u', 'a', 'a']:
+            return "MoïP"
+        elif formula == ['u', 'a', 'u', 'a']:
+            return "MõïP"
+        else:
+            return " "
+        
+    def dyadic_name_second_formula(self, formula):
+        if formula == ['a', 'u', 'n', 'a']: # traditionelle Syllogistik
+            return "SaM"
+        elif formula == ['n', 'a', 'a', 'u']:
+            return "SeM"
+        elif formula == ['a', 'u', 'n', 'a']:
+            return "SiM"
+        elif formula == ['u', 'u', 'a', 'u']:
+            return "SoM"
+        elif formula == ['a', 'n', 'u', 'a']:
+            return "MaS"
+        elif formula == ['n', 'a', 'a', 'u']:
+            return "MeS"
+        elif formula == ['a', 'u', 'u', 'u']:
+            return "MiS"
+        elif formula == ['u', 'a', 'u', 'u']:
+            return "MoS"
+        elif formula == ['a', 'n', 'u', 'a']:
+            return "SãM" # vervollständigte Syllogistik
+        elif formula == ['u', 'a', 'a', 'n']:
+            return "SëM"
+        elif formula == ['u', 'u', 'u', 'a']:
+            return "SïM"
+        elif formula == ['u', 'a', 'u', 'u']:
+            return "MõM"
+        elif formula == ['a', 'u', 'n', 'a']:
+            return "MãS"
+        elif formula == ['u', 'a', 'a', 'n']:
+            return "MëS"
+        elif formula == ['u', 'u', 'u', 'a']:
+            return "MïS"
+        elif formula == ['u', 'u', 'a', 'u']:
+            return "MõS"
+        elif formula == ['a', 'a', 'a', 'a']: # Dyadische Formeln
+            return "S#M"
+        elif formula == ['a', 'a', 'a', 'n']:
+            return "SÄM"
+        elif formula == ['a', 'n', 'a', 'a']:
+            return "SÖM"
+        elif formula == ['a', 'n', 'a', 'n']:
+            return "S&M"
+        elif formula == ['a', 'a', 'n', 'a']:
+            return "S@M"
+        elif formula == ['a', 'a', 'n', 'n']:
+            return "S%M"
+        elif formula == ['a', 'n', 'n', 'a']:
+            return "S$M"
+        elif formula == ['a', 'n', 'n', 'n']:
+            return "SÜM"
+        elif formula == ['n', 'a', 'a', 'a']:
+            return "SÜ'M"
+        elif formula == ['n', 'a', 'a', 'n']:
+            return "S$'M"
+        elif formula == ['n', 'n', 'a', 'a']:
+            return "S%'M"
+        elif formula == ['n', 'n', 'a', 'n']:
+            return "S@'M"
+        elif formula == ['n', 'a', 'n', 'a']:
+            return "S&'M"
+        elif formula == ['n', 'a', 'n', 'n']:
+            return "SÖ'M"
+        elif formula == ['n', 'n', 'n', 'a']:
+            return "SÄ'M"
+        elif formula == ['n', 'n', 'n', 'n']:
+            return "S#'M"
+        else:
+            return " "
+        
+    def dyadic_name_third_formula(self, formula):
+        if formula == ['a', 'u', 'n', 'a']: # traditionelle Syllogistik
+            return "SaP"
+        elif formula == ['n', 'a', 'a', 'u']:
+            return "SeP"
+        elif formula == ['a', 'u', 'n', 'a']:
+            return "SiP"
+        elif formula == ['u', 'u', 'a', 'u']:
+            return "SoP"
+        elif formula == ['a', 'n', 'u', 'a']:
+            return "PaS"
+        elif formula == ['n', 'a', 'a', 'u']:
+            return "PeS"
+        elif formula == ['a', 'u', 'u', 'u']:
+            return "PiS"
+        elif formula == ['u', 'a', 'u', 'u']:
+            return "PoS"
+        elif formula == ['a', 'n', 'u', 'a']:
+            return "SãP" # vervollständigte Syllogistik
+        elif formula == ['u', 'a', 'a', 'n']:
+            return "SëP"
+        elif formula == ['u', 'u', 'u', 'a']:
+            return "SïP"
+        elif formula == ['u', 'a', 'u', 'u']:
+            return "SõP"
+        elif formula == ['a', 'u', 'n', 'a']:
+            return "PãS"
+        elif formula == ['u', 'a', 'a', 'n']:
+            return "PëS"
+        elif formula == ['u', 'u', 'u', 'a']:
+            return "PïS"
+        elif formula == ['u', 'u', 'a', 'u']:
+            return "PõS"
+        elif formula == ['a', 'a', 'a', 'a']:
+            return "S#P"
+        elif formula == ['a', 'a', 'a', 'n']:
+            return "SÄP"
+        elif formula == ['a', 'n', 'a', 'a']:
+            return "SÖP"
+        elif formula == ['a', 'n', 'a', 'n']:
+            return "S&P"
+        elif formula == ['a', 'a', 'n', 'a']:
+            return "S@P"
+        elif formula == ['a', 'a', 'n', 'n']:
+            return "S%P"
+        elif formula == ['a', 'n', 'n', 'a']:
+            return "S$P"
+        elif formula == ['a', 'n', 'n', 'n']:
+            return "SÜP"
+        elif formula == ['n', 'a', 'a', 'a']:
+            return "SÜ'P"
+        elif formula == ['n', 'a', 'a', 'n']:
+            return "S$'P"
+        elif formula == ['n', 'n', 'a', 'a']:
+            return "S%'P"
+        elif formula == ['n', 'n', 'a', 'n']:
+            return "S@'P"
+        elif formula == ['n', 'a', 'n', 'a']:
+            return "S&'P"
+        elif formula == ['n', 'a', 'n', 'n']:
+            return "SÖ'P"
+        elif formula == ['n', 'n', 'n', 'a']:
+            return "SÄ'P"
+        elif formula == ['n', 'n', 'n', 'n']:
+            return "S#'P"
+        elif formula == ['a', 'u', 'a', 'u']:
+            return "PioS"
+        elif formula == ['a', 'a', 'u', 'u']:
+            return "PiõS"
+        elif formula == ['u', 'a', 'a', 'u']:
+            return "PoõS"
+        elif formula == ['u', 'u', 'a', 'a']:
+            return "PoïS"
+        elif formula == ['u', 'a', 'u', 'a']:
+            return "PõïS"
+        else:
+            return " "
 
     def syllogism_example_function(self, premis_one, premis_two, solution):
         if premis_one == "MaP" and premis_two == "SaM": # example-sentences - traditional syllogistic
@@ -1157,13 +1391,13 @@ class TrainingScreen(Screen):
 
     def syllogism_deduction_first_value_a(self, first_formula, second_formula):
         if first_formula[0] == "a" and second_formula[1] == "n" and second_formula[
-            0] == "n":  # calculates potential "a"-values of first value
+            0] != "n":  # calculates potential "a"-values of first value
             return ("a")
-        elif second_formula[0] == "a" and first_formula[2] == "n" and first_formula[0] == "n":
+        elif second_formula[0] == "a" and first_formula[2] == "n" and first_formula[0] != "n":
             return ("a")
-        elif first_formula[1] == "a" and second_formula[3] == "n" and second_formula[2] == "n":
+        elif first_formula[1] == "a" and second_formula[3] == "n" and second_formula[2] != "n":
             return ("a")
-        elif second_formula[2] == "a" and first_formula[3] == "n" and first_formula[1] == "n":
+        elif second_formula[2] == "a" and first_formula[3] == "n" and first_formula[1] != "n":
             return ("a")
         else:  # calculates potential "u"-values of first value
             return ("u")
@@ -1182,13 +1416,13 @@ class TrainingScreen(Screen):
 
     def syllogism_deduction_second_value_a(self, first_formula, second_formula):
         if first_formula[0] == "a" and second_formula[0] == "n" and second_formula[
-            1] == "n":  # calculates potential "a"-values of second value
+            1] != "n":  # calculates potential "a"-values of second value
             return ("a")
-        elif second_formula[1] == "a" and first_formula[2] == "n" and first_formula[0] == "n":
+        elif second_formula[1] == "a" and first_formula[2] == "n" and first_formula[0] != "n":
             return ("a")
-        elif first_formula[1] == "a" and second_formula[2] == "n" and second_formula[3] == "n":
+        elif first_formula[1] == "a" and second_formula[2] == "n" and second_formula[3] != "n":
             return ("a")
-        elif second_formula[3] == "a" and first_formula[3] == "n" and first_formula[1] == "n":
+        elif second_formula[3] == "a" and first_formula[3] == "n" and first_formula[1] != "n":
             return ("a")
         else:  # calculates potential "u"-values of second value
             return ("u")
@@ -1206,13 +1440,13 @@ class TrainingScreen(Screen):
             return ("u")
 
     def syllogism_deduction_third_value_a(self, first_formula, second_formula):
-        if first_formula[2] == "a" and second_formula[1] == "n" and second_formula[0] == "n":
+        if first_formula[2] == "a" and second_formula[1] == "n" and second_formula[0] != "n":
             return ("a")
-        elif second_formula[0] == "a" and first_formula[0] == "n" and first_formula[2] == "n":
+        elif second_formula[0] == "a" and first_formula[0] == "n" and first_formula[2] != "n":
             return ("a")
-        elif first_formula[3] == "a" and second_formula[3] == "n" and second_formula[2] == "n":
+        elif first_formula[3] == "a" and second_formula[3] == "n" and second_formula[2] != "n":
             return ("a")
-        elif second_formula[2] == "a" and first_formula[1] == "n" and first_formula[3] == "n":
+        elif second_formula[2] == "a" and first_formula[1] == "n" and first_formula[3] != "n":
             return ("a")
         else:
             return ("u")
@@ -1230,114 +1464,7 @@ class TrainingScreen(Screen):
             return ("u")
 
     def syllogism_deduction_fourth_value_a(self, first_formula, second_formula):
-        if first_formula[2] == "a" and second_formula[0] == "n" and second_formula[1] == "n":
-            return ("a")
-        elif second_formula[1] == "a" and first_formula[0] == "n" and first_formula[2] == "n":
-            return ("a")
-        elif first_formula[3] == "a" and second_formula[2] == "n" and second_formula[3] == "n":
-            return ("a")
-        elif second_formula[3] == "a" and first_formula[1] == "n" and first_formula[3] == "n":
-            return ("a")
-        else:
-            return ("u")
-
-    def syllogism_contradiction_test(self, first_formula, second_formula):
-        conclusion = [0, 0, 0, 0, 0, 0, 0, 0]
-        conclusion[0] = self.syllogism_deduction_first_value_n(first_formula, second_formula)
-        conclusion[1] = self.syllogism_deduction_first_value_a(first_formula, second_formula)
-        if conclusion[0] == 'n' and conclusion[1] == 'a':
-            print('first error at 0')
-            return (1)
-        conclusion[2] = self.syllogism_deduction_second_value_n(first_formula, second_formula)
-        conclusion[3] = self.syllogism_deduction_second_value_a(first_formula, second_formula)
-        if conclusion[2] == 'n' and conclusion[3] == 'a':
-            print('first error at 1')
-            return (1)
-        conclusion[4] = self.syllogism_deduction_third_value_n(first_formula, second_formula)
-        conclusion[5] = self.syllogism_deduction_third_value_a(first_formula, second_formula)
-        if conclusion[4] == 'n' and conclusion[5] == 'a':
-            print('first error at 2')
-            return (1)
-        conclusion[6] = self.syllogism_deduction_fourth_value_n(first_formula, second_formula)
-        conclusion[7] = self.syllogism_deduction_fourth_value_a(first_formula, second_formula)
-        if conclusion[6] == 'n' and conclusion[7] == 'a':
-            print('first error at 3')
-            return (1)
-        else:
-            return (0)
-
-    def syllogism_deduction_first_value(self, first_formula, second_formula):
-        if first_formula[0] == "n" and first_formula[1] == "n":  # caluculates potential "n"-values of first value
-            return ("n")
-        elif second_formula[0] == "n" and first_formula[1] == "n":
-            return ("n")
-        elif first_formula[0] == "n" and second_formula[2] == "n":
-            return ("n")
-        elif second_formula[0] == "n" and second_formula[2] == "n":
-            return ("n")
-        elif first_formula[0] == "a" and second_formula[1] == "n" and second_formula[
-            0] != "n":  # calculates potential "a"-values of first value
-            return ("a")
-        elif second_formula[0] == "a" and first_formula[2] == "n" and first_formula[0] != "n":
-            return ("a")
-        elif first_formula[1] == "a" and second_formula[3] == "n" and second_formula[2] != "n":
-            return ("a")
-        elif second_formula[2] == "a" and first_formula[3] == "n" and first_formula[1] != "n":
-            return ("a")
-        else:  # calculates potential "u"-values of first value
-            return ("u")
-
-    def syllogism_deduction_second_value(self, first_formula, second_formula):
-        if first_formula[0] == "n" and first_formula[1] == "n":  # caluculates potential "n"-values of second value
-            return ("n")
-        elif second_formula[1] == "n" and first_formula[1] == "n":
-            return ("n")
-        elif first_formula[0] == "n" and second_formula[3] == "n":
-            return ("n")
-        elif second_formula[1] == "n" and second_formula[3] == "n":
-            return ("n")
-        elif first_formula[0] == "a" and second_formula[0] == "n" and second_formula[
-            1] != "n":  # calculates potential "a"-values of second value
-            return ("a")
-        elif second_formula[1] == "a" and first_formula[2] == "n" and first_formula[0] != "n":
-            return ("a")
-        elif first_formula[1] == "a" and second_formula[2] == "n" and second_formula[3] != "n":
-            return ("a")
-        elif second_formula[3] == "a" and first_formula[3] == "n" and first_formula[1] != "n":
-            return ("a")
-        else:  # calculates potential "u"-values of second value
-            return ("u")
-
-    def syllogism_deduction_third_value(self, first_formula, second_formula):
-        if first_formula[2] == "n" and first_formula[3] == "n":
-            return ("n")
-        elif second_formula[0] == "n" and first_formula[3] == "n":
-            return ("n")
-        elif first_formula[2] == "n" and second_formula[2] == "n":
-            return ("n")
-        elif second_formula[0] == "n" and second_formula[2] == "n":
-            return ("n")
-        elif first_formula[2] == "a" and second_formula[1] == "n" and second_formula[0] != "n":
-            return ("a")
-        elif second_formula[0] == "a" and first_formula[0] == "n" and first_formula[2] != "n":
-            return ("a")
-        elif first_formula[3] == "a" and second_formula[3] == "n" and second_formula[2] != "n":
-            return ("a")
-        elif second_formula[2] == "a" and first_formula[1] == "n" and first_formula[3] != "n":
-            return ("a")
-        else:
-            return ("u")
-
-    def syllogism_deduction_fourth_value(self, first_formula, second_formula):
-        if first_formula[2] == "n" and first_formula[3] == "n":
-            return ("n")
-        elif second_formula[1] == "n" and first_formula[3] == "n":
-            return ("n")
-        elif first_formula[2] == "n" and second_formula[3] == "n":
-            return ("n")
-        elif second_formula[1] == "n" and second_formula[3] == "n":
-            return ("n")
-        elif first_formula[2] == "a" and second_formula[0] == "n" and second_formula[1] != "n":
+        if first_formula[2] == "a" and second_formula[0] == "n" and second_formula[1] != "n":
             return ("a")
         elif second_formula[1] == "a" and first_formula[0] == "n" and first_formula[2] != "n":
             return ("a")
@@ -1348,7 +1475,209 @@ class TrainingScreen(Screen):
         else:
             return ("u")
 
+    def syllogism_deduction_first_value_a_contradiction(self, first_formula, second_formula):
+        if first_formula[0] == "a" and second_formula[1] == "n" and second_formula[
+            0] == "n":  # calculates potential "a"-values of first value
+            self.error_number_enlonged.append([[0], [0]])
+        if second_formula[0] == "a" and first_formula[2] == "n" and first_formula[0] == "n":
+            self.error_number_enlonged.append([[1], [0]])
+        if first_formula[1] == "a" and second_formula[3] == "n" and second_formula[2] == "n":
+            self.error_number_enlonged.append([[0], [1]])
+        if second_formula[2] == "a" and first_formula[3] == "n" and first_formula[1] == "n":
+            self.error_number_enlonged.append([[1], [2]])
+
+    def syllogism_deduction_second_value_a_contradiction(self, first_formula, second_formula):
+        if first_formula[0] == "a" and second_formula[0] == "n" and second_formula[1] == "n":  # calculates potential "a"-values of second value
+            self.error_number_enlonged.append([[0], [0]])
+        if second_formula[1] == "a" and first_formula[2] == "n" and first_formula[0] == "n":
+            self.error_number_enlonged.append([[1], [1]])
+        if first_formula[1] == "a" and second_formula[2] == "n" and second_formula[3] == "n":
+            self.error_number_enlonged.append([[0], [1]])
+        if second_formula[3] == "a" and first_formula[3] == "n" and first_formula[1] == "n":
+            self.error_number_enlonged.append([[1], [3]])
+
+    def syllogism_deduction_third_value_a_contradiction(self, first_formula, second_formula):
+        if first_formula[2] == "a" and second_formula[1] == "n" and second_formula[0] == "n":
+            self.error_number_enlonged.append([[0], [2]])
+        if second_formula[0] == "a" and first_formula[0] == "n" and first_formula[2] == "n":
+            self.error_number_enlonged.append([[1], [0]])
+        if first_formula[3] == "a" and second_formula[3] == "n" and second_formula[2] == "n":
+            self.error_number_enlonged.append([[0], [3]])
+        if second_formula[2] == "a" and first_formula[1] == "n" and first_formula[3] == "n":
+            self.error_number_enlonged.append([[1], [2]])
+        
+    def syllogism_deduction_fourth_value_a_contradiction(self, first_formula, second_formula):
+        if first_formula[2] == "a" and second_formula[0] == "n" and second_formula[1] == "n":
+            self.error_number_enlonged.append([[0], [2]])
+        if second_formula[1] == "a" and first_formula[0] == "n" and first_formula[2] == "n":
+            self.error_number_enlonged.append([[1], [1]])
+        if first_formula[3] == "a" and second_formula[2] == "n" and second_formula[3] == "n":
+            self.error_number_enlonged.append([[0], [3]])
+        if second_formula[3] == "a" and first_formula[1] == "n" and first_formula[3] == "n":
+            self.error_number_enlonged.append([[1], [3]])
+
+    def syllogism_contradiction_test(self, first_formula, second_formula):
+        self.error_number_enlonged = []
+        conclusion = [0, 0, 0, 0, 0, 0, 0, 0]
+        conclusion[0] = self.syllogism_deduction_first_value_n(first_formula, second_formula)
+        conclusion_1_contradiction_value = self.syllogism_deduction_first_value_a_contradiction(first_formula, second_formula)
+        conclusion[1] = conclusion_1_contradiction_value
+        if conclusion[0] == 'n' and conclusion[1] == 'a':
+            self.syllogism_deduction_first_value_a_contradiction(first_formula, second_formula)
+        conclusion[2]  = self.syllogism_deduction_second_value_n(first_formula, second_formula)
+        conclusion_3_contradiction_value = self.syllogism_deduction_second_value_a_contradiction(first_formula, second_formula)
+        conclusion[3] = conclusion_3_contradiction_value
+        if conclusion[2] == 'n' and conclusion[3] == 'a':
+            self.syllogism_deduction_second_value_a_contradiction(first_formula, second_formula)
+        conclusion[4] = self.syllogism_deduction_third_value_n(first_formula, second_formula)
+        conclusion_5_contradiction_value = self.syllogism_deduction_third_value_a_contradiction(first_formula, second_formula)
+        conclusion[5] = conclusion_5_contradiction_value
+        if conclusion[4] == 'n' and conclusion[5] == 'a':
+            self.syllogism_deduction_third_value_a_contradiction(first_formula, second_formula)
+        conclusion[6] = self.syllogism_deduction_fourth_value_n(first_formula, second_formula)
+        conclusion_7_contradiction_value = self.syllogism_deduction_fourth_value_a_contradiction(first_formula, second_formula)
+        conclusion[7] = conclusion_7_contradiction_value
+        if conclusion[6] == 'n' and conclusion[7] == 'a':
+            self.syllogism_deduction_fourth_value_a_contradiction(first_formula, second_formula)
+        if (len(self.error_number_enlonged) != 0):
+            return self.error_number_enlonged[:]
+        else:
+            return ([0])
+
+
+    def syllogism_deduction_first_value(self, first_formula, second_formula):
+        if first_formula[0] == "n" and first_formula[1] == "n":  # caluculates potential "n"-values of first value
+            self.n_goes_into_conclusion.append([[0], [0]])
+            self.n_goes_into_conclusion.append([[0], [2]])
+            return ("n")
+        elif second_formula[0] == "n" and first_formula[1] == "n":
+            self.n_goes_into_conclusion.append([[1], [0]])
+            self.n_goes_into_conclusion.append([[0], [2]])
+            return ("n")
+        elif first_formula[0] == "n" and second_formula[2] == "n":
+            self.n_goes_into_conclusion.append([[0], [0]])
+            self.n_goes_into_conclusion.append([[1], [2]])
+            return ("n")
+        elif second_formula[0] == "n" and second_formula[2] == "n":
+            self.n_goes_into_conclusion.append([[1], [0]])
+            self.n_goes_into_conclusion.append([[1], [2]])
+            return ("n")
+        elif first_formula[0] == "a" and second_formula[1] == "n" and second_formula[
+            0] != "n":  # calculates potential "a"-values of first value
+            self.a_goes_into_conclusion.append([[0], [0]]) # first value: first or second premis, second value: from [0] to [7]
+            return ("a")
+        elif second_formula[0] == "a" and first_formula[2] == "n" and first_formula[0] != "n":
+            self.a_goes_into_conclusion.append([[1], [0]])
+            return ("a")
+        elif first_formula[1] == "a" and second_formula[3] == "n" and second_formula[2] != "n":
+            self.a_goes_into_conclusion.append([[0], [2]])
+            return ("a")
+        elif second_formula[2] == "a" and first_formula[3] == "n" and first_formula[1] != "n":
+            self.a_goes_into_conclusion.append([[1], [2]])
+            return ("a")
+        else:  # calculates potential "u"-values of first value
+            return ("u")
+
+    def syllogism_deduction_second_value(self, first_formula, second_formula):
+        if first_formula[0] == "n" and first_formula[1] == "n":  # caluculates potential "n"-values of second value
+            self.n_goes_into_conclusion.append([[0], [1]])
+            self.n_goes_into_conclusion.append([[0], [3]])
+            return ("n")
+        elif second_formula[1] == "n" and first_formula[1] == "n":
+            self.n_goes_into_conclusion.append([[1], [1]])
+            self.n_goes_into_conclusion.append([[0], [3]])
+            return ("n")
+        elif first_formula[0] == "n" and second_formula[3] == "n":
+            self.n_goes_into_conclusion.append([[0], [1]])
+            self.n_goes_into_conclusion.append([[1], [3]])
+            return ("n")
+        elif second_formula[1] == "n" and second_formula[3] == "n":
+            self.n_goes_into_conclusion.append([[1], [1]])
+            self.n_goes_into_conclusion.append([[1], [3]])
+            return ("n")
+        elif first_formula[0] == "a" and second_formula[0] == "n" and second_formula[
+            1] != "n":  # calculates potential "a"-values of second value
+            self.a_goes_into_conclusion.append([[0], [1]])
+            return ("a")
+        elif second_formula[1] == "a" and first_formula[2] == "n" and first_formula[0] != "n":
+            self.a_goes_into_conclusion.append([[1], [1]])
+            return ("a")
+        elif first_formula[1] == "a" and second_formula[2] == "n" and second_formula[3] != "n":
+            self.a_goes_into_conclusion.append([[0], [3]])
+            return ("a")
+        elif second_formula[3] == "a" and first_formula[3] == "n" and first_formula[1] != "n":
+            self.a_goes_into_conclusion.append([[1], [3]])
+            return ("a")
+        else:  # calculates potential "u"-values of second value
+            return ("u")
+
+    def syllogism_deduction_third_value(self, first_formula, second_formula):
+        if first_formula[2] == "n" and first_formula[3] == "n":
+            self.n_goes_into_conclusion.append([[0], [4]])
+            self.n_goes_into_conclusion.append([[0], [6]])
+            return ("n")
+        elif second_formula[0] == "n" and first_formula[3] == "n":
+            self.n_goes_into_conclusion.append([[1], [4]])
+            self.n_goes_into_conclusion.append([[0], [6]])
+            return ("n")
+        elif first_formula[2] == "n" and second_formula[2] == "n":
+            self.n_goes_into_conclusion.append([[0], [4]])
+            self.n_goes_into_conclusion.append([[1], [6]])
+            return ("n")
+        elif second_formula[0] == "n" and second_formula[2] == "n":
+            self.n_goes_into_conclusion.append([[1], [4]])
+            self.n_goes_into_conclusion.append([[1], [6]])
+            return ("n")
+        elif first_formula[2] == "a" and second_formula[1] == "n" and second_formula[0] != "n":
+            self.a_goes_into_conclusion.append([[0], [4]])
+            return ("a")
+        elif second_formula[0] == "a" and first_formula[0] == "n" and first_formula[2] != "n":
+            self.a_goes_into_conclusion.append([[1], [4]])
+            return ("a")
+        elif first_formula[3] == "a" and second_formula[3] == "n" and second_formula[2] != "n":
+            self.a_goes_into_conclusion.append([[0], [6]])
+            return ("a")
+        elif second_formula[2] == "a" and first_formula[1] == "n" and first_formula[3] != "n":
+            self.a_goes_into_conclusion.append([[1], [6]])
+            return ("a")
+        else:
+            return ("u")
+
+    def syllogism_deduction_fourth_value(self, first_formula, second_formula):
+        if first_formula[2] == "n" and first_formula[3] == "n":
+            self.n_goes_into_conclusion.append([[0], [5]])
+            self.n_goes_into_conclusion.append([[0], [7]])
+            return ("n")
+        elif second_formula[1] == "n" and first_formula[3] == "n":
+            self.n_goes_into_conclusion.append([[1], [5]])
+            self.n_goes_into_conclusion.append([[0], [7]])
+            return ("n")
+        elif first_formula[2] == "n" and second_formula[3] == "n":
+            self.n_goes_into_conclusion.append([[0], [5]])
+            self.n_goes_into_conclusion.append([[1], [7]])
+            return ("n")
+        elif second_formula[1] == "n" and second_formula[3] == "n":
+            self.n_goes_into_conclusion.append([[1], [5]])
+            self.n_goes_into_conclusion.append([[1], [7]])
+            return ("n")
+        elif first_formula[2] == "a" and second_formula[0] == "n" and second_formula[1] != "n":
+            self.a_goes_into_conclusion.append([[0], [5]])
+            return ("a")
+        elif second_formula[1] == "a" and first_formula[0] == "n" and first_formula[2] != "n":
+            self.a_goes_into_conclusion.append([[1], [5]])
+            return ("a")
+        elif first_formula[3] == "a" and second_formula[2] == "n" and second_formula[3] != "n":
+            self.a_goes_into_conclusion.append([[0], [7]])
+            return ("a")
+        elif second_formula[3] == "a" and first_formula[1] == "n" and first_formula[3] != "n":
+            self.a_goes_into_conclusion.append([[1], [7]])
+            return ("a")
+        else:
+            return ("u")
+
     def syllogism_solution(self,first_formula, second_formula):
+        self.a_goes_into_conclusion = []
+        self.n_goes_into_conclusion = []
         conclusion = [0, 0, 0, 0]
         conclusion[0] = self.syllogism_deduction_first_value(first_formula, second_formula)
         conclusion[1] = self.syllogism_deduction_second_value(first_formula, second_formula)
@@ -1474,6 +1803,7 @@ class TrainingScreen(Screen):
                 self.btn_8_p1.background_color=(1, 1, 1, 1)
         elif len(foo_1) == 4:
             self.first_formula = foo_1
+            self.premis_one_label.text = self.dyadic_name_first_formula(self.first_formula)
             if button == self.btn_n:
                 z = foo_1.append('n')
                 self.btn_1_p2.text ='n'
@@ -1551,6 +1881,7 @@ class TrainingScreen(Screen):
                 self.btn_8_p2.background_color=(1, 1, 1, 1)
         if len(foo_1) == 8:
             self.second_formula = foo_1[4:8]
+            self.premis_two_label.text = self.dyadic_name_second_formula(self.second_formula)
             self.btn_n.disabled = True
             self.btn_a.disabled = True
             self.btn_u.disabled = True
@@ -1573,17 +1904,6 @@ class TrainingScreen(Screen):
         wrong_label = Label(color= (1, 0, 0, 1), text='Wrong!', size_hint=(.5, .3), pos_hint={'x': .25, 'y': .25})
         self.add_widget(wrong_label)
 
-    def on_checkbox_Active(self, checkboxInstance, isActive):
-        if isActive:
-            self.lbl_active_advice.text = self.my_text_training_conclusion
-        else:
-            self.lbl_active_advice.text = "OFF"
-
-    def on_checkbox_Active_2(self, checkboxInstance, isActive):
-        if isActive:
-            self.lbl_active_advice.text = self.advice_premises_and_conclusion
-        else:
-            self.lbl_active_advice.text = "OFF"
 
     def on_checkbox_Active_3(self, checkboxInstance, isActive):
         if isActive:
@@ -1687,6 +2007,9 @@ class TrainingScreen(Screen):
                 self.remove_widget(child)
         
         foo_1.clear()
+        self.error_number_enlonged.clear()
+        self.a_goes_into_conclusion.clear()
+        self.n_goes_into_conclusion.clear()
         
         self.menu_button = Button(text='Menu', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .9})
         self.add_widget(self.menu_button)
@@ -1758,28 +2081,9 @@ class TrainingScreen(Screen):
         advice_premis_1 = self.first_formula_values(first_formula)
         advice_premis_2 = self.second_formula_values(second_formula)
         
-        function_output_list = self.output2(self.my_text, self.my_text2)
-        #advices:
-        self.my_text_training_conclusion = '  1. premis: ' + advice_premis_1[0] + '-' + advice_premis_1[0] + ' ' + \
-                                          advice_premis_1[
-                                              1] + '-' + advice_premis_1[1] + ' ' + advice_premis_1[2] + '-' + \
-                                          advice_premis_1[2] + ' ' + advice_premis_1[
-                                              3] + '-' + advice_premis_1[3] + "\n" + '  2. premis: ' + advice_premis_2[
-                                              0] + ' ' + \
-                                          advice_premis_2[1] + ' ' + advice_premis_2[2] + ' ' + advice_premis_2[3] + ',' + \
-                                          advice_premis_2[0] + ' ' + advice_premis_2[1] + ' ' + advice_premis_2[2] + ' ' + \
-                                          advice_premis_2[3]
-        self.advice_premises_and_conclusion = '  1. premis: ' + advice_premis_1[0] + '-' + advice_premis_1[0] + ' ' + \
-                                          advice_premis_1[
-                                              1] + '-' + advice_premis_1[1] + ' ' + advice_premis_1[2] + '-' + \
-                                          advice_premis_1[2] + ' ' + advice_premis_1[
-                                              3] + '-' + advice_premis_1[3] + "\n" + '  2. premis: ' + advice_premis_2[
-                                              0] + ' ' + \
-                                          advice_premis_2[1] + ' ' + advice_premis_2[2] + ' ' + advice_premis_2[3] + ',' + \
-                                          advice_premis_2[0] + ' ' + advice_premis_2[1] + ' ' + advice_premis_2[2] + ' ' + \
-                                          advice_premis_2[3] + "\n" + '-------------------------------------------' + "\n" + 'conclusion: ' + function_output_list[3][0] + ' ' + function_output_list[3][1] + ' ' + function_output_list[3][0] + ' ' + function_output_list[3][1] + ' ' + function_output_list[3][2] + ' ' + function_output_list[3][3] + ' ' + function_output_list[3][2] + ' ' + function_output_list[3][3]
+        self.function_output_list = self.output2(self.my_text, self.my_text2)
         
-        syllogism_example_text = self.syllogism_example_function(self.my_text, self.my_text2, function_output_list[3])
+        syllogism_example_text = self.syllogism_example_function(self.my_text, self.my_text2, self.function_output_list[3])
         self.syllogism_example_text = syllogism_example_text
 
         self.label_first_premis = Label(text='')
@@ -1834,19 +2138,12 @@ class TrainingScreen(Screen):
 
         self.checkbox_4_dummy_label = Label(text='')
 
-        self.boxlayout_Checkbox_1.add_widget(self.label_advice_1)
-        self.boxlayout_Checkbox_1.add_widget(self.active)
-        self.boxlayout_Checkbox_2.add_widget(self.label_advice_2)
-        self.boxlayout_Checkbox_2.add_widget(self.active_2)
         self.boxlayout_Checkbox_3.add_widget(self.label_example)
         self.boxlayout_Checkbox_3.add_widget(self.active_3)
         self.boxlayout_Checkbox_4.add_widget(self.label_sentences)
         self.boxlayout_Checkbox_4.add_widget(self.checkbox_4_dummy_label)
         
 
-        
-        self.active.bind(active=self.on_checkbox_Active)
-        self.active_2.bind(active=self.on_checkbox_Active_2)
         self.active_3.bind(active=self.on_checkbox_Active_3)
     
         self.syllogism_box_col_1 = BoxLayout(orientation='vertical')
@@ -1924,7 +2221,7 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_4 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_4)
         
-        self.premis_one_label = Label(text='premis one', size_hint_x = 2.0)
+        self.premis_one_label = Label(text='premis one', size_hint_x = 2.0, font_name = 'my_custom_font')
         self.syllogism_box_row_4.add_widget(self.premis_one_label)
 
         self.btn_1_p1 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -1943,11 +2240,14 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_4.add_widget(self.btn_7_p1)
         self.btn_8_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_8_p1)
+        
+        self.buttons_premis_one = [self.btn_1_p1, self.btn_2_p1, self.btn_3_p1, self.btn_4_p1, \
+                                   self.btn_5_p1, self.btn_6_p1, self.btn_7_p1, self.btn_8_p1]
 
         self.syllogism_box_row_5 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_5)
         
-        self.premis_two_label = Label(text='premis two', size_hint_x = 2.0)
+        self.premis_two_label = Label(text='premis two', size_hint_x = 2.0, font_name = 'my_custom_font')
         self.syllogism_box_row_5.add_widget(self.premis_two_label)
 
         self.btn_1_p2 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -1967,10 +2267,13 @@ class TrainingScreen(Screen):
         self.btn_8_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_8_p2)
         
+        self.buttons_premis_two = [self.btn_1_p2, self.btn_2_p2, self.btn_3_p2, self.btn_4_p2, \
+                                   self.btn_5_p2, self.btn_6_p2, self.btn_7_p2, self.btn_8_p2]
+        
         self.syllogism_box_row_6 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_6)
         
-        self.conclusion_label = Label(text='conclusion', size_hint_x = 2.0)
+        self.conclusion_label = Label(text='conclusion', size_hint_x = 2.0, font_name = 'my_custom_font')
         self.syllogism_box_row_6.add_widget(self.conclusion_label)
 
         self.btn_1_c = Button(color= (0, 0, 0, 1), background_normal='')
@@ -1990,6 +2293,35 @@ class TrainingScreen(Screen):
         self.btn_8_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_8_c)
         
+        self.buttons_conclusion = [self.btn_1_c, self.btn_2_c, self.btn_3_c, self.btn_4_c,\
+                                   self.btn_5_c, self.btn_6_c, self.btn_7_c, self.btn_8_c]
+
+        self.syllogism_box_row_7 = BoxLayout(orientation='horizontal')
+        self.syllogism_box_col_1.add_widget(self.syllogism_box_row_7)
+        
+        self.solution_label = Label(text='solution', size_hint_x = 2.0, font_name = 'my_custom_font')
+        self.syllogism_box_row_7.add_widget(self.solution_label)
+
+        self.btn_1_s = Button(color= (0, 0, 0, 1))
+        self.syllogism_box_row_7.add_widget(self.btn_1_s)
+        self.btn_2_s = Button(color= (0, 0, 0, 1))
+        self.syllogism_box_row_7.add_widget(self.btn_2_s)
+        self.btn_3_s = Button(color= (0, 0, 0, 1))
+        self.syllogism_box_row_7.add_widget(self.btn_3_s)
+        self.btn_4_s = Button(color= (0, 0, 0, 1))
+        self.syllogism_box_row_7.add_widget(self.btn_4_s)
+        self.btn_5_s = Button(color= (0, 0, 0, 1))
+        self.syllogism_box_row_7.add_widget(self.btn_5_s)
+        self.btn_6_s = Button(color= (0, 0, 0, 1))
+        self.syllogism_box_row_7.add_widget(self.btn_6_s)
+        self.btn_7_s = Button(color= (0, 0, 0, 1))
+        self.syllogism_box_row_7.add_widget(self.btn_7_s)
+        self.btn_8_s = Button(color= (0, 0, 0, 1))
+        self.syllogism_box_row_7.add_widget(self.btn_8_s)
+
+        self.buttons_solution = [self.btn_1_s, self.btn_2_s, self.btn_3_s, self.btn_4_s,\
+                                 self.btn_5_s, self.btn_6_s, self.btn_7_s, self.btn_8_s]
+        
         self.answer_buttons_and_advices = BoxLayout(orientation='horizontal')
         vertical.add_widget(self.answer_buttons_and_advices)
 
@@ -2007,8 +2339,7 @@ class TrainingScreen(Screen):
         self.buttons = [self.button1, self.button2, self.button3]
         correct_answer = random.randrange(len(self.buttons))
 
-        print(function_output_list[3])
-        button_text = function_output_list[0]
+        button_text = self.function_output_list[0]
         
         completedsyllogistic = self.function_completed_syllogistic_settings()
         
@@ -2046,10 +2377,7 @@ class TrainingScreen(Screen):
         self.box_advices_and_example_BoxLayout = BoxLayout(orientation='vertical')
         self.answer_buttons_and_advices.add_widget(self.box_advices_and_example_BoxLayout)
 
-        self.lbl_active_advice = Label(text="Advice OFF")
-        self.box_advices_and_example_BoxLayout.add_widget(self.lbl_active_advice)
-            
-        self.lbl_active_example = Label(text="Example OFF")
+        self.lbl_active_example = Label(text="Example OFF", font_size= 20)
         self.box_advices_and_example_BoxLayout.add_widget(self.lbl_active_example)
 
         self.box_horizontal_buttons_down = BoxLayout(orientation='horizontal')
@@ -2079,60 +2407,211 @@ class TrainingScreen(Screen):
         my_text = self.first_formula
         first_formula = my_text
         my_text2 = self.second_formula
-        second_formula = my_text2
+        second_formula = my_text2[:]
         advice_premis_1 = self.first_formula_values(first_formula)
         advice_premis_2 = self.second_formula_values(second_formula)
         function_output_list = self.output2(my_text, my_text2)
+        formulas_list_first_premis = first_formula[0:4][:]
+        print(formulas_list_first_premis)
+        print(second_formula)
+        formulas_list = [formulas_list_first_premis, second_formula]
+        print(function_output_list[3])
 
-        if function_output_list[4] == 1:
+        solution = [self.function_output_list[3][0][:], self.function_output_list[3][1][:], self.function_output_list[3][0][:], self.function_output_list[3][1][:], \
+            self.function_output_list[3][2][:], self.function_output_list[3][3][:], self.function_output_list[3][2][:], self.function_output_list[3][3][:]] 
+ 
+        self.conclusion_label.text = self.dyadic_name_third_formula(function_output_list[3])
+        self.solution_label.text =  self.dyadic_name_third_formula(self.function_output_list[3])
+
+        self.btn_1_c.text = function_output_list[3][0]
+        self.btn_3_c.text = function_output_list[3][0]
+        self.btn_2_c.text = function_output_list[3][1]
+        self.btn_4_c.text = function_output_list[3][1]
+        self.btn_5_c.text = function_output_list[3][2]
+        self.btn_7_c.text = function_output_list[3][2]
+        self.btn_6_c.text = function_output_list[3][3]
+        self.btn_8_c.text = function_output_list[3][3]
+        if function_output_list[3][0] == 'n':
+            self.btn_1_c.background_color=(1, 0, 0, 1)
+            self.btn_3_c.background_color=(1, 0, 0, 1)
+        elif function_output_list[3][0] == 'a':
+            self.btn_1_c.background_color=(0, 1, 0, 1)
+            self.btn_3_c.background_color=(0, 1, 0, 1)
+        elif function_output_list[3][0] == 'u':
+            self.btn_1_c.background_color=(1, 1, 1, 1)
+            self.btn_3_c.background_color=(1, 1, 1, 1)
+        if function_output_list[3][1] == 'n':
+            self.btn_2_c.background_color=(1, 0, 0, 1)
+            self.btn_4_c.background_color=(1, 0, 0, 1)
+        elif function_output_list[3][1] == 'a':
+            self.btn_2_c.background_color=(0, 1, 0, 1)
+            self.btn_4_c.background_color=(0, 1, 0, 1)
+        elif function_output_list[3][1] == 'u':
+            self.btn_2_c.background_color=(1, 1, 1, 1)
+            self.btn_4_c.background_color=(1, 1, 1, 1)
+        if function_output_list[3][2] == 'n':
+            self.btn_5_c.background_color=(1, 0, 0, 1)
+            self.btn_7_c.background_color=(1, 0, 0, 1)
+        elif function_output_list[3][2] == 'a':
+            self.btn_5_c.background_color=(0, 1, 0, 1)
+            self.btn_7_c.background_color=(0, 1, 0, 1)
+        elif function_output_list[3][2] == 'u':
+            self.btn_5_c.background_color=(1, 1, 1, 1)
+            self.btn_7_c.background_color=(1, 1, 1, 1)
+        if function_output_list[3][3] == 'n':
+            self.btn_6_c.background_color=(1, 0, 0, 1)
+            self.btn_8_c.background_color=(1, 0, 0, 1)
+        elif function_output_list[3][3] == 'a':
+            self.btn_6_c.background_color=(0, 1, 0, 1)
+            self.btn_8_c.background_color=(0, 1, 0, 1)
+        elif function_output_list[3][3] == 'u':
+            self.btn_6_c.background_color=(1, 1, 1, 1)
+            self.btn_8_c.background_color=(1, 1, 1, 1)
+        
+        if function_output_list[4] == [0]:
+            for r in range(len(self.a_goes_into_conclusion)):
+                for s in range(8):
+                    if self.a_goes_into_conclusion[r][0][0] == 0 and self.a_goes_into_conclusion[r][1][0] == s:
+                        with self.buttons_premis_one[s].canvas:
+                            Color(0,0,0,1)
+                            Line(points=(self.buttons_premis_one[s].center_x-self.buttons_premis_one[s].width*.6/2,\
+                                                                                 self.buttons_premis_one[s].center_y-self.buttons_premis_one[s].height*.95/2,\
+                                                                                 self.buttons_premis_one[s].center_x+self.buttons_premis_one[s].width*.6/2,\
+                                                                                 self.buttons_premis_one[s].center_y-self.buttons_premis_one[s].height*.95/2),\
+                                                                            width=2)
+                    if self.a_goes_into_conclusion[r][0][0] == 1 and self.a_goes_into_conclusion[r][1][0] == s:
+                        with self.buttons_premis_two[s].canvas:
+                            Color(0,0,0,1)
+                            Line(points=(self.buttons_premis_two[s].center_x-self.buttons_premis_two[s].width*.6/2,\
+                                                                                 self.buttons_premis_two[s].center_y-self.buttons_premis_two[s].height*.95/2,\
+                                                                                 self.buttons_premis_two[s].center_x+self.buttons_premis_two[s].width*.6/2,\
+                                                                                 self.buttons_premis_two[s].center_y-self.buttons_premis_two[s].height*.95/2),\
+                                                                            width=2)
+            for r in range(len(self.n_goes_into_conclusion)):
+                for s in range(8):
+                    if self.n_goes_into_conclusion[r][0][0] == 0 and self.n_goes_into_conclusion[r][1][0] == s:
+                        with self.buttons_premis_one[s].canvas:
+                            Color(0,0,0,1)
+                            Line(points=(self.buttons_premis_one[s].center_x-self.buttons_premis_one[s].width*.6/2,\
+                                                                                 self.buttons_premis_one[s].center_y-self.buttons_premis_one[s].height*.95/2,\
+                                                                                 self.buttons_premis_one[s].center_x+self.buttons_premis_one[s].width*.6/2,\
+                                                                                 self.buttons_premis_one[s].center_y-self.buttons_premis_one[s].height*.95/2),\
+                                                                            width=2)
+                    if self.n_goes_into_conclusion[r][0][0] == 1 and self.n_goes_into_conclusion[r][1][0] == s:
+                        with self.buttons_premis_two[s].canvas:
+                            Color(0,0,0,1)
+                            Line(points=(self.buttons_premis_two[s].center_x-self.buttons_premis_two[s].width*.6/2,\
+                                                                                 self.buttons_premis_two[s].center_y-self.buttons_premis_two[s].height*.95/2,\
+                                                                                 self.buttons_premis_two[s].center_x+self.buttons_premis_two[s].width*.6/2,\
+                                                                                 self.buttons_premis_two[s].center_y-self.buttons_premis_two[s].height*.95/2),\
+                                                                            width=2)
+                        
+        
+        if function_output_list[4] != [0]:
             self.conclusion_label.text = "Contradiction!"
-        else:
-            self.btn_1_c.text = function_output_list[3][0]
-            self.btn_3_c.text = function_output_list[3][0]
-            self.btn_2_c.text = function_output_list[3][1]
-            self.btn_4_c.text = function_output_list[3][1]
-            self.btn_5_c.text = function_output_list[3][2]
-            self.btn_7_c.text = function_output_list[3][2]
-            self.btn_6_c.text = function_output_list[3][3]
-            self.btn_8_c.text = function_output_list[3][3]
-            if function_output_list[3][0] == 'n':
-                self.btn_1_c.background_color=(1, 0, 0, 1)
-                self.btn_3_c.background_color=(1, 0, 0, 1)
-            elif function_output_list[3][0] == 'a':
-                self.btn_1_c.background_color=(0, 1, 0, 1)
-                self.btn_3_c.background_color=(0, 1, 0, 1)
-            elif function_output_list[3][0] == 'u':
-                self.btn_1_c.background_color=(1, 1, 1, 1)
-                self.btn_3_c.background_color=(1, 1, 1, 1)
-            if function_output_list[3][1] == 'n':
-                self.btn_2_c.background_color=(1, 0, 0, 1)
-                self.btn_4_c.background_color=(1, 0, 0, 1)
-            elif function_output_list[3][1] == 'a':
-                self.btn_2_c.background_color=(0, 1, 0, 1)
-                self.btn_4_c.background_color=(0, 1, 0, 1)
-            elif function_output_list[3][1] == 'u':
-                self.btn_2_c.background_color=(1, 1, 1, 1)
-                self.btn_4_c.background_color=(1, 1, 1, 1)
-            if function_output_list[3][2] == 'n':
-                self.btn_5_c.background_color=(1, 0, 0, 1)
-                self.btn_7_c.background_color=(1, 0, 0, 1)
-            elif function_output_list[3][2] == 'a':
-                self.btn_5_c.background_color=(0, 1, 0, 1)
-                self.btn_7_c.background_color=(0, 1, 0, 1)
-            elif function_output_list[3][2] == 'u':
-                self.btn_5_c.background_color=(1, 1, 1, 1)
-                self.btn_7_c.background_color=(1, 1, 1, 1)
-            if function_output_list[3][3] == 'n':
-                self.btn_6_c.background_color=(1, 0, 0, 1)
-                self.btn_8_c.background_color=(1, 0, 0, 1)
-            elif function_output_list[3][3] == 'a':
-                self.btn_6_c.background_color=(0, 1, 0, 1)
-                self.btn_8_c.background_color=(0, 1, 0, 1)
-            elif function_output_list[3][3] == 'u':
-                self.btn_6_c.background_color=(1, 1, 1, 1)
-                self.btn_8_c.background_color=(1, 1, 1, 1)
-
-
+            print(formulas_list)
+            print(function_output_list[4])
+            for r in range(len(function_output_list[4])):
+                for s in range(4):
+                    for t in range(2):
+                        if function_output_list[4][r][0][0] == 0 and function_output_list[4][r][1][0] == s:
+                            self.buttons_conclusion[(s+s)+t].background_color = (0, 0, 1, 1)
+                            self.buttons_conclusion[(s+s)+t].text = str((s+s)+t+1)
+                            with self.buttons_premis_one[(s+s)+t].canvas:
+                                Color(0,0,0,1)
+                                Line(points=(self.buttons_premis_one[(s+s)+t].center_x-self.buttons_premis_one[(s+s)+t].width*.6/2,\
+                                                                                     self.buttons_premis_one[(s+s)+t].center_y-self.buttons_premis_one[(s+s)+t].height*.95/2,\
+                                                                                     self.buttons_premis_one[(s+s)+t].center_x+self.buttons_premis_one[(s+s)+t].width*.6/2,\
+                                                                                     self.buttons_premis_one[(s+s)+t].center_y-self.buttons_premis_one[(s+s)+t].height*.95/2),\
+                                                                             width=2)
+                        if function_output_list[4][r][0][0] == 1 and function_output_list[4][r][1][0] == s:
+                            print(t)
+                            self.buttons_conclusion[s+4*t].background_color = (0, 0, 1, 1)
+                            self.buttons_conclusion[s+4*t].text = str(s+4*t+1)
+                            
+        
+        self.btn_1_s.text = self.function_output_list[3][0]
+        self.btn_3_s.text = self.function_output_list[3][0]
+        self.btn_2_s.text = self.function_output_list[3][1]
+        self.btn_4_s.text = self.function_output_list[3][1]
+        self.btn_5_s.text = self.function_output_list[3][2]
+        self.btn_7_s.text = self.function_output_list[3][2]
+        self.btn_6_s.text = self.function_output_list[3][3]
+        self.btn_8_s.text = self.function_output_list[3][3]
+        if self.function_output_list[3][0] == 'n':
+            self.btn_1_s.background_color=(1, 0, 0, 1)
+            self.btn_1_s.background_normal= ''
+            self.btn_3_s.background_color=(1, 0, 0, 1)
+            self.btn_3_s.background_normal= ''
+        elif self.function_output_list[3][0] == 'a':
+            self.btn_1_s.background_color=(0, 1, 0, 1)
+            self.btn_1_s.background_normal= ''
+            self.btn_3_s.background_color=(0, 1, 0, 1)
+            self.btn_3_s.background_normal= ''
+        elif self.function_output_list[3][0] == 'u':
+            self.btn_1_s.background_color=(1, 1, 1, 1)
+            self.btn_1_s.background_normal= ''
+            self.btn_3_s.background_color=(1, 1, 1, 1)
+            self.btn_3_s.background_normal= ''
+        if self.function_output_list[3][1] == 'n':
+            self.btn_2_s.background_color=(1, 0, 0, 1)
+            self.btn_2_s.background_normal= ''
+            self.btn_4_s.background_color=(1, 0, 0, 1)
+            self.btn_4_s.background_normal= ''
+        elif self.function_output_list[3][1] == 'a':
+            self.btn_2_s.background_color=(0, 1, 0, 1)
+            self.btn_2_s.background_normal= ''
+            self.btn_4_s.background_color=(0, 1, 0, 1)
+            self.btn_4_s.background_normal= ''
+        elif self.function_output_list[3][1] == 'u':
+            self.btn_2_s.background_color=(1, 1, 1, 1)
+            self.btn_2_s.background_normal= ''
+            self.btn_4_s.background_color=(1, 1, 1, 1)
+            self.btn_4_s.background_normal= ''
+        if self.function_output_list[3][2] == 'n':
+            self.btn_5_s.background_color=(1, 0, 0, 1)
+            self.btn_5_s.background_normal= ''
+            self.btn_7_s.background_color=(1, 0, 0, 1)
+            self.btn_7_s.background_normal= ''
+        elif self.function_output_list[3][2] == 'a':
+            self.btn_5_s.background_color=(0, 1, 0, 1)
+            self.btn_5_s.background_normal= ''
+            self.btn_7_s.background_color=(0, 1, 0, 1)
+            self.btn_7_s.background_normal= ''
+        elif self.function_output_list[3][2] == 'u':
+            self.btn_5_s.background_color=(1, 1, 1, 1)
+            self.btn_5_s.background_normal= ''
+            self.btn_7_s.background_color=(1, 1, 1, 1)
+            self.btn_7_s.background_normal= ''
+        if self.function_output_list[3][3] == 'n':
+            self.btn_6_s.background_color=(1, 0, 0, 1)
+            self.btn_6_s.background_normal= ''
+            self.btn_8_s.background_color=(1, 0, 0, 1)
+            self.btn_8_s.background_normal= ''
+        elif self.function_output_list[3][3] == 'a':
+            self.btn_6_s.background_color=(0, 1, 0, 1)
+            self.btn_6_s.background_normal= ''
+            self.btn_8_s.background_color=(0, 1, 0, 1)
+            self.btn_8_s.background_normal= ''
+        elif self.function_output_list[3][3] == 'u':
+            self.btn_6_s.background_color=(1, 1, 1, 1)
+            self.btn_6_s.background_normal= ''
+            self.btn_8_s.background_color=(1, 1, 1, 1)
+            self.btn_8_s.background_normal= ''
+        
+        
+        if self.function_output_list[4] != [0]:
+            self.conclusion_label.text = "Contradiction!"
+            for r in range(len(self.function_output_list[4])):
+                for s in range(4):
+                    for t in range(2):
+                        if self.function_output_list[4][r][0][0] == 0 and self.function_output_list[4][r][1][0] == s:
+                            self.buttons_solution[(s+s)+t].background_color = (0, 0, 1, 1)
+                            self.buttons_solution[(s+s)+t].text = str((s+s)+t+1)
+                        if self.function_output_list[4][r][0][0] == 1 and self.function_output_list[4][r][1][0] == s:
+                            print(t)
+                            self.buttons_solution[s+4*t].background_color = (0, 0, 1, 1)
+                            self.buttons_solution[s+4*t].text = str(s+4*t+1)
 
     def __init__(self, **kwargs):
         super(RelativeLayout, self).__init__(**kwargs)
@@ -2298,14 +2777,13 @@ class ConclusionsScreen(Screen):
             return ("u")
 
     def syllogism_deduction_first_value_a(self, first_formula, second_formula):
-        if first_formula[0] == "a" and second_formula[1] == "n" and second_formula[
-            0] == "n":  # calculates potential "a"-values of first value
+        if first_formula[0] == "a" and second_formula[1] == "n":  # calculates potential "a"-values of first value
             return ("a")
-        elif second_formula[0] == "a" and first_formula[2] == "n" and first_formula[0] == "n":
+        elif second_formula[0] == "a" and first_formula[2] == "n":
             return ("a")
-        elif first_formula[1] == "a" and second_formula[3] == "n" and second_formula[2] == "n":
+        elif first_formula[1] == "a" and second_formula[3] == "n":
             return ("a")
-        elif second_formula[2] == "a" and first_formula[3] == "n" and first_formula[1] == "n":
+        elif second_formula[2] == "a" and first_formula[3] == "n":
             return ("a")
         else:  # calculates potential "u"-values of first value
             return ("u")
@@ -2323,13 +2801,13 @@ class ConclusionsScreen(Screen):
             return ("u")
 
     def syllogism_deduction_second_value_a(self, first_formula, second_formula):
-        if first_formula[0] == "a" and second_formula[0] == "n" and second_formula[1] == "n":  # calculates potential "a"-values of second value
+        if first_formula[0] == "a" and second_formula[0] == "n":  # calculates potential "a"-values of second value
             return ("a")
-        elif second_formula[1] == "a" and first_formula[2] == "n" and first_formula[0] == "n":
+        elif second_formula[1] == "a" and first_formula[2] == "n":
             return ("a")
-        elif first_formula[1] == "a" and second_formula[2] == "n" and second_formula[3] == "n":
+        elif first_formula[1] == "a" and second_formula[2] == "n":
             return ("a")
-        elif second_formula[3] == "a" and first_formula[3] == "n" and first_formula[1] == "n":
+        elif second_formula[3] == "a" and first_formula[3] == "n":
             return ("a")
         else:  # calculates potential "u"-values of second value
             return ("u")
@@ -2347,13 +2825,13 @@ class ConclusionsScreen(Screen):
             return ("u")
 
     def syllogism_deduction_third_value_a(self, first_formula, second_formula):
-        if first_formula[2] == "a" and second_formula[1] == "n" and second_formula[0] == "n":
+        if first_formula[2] == "a" and second_formula[1] == "n":
             return ("a")
-        elif second_formula[0] == "a" and first_formula[0] == "n" and first_formula[2] == "n":
+        elif second_formula[0] == "a" and first_formula[0] == "n":
             return ("a")
-        elif first_formula[3] == "a" and second_formula[3] == "n" and second_formula[2] == "n":
+        elif first_formula[3] == "a" and second_formula[3] == "n":
             return ("a")
-        elif second_formula[2] == "a" and first_formula[1] == "n" and first_formula[3] == "n":
+        elif second_formula[2] == "a" and first_formula[1] == "n":
             return ("a")
         else:
             return ("u")
@@ -2371,13 +2849,13 @@ class ConclusionsScreen(Screen):
             return ("u")
 
     def syllogism_deduction_fourth_value_a(self, first_formula, second_formula):
-        if first_formula[2] == "a" and second_formula[0] == "n" and second_formula[1] == "n":
+        if first_formula[2] == "a" and second_formula[0] == "n":
             return ("a")
-        elif second_formula[1] == "a" and first_formula[0] == "n" and first_formula[2] == "n":
+        elif second_formula[1] == "a" and first_formula[0] == "n":
             return ("a")
-        elif first_formula[3] == "a" and second_formula[2] == "n" and second_formula[3] == "n":
+        elif first_formula[3] == "a" and second_formula[2] == "n":
             return ("a")
-        elif second_formula[3] == "a" and first_formula[1] == "n" and first_formula[3] == "n":
+        elif second_formula[3] == "a" and first_formula[1] == "n":
             return ("a")
         else:
             return ("u")
@@ -2988,13 +3466,13 @@ class Training_calculating_quiz_Screen(Screen):
 
     def syllogism_deduction_first_value_a(self, first_formula, second_formula):
         if first_formula[0] == "a" and second_formula[1] == "n" and second_formula[
-            0] == "n":  # calculates potential "a"-values of first value
+            0] != "n":  # calculates potential "a"-values of first value
             return ("a")
-        elif second_formula[0] == "a" and first_formula[2] == "n" and first_formula[0] == "n":
+        elif second_formula[0] == "a" and first_formula[2] == "n" and first_formula[0] != "n":
             return ("a")
-        elif first_formula[1] == "a" and second_formula[3] == "n" and second_formula[2] == "n":
+        elif first_formula[1] == "a" and second_formula[3] == "n" and second_formula[2] != "n":
             return ("a")
-        elif second_formula[2] == "a" and first_formula[3] == "n" and first_formula[1] == "n":
+        elif second_formula[2] == "a" and first_formula[3] == "n" and first_formula[1] != "n":
             return ("a")
         else:  # calculates potential "u"-values of first value
             return ("u")
@@ -3012,13 +3490,14 @@ class Training_calculating_quiz_Screen(Screen):
             return ("u")
 
     def syllogism_deduction_second_value_a(self, first_formula, second_formula):
-        if first_formula[0] == "a" and second_formula[0] == "n" and second_formula[1] == "n":  # calculates potential "a"-values of second value
+        if first_formula[0] == "a" and second_formula[0] == "n" and second_formula[
+            1] != "n":  # calculates potential "a"-values of second value
             return ("a")
-        elif second_formula[1] == "a" and first_formula[2] == "n" and first_formula[0] == "n":
+        elif second_formula[1] == "a" and first_formula[2] == "n" and first_formula[0] != "n":
             return ("a")
-        elif first_formula[1] == "a" and second_formula[2] == "n" and second_formula[3] == "n":
+        elif first_formula[1] == "a" and second_formula[2] == "n" and second_formula[3] != "n":
             return ("a")
-        elif second_formula[3] == "a" and first_formula[3] == "n" and first_formula[1] == "n":
+        elif second_formula[3] == "a" and first_formula[3] == "n" and first_formula[1] != "n":
             return ("a")
         else:  # calculates potential "u"-values of second value
             return ("u")
@@ -3036,13 +3515,13 @@ class Training_calculating_quiz_Screen(Screen):
             return ("u")
 
     def syllogism_deduction_third_value_a(self, first_formula, second_formula):
-        if first_formula[2] == "a" and second_formula[1] == "n" and second_formula[0] == "n":
+        if first_formula[2] == "a" and second_formula[1] == "n" and second_formula[0] != "n":
             return ("a")
-        elif second_formula[0] == "a" and first_formula[0] == "n" and first_formula[2] == "n":
+        elif second_formula[0] == "a" and first_formula[0] == "n" and first_formula[2] != "n":
             return ("a")
-        elif first_formula[3] == "a" and second_formula[3] == "n" and second_formula[2] == "n":
+        elif first_formula[3] == "a" and second_formula[3] == "n" and second_formula[2] != "n":
             return ("a")
-        elif second_formula[2] == "a" and first_formula[1] == "n" and first_formula[3] == "n":
+        elif second_formula[2] == "a" and first_formula[1] == "n" and first_formula[3] != "n":
             return ("a")
         else:
             return ("u")
@@ -3060,36 +3539,81 @@ class Training_calculating_quiz_Screen(Screen):
             return ("u")
 
     def syllogism_deduction_fourth_value_a(self, first_formula, second_formula):
-        if first_formula[2] == "a" and second_formula[0] == "n" and second_formula[1] == "n":
+        if first_formula[2] == "a" and second_formula[0] == "n" and second_formula[1] != "n":
             return ("a")
-        elif second_formula[1] == "a" and first_formula[0] == "n" and first_formula[2] == "n":
+        elif second_formula[1] == "a" and first_formula[0] == "n" and first_formula[2] != "n":
             return ("a")
-        elif first_formula[3] == "a" and second_formula[2] == "n" and second_formula[3] == "n":
+        elif first_formula[3] == "a" and second_formula[2] == "n" and second_formula[3] != "n":
             return ("a")
-        elif second_formula[3] == "a" and first_formula[1] == "n" and first_formula[3] == "n":
+        elif second_formula[3] == "a" and first_formula[1] == "n" and first_formula[3] != "n":
             return ("a")
         else:
             return ("u")
+
+    def syllogism_deduction_first_value_a_contradiction(self, first_formula, second_formula):
+        if first_formula[0] == "a" and second_formula[1] == "n" and second_formula[
+            0] == "n":  # calculates potential "a"-values of first value
+            self.error_number_enlonged.append([[0], [0]])
+        if second_formula[0] == "a" and first_formula[2] == "n" and first_formula[0] == "n":
+            self.error_number_enlonged.append([[1], [0]])
+        if first_formula[1] == "a" and second_formula[3] == "n" and second_formula[2] == "n":
+            self.error_number_enlonged.append([[0], [1]])
+        if second_formula[2] == "a" and first_formula[3] == "n" and first_formula[1] == "n":
+            self.error_number_enlonged.append([[1], [2]])
+
+    def syllogism_deduction_second_value_a_contradiction(self, first_formula, second_formula):
+        if first_formula[0] == "a" and second_formula[0] == "n" and second_formula[1] == "n":  # calculates potential "a"-values of second value
+            self.error_number_enlonged.append([[0], [0]])
+        if second_formula[1] == "a" and first_formula[2] == "n" and first_formula[0] == "n":
+            self.error_number_enlonged.append([[1], [1]])
+        if first_formula[1] == "a" and second_formula[2] == "n" and second_formula[3] == "n":
+            self.error_number_enlonged.append([[0], [1]])
+        if second_formula[3] == "a" and first_formula[3] == "n" and first_formula[1] == "n":
+            self.error_number_enlonged.append([[1], [3]])
+
+    def syllogism_deduction_third_value_a_contradiction(self, first_formula, second_formula):
+        if first_formula[2] == "a" and second_formula[1] == "n" and second_formula[0] == "n":
+            self.error_number_enlonged.append([[0], [2]])
+        if second_formula[0] == "a" and first_formula[0] == "n" and first_formula[2] == "n":
+            self.error_number_enlonged.append([[1], [0]])
+        if first_formula[3] == "a" and second_formula[3] == "n" and second_formula[2] == "n":
+            self.error_number_enlonged.append([[0], [3]])
+        if second_formula[2] == "a" and first_formula[1] == "n" and first_formula[3] == "n":
+            self.error_number_enlonged.append([[1], [2]])
+        
+    def syllogism_deduction_fourth_value_a_contradiction(self, first_formula, second_formula):
+        if first_formula[2] == "a" and second_formula[0] == "n" and second_formula[1] == "n":
+            self.error_number_enlonged.append([[0], [2]])
+        if second_formula[1] == "a" and first_formula[0] == "n" and first_formula[2] == "n":
+            self.error_number_enlonged.append([[1], [1]])
+        if first_formula[3] == "a" and second_formula[2] == "n" and second_formula[3] == "n":
+            self.error_number_enlonged.append([[0], [3]])
+        if second_formula[3] == "a" and first_formula[1] == "n" and first_formula[3] == "n":
+            self.error_number_enlonged.append([[1], [3]])
 
     def syllogism_contradiction_test_enlonged(self, first_formula, second_formula):
         self.error_number_enlonged = []
         conclusion = [0, 0, 0, 0, 0, 0, 0, 0]
         conclusion[0] = self.syllogism_deduction_first_value_n(first_formula, second_formula)
-        conclusion[1] = self.syllogism_deduction_first_value_a(first_formula, second_formula)
+        conclusion_1_contradiction_value = self.syllogism_deduction_first_value_a_contradiction(first_formula, second_formula)
+        conclusion[1] = conclusion_1_contradiction_value
         if conclusion[0] == 'n' and conclusion[1] == 'a':
-            self.error_number_enlonged.append(1)
-        conclusion[2] = self.syllogism_deduction_second_value_n(first_formula, second_formula)
-        conclusion[3] = self.syllogism_deduction_second_value_a(first_formula, second_formula)
+            self.syllogism_deduction_first_value_a_contradiction(first_formula, second_formula)
+        conclusion[2]  = self.syllogism_deduction_second_value_n(first_formula, second_formula)
+        conclusion_3_contradiction_value = self.syllogism_deduction_second_value_a_contradiction(first_formula, second_formula)
+        conclusion[3] = conclusion_3_contradiction_value
         if conclusion[2] == 'n' and conclusion[3] == 'a':
-            self.error_number_enlonged.append(2)
+            self.syllogism_deduction_second_value_a_contradiction(first_formula, second_formula)
         conclusion[4] = self.syllogism_deduction_third_value_n(first_formula, second_formula)
-        conclusion[5] = self.syllogism_deduction_third_value_a(first_formula, second_formula)
+        conclusion_5_contradiction_value = self.syllogism_deduction_third_value_a_contradiction(first_formula, second_formula)
+        conclusion[5] = conclusion_5_contradiction_value
         if conclusion[4] == 'n' and conclusion[5] == 'a':
-            self.error_number_enlonged.append(3)
+            self.syllogism_deduction_third_value_a_contradiction(first_formula, second_formula)
         conclusion[6] = self.syllogism_deduction_fourth_value_n(first_formula, second_formula)
-        conclusion[7] = self.syllogism_deduction_fourth_value_a(first_formula, second_formula)
+        conclusion_7_contradiction_value = self.syllogism_deduction_fourth_value_a_contradiction(first_formula, second_formula)
+        conclusion[7] = conclusion_7_contradiction_value
         if conclusion[6] == 'n' and conclusion[7] == 'a':
-            self.error_number_enlonged.append(4)
+            self.syllogism_deduction_fourth_value_a_contradiction(first_formula, second_formula)
         if (len(self.error_number_enlonged) != 0):
             return self.error_number_enlonged[:]
         else:
@@ -6289,7 +6813,14 @@ class Sat_Screen(Screen):
             self.head_3 = Label(text= self.sat_list_boxlayout_terms_r[j], font_name= 'my_custom_font', size_hint_y= .3)
             self.col_x.add_widget(self.head_3)
             for k in range(4):
-                self.value = Label(text= self.values_list[count_1], font_name= 'my_custom_font')
+                self.value = CustomLabel(text= self.values_list[count_1], color = (0, 0, 0, 1),  font_name= 'my_custom_font')
+                if count_1 == 4 or count_1 == 5 or count_1 == 6 or count_1 == 7 or\
+                   count_1 == 12 or count_1 == 13 or count_1 == 14 or count_1 == 15 or\
+                   count_1 == 20 or count_1 == 21 or count_1 == 22 or count_1 == 23 or\
+                   count_1 == 24 or count_1 == 25 or count_1 == 26 or count_1 == 27:
+                    self.value.background_color = [.9, 1, .9, 1]
+                else:
+                    self.value.background_color = [.3, 1, .3, 1]
                 count_1 = count_1 + 1
                 self.col_x.add_widget(self.value)
                 if (j+1 == 2) or (j+1 == 4) or (j+1 == 6) or (j+1 == 7):
