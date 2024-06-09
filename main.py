@@ -161,6 +161,12 @@ Builder.load_string("""
             background_normal: ''
             background_color: 1, .1, .1, .2
         Button:
+            text: 'Analytische Verhältnisse und synthetische Verbindungen'
+            on_press: root.manager.current = 'menu_introduction_1b'
+            font_size: dp(27)
+            background_normal: ''
+            background_color: 1, .1, .1, .2
+        Button:
             text: 'Direct Inferences/Indirect Inferences'
             on_press: root.manager.current = 'menu_introduction_2'
             font_size: dp(27)
@@ -184,6 +190,8 @@ Builder.load_string("""
         pos_hint: {"x":0.9,"y":0.9}
 
 <Menu_introductionScreen_1>
+
+<Menu_introductionScreen_1b>
 
 <Menu_introductionScreen_2>
 
@@ -696,11 +704,11 @@ class Menu_introductionScreen_1(Screen):
             self.box_layout_introduction_formulas_2.add_widget(self.col_boxlayout)
             
                                                  
-            self.s_3_1 = CustomLabel(text=b_list[i], background_color = [1/((i+1)*.6), 1/((i+1)*.6), 1/((i+1)*.6), 0.8], font_name='my_custom_font')
+            self.s_3_1 = CustomLabel(text=b_list[i], background_color = [0, 0, 0, 1], font_name='my_custom_font')
             self.col_boxlayout.add_widget(self.s_3_1)
-            self.p_3_1 = CustomLabel(text=c_list[i], background_color = [1/((i+1)*.6), 1/((i+1)*.6), 1/((i+1)*.6), 0.8], font_name='my_custom_font')
+            self.p_3_1 = CustomLabel(text=c_list[i], background_color = [0, 0, 0, 1], font_name='my_custom_font')
             self.col_boxlayout.add_widget(self.p_3_1)
-            self.m_3_1 = CustomLabel(text=d_list[i], background_color = [1/((i+1)*.6), 1/((i+1)*.6), 1/((i+1)*.6), 0.8], font_name='my_custom_font')
+            self.m_3_1 = CustomLabel(text=d_list[i], background_color = [0, 0, 0, 1], font_name='my_custom_font')
             self.col_boxlayout.add_widget(self.m_3_1)
 
             for j, triadic_formula in enumerate(self.triadic_formulas_list):
@@ -719,7 +727,30 @@ class Menu_introductionScreen_1(Screen):
         self.root.add_widget(self.layout)
         self.add_widget(self.root)
         
+class Menu_introductionScreen_1b(Screen):
+    
+    def change_screen_menu(self, *args):
+        self.parent.current = 'menu'
+    
+    def __init__(self, **kwargs):
+        super(RelativeLayout, self).__init__(**kwargs)
+        
+        self.layout = GridLayout(cols=1, spacing=70, size_hint_y=None)
+        self.layout.bind(minimum_height=self.layout.setter('height'))
+        
+        self.text_1 = Label(text='"Aus den beiden Prinzipien ergibt sich weiterhin:\n\n\nAnalytische (Identitäts-) Verhältnisse und synthetische Verbindungen sind scharf voneinander zu scheiden.\nEin Sachverhalt oder eine Sachverhaltsverbindung kann mit sich selbst nur durch das Identitätszeichen verknüpft werden, \nz. B. \n      B <-> B\n(BaC)<->(BaC)\n\nDie folgenden Verknüpfungen sind nicht zugelassen: \n           BaB\n (BaC) a (BaC) \nSie stellen Selbstlimitation dar.\n[...]\n\n\nEin Sachverhalt kann mit seinem Komplement gar nicht verknüpft werden. Hier besteht weder analytische noch synthetische Verknüpfung. \nHier besteht nur komplementäre Limitation. \nEs gilt aber: \nB <-> ~~B\n[...]" (Grundlagen der Strengen Logik, S.60f)\n\n\n', size_hint_y=None)
+        self.text_1.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
+        self.text_1.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
+        self.layout.add_widget(self.text_1)
 
+        self.menu_button = Button(text='Menü', background_normal= '', background_color=(1, 1, 1, .5), color=(0, 0, 0, 1), size_hint_y=None)
+        self.layout.add_widget(self.menu_button)
+        self.menu_button.bind(on_press=self.change_screen_menu)
+        
+        
+        self.root = ScrollView(size=(Window.width, Window.height))
+        self.root.add_widget(self.layout)
+        self.add_widget(self.root)
         
 class Menu_introductionScreen_2(Screen):
     
@@ -758,7 +789,7 @@ class Menu_introductionScreen_2(Screen):
 
         self.layout.add_widget(self.box_b_not_b)
         
-        self.text_2 = Label(text='1. Die erste Stufe: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien (das Prinzip der Identität und das Prinzip der Limitation) definiert wird, teilt das Eins in Zwei. Es entstehen vier Möglichkeiten, die sich alle ausschließen. Zudem entstehen Kollektiv-Kennzeichnungen (Au und uN bzw. Nu und uA (unmittelbare Schlüsse)):', size_hint_y = None)
+        self.text_2 = Label(text='\n\n\n\n\n\n1. DIE ERSTE STUFE: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien (das Prinzip der Identität und das Prinzip der Limitation) definiert wird, teilt das Eins in Zwei. Es entstehen vier Möglichkeiten, die sich alle ausschließen. Zudem entstehen Kollektiv-Kennzeichnungen (Au und uN bzw. Nu und uA (unmittelbare Schlüsse)):', size_hint_y = None)
         self.text_2.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_2.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
         self.layout.add_widget(self.text_2)
@@ -793,7 +824,7 @@ class Menu_introductionScreen_2(Screen):
         self.label_box_2_5 = Button(text= 'A', background_normal= '', background_color=(0, 1, 0, 1), color=(0, 0, 0, 1), font_name= 'my_custom_font')
         self.box_3.add_widget(self.label_box_2_5)
 
-        self.box_4 = BoxLayout(orientation= 'vertical', size_hint_y=None, size_hint_x=None)
+        self.box_4 = BoxLayout(orientation= 'vertical', size_hint_x= .4, size_hint_y=None)
         self.box_1.add_widget(self.box_4)
 
         self.label_box_3_1 = Label(text= ' ', size_hint_y= .2)
@@ -803,7 +834,7 @@ class Menu_introductionScreen_2(Screen):
         self.label_box_3_3 = Label(text= 'A\u00A5', size_hint_y= .4, font_name= 'my_custom_font')
         self.box_4.add_widget(self.label_box_3_3)
 
-        self.box_5 = BoxLayout(orientation= 'vertical', size_hint_y=None, size_hint_x=None)
+        self.box_5 = BoxLayout(orientation= 'vertical', size_hint_x= .4, size_hint_y=None)
         self.box_1.add_widget(self.box_5)
 
         self.label_box_4_1 = Label(text= ' ', size_hint_y= .2)
@@ -813,7 +844,7 @@ class Menu_introductionScreen_2(Screen):
         
         self.layout.add_widget(self.box_1)
         
-        self.text_3 = Label(text='Unmittelbare Schlüsse (auf derselben Stufe): \nAN -> Au \nNN -> uN \nusw. \n\nAus der Annahme\n  "Es gibt keine Nicht-Menschen." (uN)\nfolgt nicht:\n  "Es gibt Menschen." (Au)\n\n\n2. Die zweite Stufe: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Zwei in Vier. Ab nun überschneiden sich Begriffe. Jetzt sind es Zwei. Es entstehen 16 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen unmittelbare Schlüsse zwischen Stufen: \n\nUnmittelbare Schlüsse zwischen Stufen: \n\n   a) Ganzformel -> Teilformeln: \nANNA -> auau \n            -> aauu \n\n   b) Teilformeln -> Ganzformel: \nuaua und \nuuaa und \nnunu und \nnnuu        -> NNNA \n\nZum Beispiel folgt aus: "Einige p sind q." (Auuu, piq)\n-->p (auau)\n-->q (aauu).\n\n\n3. Die dritte Stufe: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Vier in Acht. Jetzt überschneiden sich drei Begriffe. Es entstehen 256 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen mittelbare Schlüsse innerhalb einer Stufe (z. B. die traditionelle (und die vollständige traditionelle) Syllogistik): \n\nMittelbare Schlüsse innerhalb einer Stufe (über Mittelbegriff): \n\n   c) Teilformeln -> Teilformel: \naauunnaa und \naunaauna           -> auaunana \n\n\n\nMittelbar innerhalb einer Stufe kann erst ab dritter Stufe geschlossen werden. Dies geschieht über einen Mittelbegriff. Dabei werden die Geltungswertstellen und die dazugehörigen Geltungswerte jeweils um den sozusagen unbeteiligten Begriff verlängert. Aus zwei Formeln (zum Beispiel kategorische Urteile), folgt eine dritte Formel (zum Beispiel ein kategorisches Urteil):\n\nMaP, SaM -> SaP (Barbara). (Siehe "Ressources" -> "Artikel Syllogistik")', size_hint_y=None)
+        self.text_3 = Label(text='Unmittelbare Schlüsse (auf derselben Stufe): \nAN -> Au \nNN -> uN \nusw. \n\nAus der Annahme\n  "Es gibt keine Nicht-Menschen." (uN)\nfolgt nicht:\n  "Es gibt Menschen." (Au)\n\n\n\n\n\n2. DIE ZWEITE STUFE: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Zwei in Vier. Ab nun überschneiden sich Begriffe. Jetzt sind es Zwei. Es entstehen 16 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen unmittelbare Schlüsse zwischen Stufen: \n\nUnmittelbare Schlüsse zwischen Stufen: \n\n   a) Ganzformel -> Teilformeln: \nANNA -> auau \n            -> aauu \n\n   b) Teilformeln -> Ganzformel: \nuaua und \nuuaa und \nnunu und \nnnuu        -> NNNA \n\nZum Beispiel folgt aus: "Einige p sind q." (Auuu, piq)\n-->p (auau)\n-->q (aauu).\n\n\n\n\n\n3. DIE DRITTE STUFE: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Vier in Acht. Jetzt überschneiden sich drei Begriffe. Es entstehen 256 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen mittelbare Schlüsse innerhalb einer Stufe (z. B. die traditionelle (und die vollständige traditionelle) Syllogistik): \n\nMittelbare Schlüsse innerhalb einer Stufe (über Mittelbegriff): \n\n   c) Teilformeln -> Teilformel: \naauunnaa und \naunaauna           -> auaunana \n\n\n\nMittelbar innerhalb einer Stufe kann erst ab dritter Stufe geschlossen werden. Dies geschieht über einen Mittelbegriff. Dabei werden die Geltungswertstellen und die dazugehörigen Geltungswerte jeweils um den sozusagen unbeteiligten Begriff verlängert. Aus zwei Formeln (zum Beispiel kategorische Urteile), folgt eine dritte Formel (zum Beispiel ein kategorisches Urteil):\n\nMaP, SaM -> SaP (Barbara). (Siehe "Ressources" -> "Artikel Syllogistik")', size_hint_y=None)
         self.text_3.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_3.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
         self.layout.add_widget(self.text_3)
@@ -1055,37 +1086,37 @@ class TrainingScreen(Screen):
         elif formula == ['u', 'u', 'a', 'u']:
             return "PõM"
         elif formula == ['a', 'a', 'a', 'a']: # Dyadische Formeln
-            return "M#P"
+            return "P#M"
         elif formula == ['a', 'a', 'a', 'n']:
-            return "MÄP"
+            return "PÄM"
         elif formula == ['a', 'n', 'a', 'a']:
-            return "MÖP"
+            return "PÖM"
         elif formula == ['a', 'n', 'a', 'n']:
-            return "M&P"
+            return "P&M"
         elif formula == ['a', 'a', 'n', 'a']:
-            return "M@P"
+            return "P@M"
         elif formula == ['a', 'a', 'n', 'n']:
-            return "M%P"
+            return "P%M"
         elif formula == ['a', 'n', 'n', 'a']:
-            return "M$P"
+            return "P$M"
         elif formula == ['a', 'n', 'n', 'n']:
-            return "MÜP"
+            return "PÜM"
         elif formula == ['n', 'a', 'a', 'a']:
-            return "MÜ'P"
+            return "PÜ'M"
         elif formula == ['n', 'a', 'a', 'n']:
-            return "M$'P"
+            return "P$'M"
         elif formula == ['n', 'n', 'a', 'a']:
-            return "M%'P"
+            return "P%'M"
         elif formula == ['n', 'n', 'a', 'n']:
-            return "M@'P"
+            return "P@'M"
         elif formula == ['n', 'a', 'n', 'a']:
-            return "M&'P"
+            return "P&'M"
         elif formula == ['n', 'a', 'n', 'n']:
-            return "MÖ'P"
+            return "PÖ'M"
         elif formula == ['n', 'n', 'n', 'a']:
-            return "MÄ'P"
+            return "PÄ'M"
         elif formula == ['n', 'n', 'n', 'n']:
-            return "M#'P"
+            return "P#'M"
         elif formula == ['a', 'u', 'a', 'u']: # erweiterte Syllogistik
             return "MioP"
         elif formula == ['a', 'a', 'u', 'u']:
@@ -1133,37 +1164,47 @@ class TrainingScreen(Screen):
         elif formula == ['u', 'u', 'a', 'u']:
             return "MõS"
         elif formula == ['a', 'a', 'a', 'a']: # Dyadische Formeln
-            return "S#M"
+            return "M#S"
         elif formula == ['a', 'a', 'a', 'n']:
-            return "SÄM"
+            return "MÄS"
         elif formula == ['a', 'n', 'a', 'a']:
-            return "SÖM"
+            return "MÖS"
         elif formula == ['a', 'n', 'a', 'n']:
-            return "S&M"
+            return "M&S"
         elif formula == ['a', 'a', 'n', 'a']:
-            return "S@M"
+            return "M@S"
         elif formula == ['a', 'a', 'n', 'n']:
-            return "S%M"
+            return "M%S"
         elif formula == ['a', 'n', 'n', 'a']:
-            return "S$M"
+            return "M$S"
         elif formula == ['a', 'n', 'n', 'n']:
-            return "SÜM"
+            return "MÜS"
         elif formula == ['n', 'a', 'a', 'a']:
-            return "SÜ'M"
+            return "MÜ'S"
         elif formula == ['n', 'a', 'a', 'n']:
-            return "S$'M"
+            return "M$'S"
         elif formula == ['n', 'n', 'a', 'a']:
-            return "S%'M"
+            return "M%'S"
         elif formula == ['n', 'n', 'a', 'n']:
-            return "S@'M"
+            return "M@'S"
         elif formula == ['n', 'a', 'n', 'a']:
-            return "S&'M"
+            return "M&'S"
         elif formula == ['n', 'a', 'n', 'n']:
-            return "SÖ'M"
+            return "MÖ'S"
         elif formula == ['n', 'n', 'n', 'a']:
-            return "SÄ'M"
+            return "MÄ'S"
         elif formula == ['n', 'n', 'n', 'n']:
-            return "S#'M"
+            return "M#'S"
+        elif formula == ['a', 'u', 'a', 'u']: # erweiterte Syllogistik
+            return "SioM"
+        elif formula == ['a', 'a', 'u', 'u']:
+            return "SiõM"
+        elif formula == ['u', 'a', 'a', 'u']:
+            return "SoõM"
+        elif formula == ['u', 'u', 'a', 'a']:
+            return "SoïM"
+        elif formula == ['u', 'a', 'u', 'a']:
+            return "SõïM"
         else:
             return " "
         
@@ -1232,7 +1273,7 @@ class TrainingScreen(Screen):
             return "SÄ'P"
         elif formula == ['n', 'n', 'n', 'n']:
             return "S#'P"
-        elif formula == ['a', 'u', 'a', 'u']:
+        elif formula == ['a', 'u', 'a', 'u']: # erweiterte Syllogistik
             return "PioS"
         elif formula == ['a', 'a', 'u', 'u']:
             return "PiõS"
@@ -6900,6 +6941,7 @@ class TestApp(App):
         sm.add_widget(GeneralScreen(name='general'))
         sm.add_widget(Menu_introductionScreen(name='menu_introduction'))
         sm.add_widget(Menu_introductionScreen_1(name='menu_introduction_1'))
+        sm.add_widget(Menu_introductionScreen_1b(name='menu_introduction_1b'))
         sm.add_widget(Menu_introductionScreen_2(name='menu_introduction_2'))
         sm.add_widget(Menu_introductionScreen_3(name='menu_introduction_3'))
         sm.add_widget(Menu_conclusion_introductionScreen(name='menu_conclusion_introduction'))
