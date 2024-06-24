@@ -80,17 +80,26 @@ Builder.load_string("""
         orientation: 'vertical'
         space: dp(10)
         Label:
-            text: 'Menu'
+            text: 'Menü'
             font_size: dp(30)
             color: 0,1,0.5
         Button:
-            text: 'General'
+            text: 'Allgemein'
             halign: 'center'
             valign: 'center'
             font_size: dp(27)
             on_press: root.manager.current = 'general'
             background_normal: ''
             background_color: 1, .3, .4, .85
+        Button:
+            text: root.button_transformations_in_main_menu
+            text_size: self.size
+            halign: 'center'
+            valign: 'center'
+            font_size: dp(27)
+            on_press: root.manager.current = 'menu_transformations'
+            background_normal: ''
+            background_color: 1, .2, .4, .3
         Button:
             text: root.button_conclusion_in_main_menu
             text_size: self.size
@@ -110,22 +119,13 @@ Builder.load_string("""
             background_normal: ''
             background_color: 0, 1, 0, .2
         Button:
-            text: root.button_transformations_in_main_menu
-            text_size: self.size
-            halign: 'center'
-            valign: 'center'
-            font_size: dp(27)
-            on_press: root.manager.current = 'menu_transformations'
-            background_normal: ''
-            background_color: 1, .2, .4, .3
-        Button:
-            text: 'Ressources'
+            text: 'Ressourcen'
             font_size: dp(27)
             on_press: root.manager.current = 'ressources'
             background_normal: ''
             background_color: 1, .3, .4, .85
         Button:
-            text: 'Quit'
+            text: 'Beenden'
             font_size: dp(27)
             on_press: app.stop()
             background_normal: ''
@@ -135,7 +135,7 @@ Builder.load_string("""
     BoxLayout:
         orientation: "vertical"
         Button:
-            text: 'Introduction'
+            text: 'Einleitung'
             font_size: dp(27)
             on_press: root.manager.current = 'menu_introduction'
             background_normal: ''
@@ -146,7 +146,7 @@ Builder.load_string("""
             background_normal: ''
             background_color: 1, .1, .1, .2
     Button:
-        text: "Menu"
+        text: "Menü"
         on_press: root.manager.current = 'menu'
         size_hint: "0.1", "0.1"
         pos_hint: {"x":0.9,"y":0.9}
@@ -155,7 +155,7 @@ Builder.load_string("""
     BoxLayout:
         orientation: "vertical"
         Button:
-            text: 'The logical Principles'
+            text: 'Die beiden logischen Prinzipien'
             on_press: root.manager.current = 'menu_introduction_1'
             font_size: dp(27)
             background_normal: ''
@@ -167,24 +167,24 @@ Builder.load_string("""
             background_normal: ''
             background_color: 1, .1, .1, .2
         Button:
-            text: 'Direct Inferences/Indirect Inferences'
+            text: 'Unmittelbare und mittelbare Schlüsse'
             on_press: root.manager.current = 'menu_introduction_2'
             font_size: dp(27)
             background_normal: ''
             background_color: 1, .1, .1, .2
         Button:
-            text: 'Pure vs. Applied Logic'
+            text: 'Allgemeine und angewandte Logik'
             on_press: root.manager.current = 'menu_introduction_3'
             font_size: dp(27)
             background_normal: ''
             background_color: 1, .1, .1, .2
         Button:
-            text: 'Structure of the app'
+            text: 'Struktur der App'
             font_size: dp(27)
             background_normal: ''
             background_color: 1, .1, .1, .2
     Button:
-        text: "Menu"
+        text: "Menü"
         on_press: root.manager.current = 'menu'
         size_hint: "0.1", "0.1"
         pos_hint: {"x":0.9,"y":0.9}
@@ -205,26 +205,26 @@ Builder.load_string("""
     BoxLayout:
         orientation: "vertical"
         Button:
-            text: 'Introduction'
+            text: 'Einleitung'
             font_size: dp(27)
             on_press: root.manager.current = 'menu_conclusion_introduction'
             background_normal: ''
             background_color: 1, .1, .1, .2
         Button:
-            text: 'Playground'
+            text: 'Spielwiese'
             font_size: dp(27)
             on_press: root.manager.current = 'conclusions'
             background_normal: ''
             background_color: 1, .1, .1, .2
         Button:
-            text: 'Excersises - Quiz'
+            text: 'Übungen - Quiz'
             font_size: dp(27)
             on_press:
                 root.manager.current = 'training'
             background_normal: ''
             background_color: 1, 0, .5, .3
         Button:
-            text: 'Calculating - Quiz'
+            text: 'Rechnen - Quiz'
             font_size: dp(27)
             on_press:
                 root.manager.current = 'calculating_quiz'
@@ -240,13 +240,13 @@ Builder.load_string("""
     BoxLayout:
         orientation: "vertical"
         Button:
-            text: 'Table overview'
+            text: 'Überblick - Tabelle: Syllogistik'
             on_press: root.manager.current = 'table_overview'
             font_size: dp(27)
             background_normal: ''
             background_color: 1, .1, .1, .2
         Button:
-            text: 'Table overview'
+            text: 'Überblick - Tabelle: Verlängerte dyadische Formeln'
             on_press: root.manager.current = 'table_overview_2'
             font_size: dp(27)
             background_normal: ''
@@ -258,25 +258,25 @@ Builder.load_string("""
 
 <ConclusionsScreen>:
     Button:
-        text: 'Menu'
+        text: 'Menü'
         on_press: root.manager.current = 'menu'
         size_hint: "0.1", "0.1"
         pos_hint: {"x":0.9,"y":0.9}
 
 <TrainingScreen>:
     Button:
-        text: 'Menu'
+        text: 'Menü'
         on_press: root.manager.current = 'menu'
         size_hint: "0.1", "0.1"
         pos_hint: {"x":0.9,"y":0.9}
     Button:
-        text: 'Generate!'
+        text: 'Generiere!'
         on_press: root.refresh_function()
         size_hint: "0.1", "0.1"
         pos_hint: {"x":0.9,"y":0.8}
     Button:
         id: 'settings_button'
-        text: 'Settings'
+        text: 'Einstellungen'
         on_release: app.open_settings()
         size_hint: "0.1", "0.1"
         pos_hint: {"x":0.9,"y":0.7}
@@ -297,13 +297,13 @@ Builder.load_string("""
                 text_size: self.size
                 halign: 'center'
             Button:
-                text: 'Introduction'
+                text: 'Einleitung'
                 font_size: dp(27)
                 on_press: root.manager.current = 'total-formulas-playground-left_introduction'
                 background_normal: ''
                 background_color: 1, .1, .1, .2
             Button:
-                text: 'Playground'
+                text: 'Spielwiese'
                 font_size: dp(27)
                 on_press: root.manager.current = 'total-formulas-playground-left'
                 background_normal: ''
@@ -324,12 +324,12 @@ Builder.load_string("""
                 text_size: self.size
                 halign: 'center'
             Button:
-                text: 'Introduction'
+                text: 'Einleitung'
                 font_size: dp(27)
                 background_normal: ''
                 background_color: 1, .1, .1, .2
             Button:
-                text: 'Playground'
+                text: 'Spielwiese'
                 font_size: dp(27)
                 on_press: root.manager.current = 'total-formulas-playground-right'
                 background_normal: ''
@@ -342,21 +342,21 @@ Builder.load_string("""
 
 <Total_formulas_Playground_left_Screen>:
     Button:
-        text: 'Menu'
+        text: 'Menü'
         on_press: root.manager.current = 'menu'
         size_hint: "0.1", "0.1"
         pos_hint: {"x":0.9,"y":0.9}
 
 <Total_formulas_Playground_right_Screen>:
     Button:
-        text: 'Menu'
+        text: 'Menü'
         on_press: root.manager.current = 'menu'
         size_hint: "0.1", "0.1"
         pos_hint: {"x":0.9,"y":0.9}
 
 <Total_formulas_QuizScreen>:
     Button:
-        text: 'Menu'
+        text: 'Menü'
         on_press: root.manager.current = 'menu'
         size_hint: "0.1", "0.1"
         pos_hint: {"x":0.9,"y":0.9}
@@ -365,12 +365,12 @@ Builder.load_string("""
     BoxLayout:
         orientation: "vertical"
         Button:
-            text: 'Introduction'
+            text: 'Einleitung'
             font_size: dp(27)
             background_normal: ''
             background_color: 1, .1, .1, .2
         Button:
-            text: 'Playground'
+            text: 'Spielwiese'
             font_size: dp(27)
             on_press: root.manager.current = 'transformations'
             background_normal: ''
@@ -383,7 +383,7 @@ Builder.load_string("""
 
 <TransformationsScreen>:
     Button:
-        text: 'Menu'
+        text: 'Menü'
         on_press: root.manager.current = 'menu'
         size_hint: "0.1", "0.1"
         pos_hint: {"x":0.9,"y":0.9}
@@ -416,7 +416,7 @@ Builder.load_string("""
                 import webbrowser
                 webbrowser.open('https://en.wikipedia.org/w/index.php?oldid=1195852979#Pure_Strict_syllogistic')
     Button:
-        text: "Menu"
+        text: "Menü"
         on_press: root.manager.current = 'menu'
         size_hint: "0.1", "0.1"
         pos_hint: {"x":0.9,"y":0.9}
@@ -441,9 +441,10 @@ class EllipseLabel(Label):
     pass
 
 class MenuScreen(Screen):
-    button_conclusion_in_main_menu = StringProperty('Enlonged dyadic formulas\n(M•P, S•M -> S•P)')
-    button_total_formulas_in_main_menu = StringProperty('Total-formulas\n(M•P, S•M, S•P <-> S•M•P)')
-    button_transformations_in_main_menu = StringProperty('Transformations\n(S•P <-> S•P)')
+    button_transformations_in_main_menu = StringProperty('Dyadische Formeln\n(S•P <-> S•P)')
+    button_conclusion_in_main_menu = StringProperty('Verlängerte dyadische Formeln\n(M•P, S•M -> S•P)')
+    button_total_formulas_in_main_menu = StringProperty('Triadische Ganzformeln\n(M•P, S•M, S•P <-> S•M•P)')
+
 
     def __init__(self, **kwargs):
         super(RelativeLayout, self).__init__(**kwargs)
@@ -962,11 +963,11 @@ class Table_overviewScreen_2(Screen):
         window_one = screen_manager.get_screen('calculating_quiz')
         self.enlonged_list = window_one.enlonged_list
 
-        self.dyadic_formulas_list = ['B#C', 'BÄC', 'B@C', 'B%C', 'BÖC', 'B&C', 'B$C', 'BÜC',\
-                                "BÜ'C", "B$'C", "B&'C", "BÖ'C", "B%'C", "B@'C",  "BÄ'C", "B#'C"]
+        self.dyadic_formulas_list_2 = ['B#C', 'BÄC', 'BÖC', 'B&C', 'B@C', 'B%C', 'B$C', 'BÜC',\
+                                "BÜ'C", "B$'C", "B%'C", "B@'C", "B&'C", "BÖ'C", "BÄ'C", "B#'C"]
 
-        self.dyadic_formulas_list_2 = ['C#D', 'CÄD', 'CÖD', 'C&D', 'C@D', 'C%D', 'C$D', 'CÜD',\
-                                "CÜ'D", "C$'D", "C%'D", "C@'D", "C&'D", "CÖ'D", "CÄ'D", "C#'D"]
+        self.dyadic_formulas_list = ['C#D', 'CÄD', 'C@D', 'C%D', 'CÖD', 'C&D', 'C$D', 'CÜD',\
+                                "CÜ'D", "C$'D",  "C&'D", "CÖ'D","C%'D", "C@'D", "CÄ'D", "C#'D"]
                 
 #1.2
         self.layout = BoxLayout(orientation= 'horizontal', size_hint_x= 1, size_hint_y=1)
@@ -1117,7 +1118,7 @@ class TrainingScreen(Screen):
             return "PÄ'M"
         elif formula == ['n', 'n', 'n', 'n']:
             return "P#'M"
-        elif formula == ['a', 'u', 'a', 'u']: # erweiterte Syllogistik
+        elif formula == ['a', 'u', 'a', 'u']: # erweiterte Syllogistik (naheliegend)
             return "MioP"
         elif formula == ['a', 'a', 'u', 'u']:
             return "MiõP"
@@ -1127,6 +1128,12 @@ class TrainingScreen(Screen):
             return "MoïP"
         elif formula == ['u', 'a', 'u', 'a']:
             return "MõïP"
+        elif formula == ['a', 'u', 'a', 'a']: # erweiterte Syllogistik (sogar)
+            return "MioïP"
+        elif formula == ['a', 'a', 'u', 'a']:
+            return "MiõïP"
+        elif formula == ['a', 'a', 'a', 'a']:
+            return "MiõoïP"
         else:
             return " "
         
@@ -1195,7 +1202,7 @@ class TrainingScreen(Screen):
             return "MÄ'S"
         elif formula == ['n', 'n', 'n', 'n']:
             return "M#'S"
-        elif formula == ['a', 'u', 'a', 'u']: # erweiterte Syllogistik
+        elif formula == ['a', 'u', 'a', 'u']: # erweiterte Syllogistik (naheliegend)
             return "SioM"
         elif formula == ['a', 'a', 'u', 'u']:
             return "SiõM"
@@ -1205,6 +1212,12 @@ class TrainingScreen(Screen):
             return "SoïM"
         elif formula == ['u', 'a', 'u', 'a']:
             return "SõïM"
+        elif formula == ['a', 'u', 'a', 'a']: # erweiterte Syllogistik (sogar)
+            return "SioïM"
+        elif formula == ['a', 'a', 'u', 'a']:
+            return "SiõïM"
+        elif formula == ['a', 'a', 'a', 'a']:
+            return "SiõoïM"
         else:
             return " "
         
@@ -3829,8 +3842,8 @@ class Training_calculating_quiz_Screen(Screen):
                                             self.first_formula_enlonged = enlonged_third_formula[0:4]
                                             self.second_formula_enlonged = enlonged_third_formula[4:8]
                                             
-                                            first_formula = self.dyadic_name_fn(self.first_formula_enlonged, 1)
-                                            second_formula = self.dyadic_name_fn(self.second_formula_enlonged, 2)
+                                            first_formula = self.dyadic_name_fn(self.first_formula_enlonged, 2)
+                                            second_formula = self.dyadic_name_fn(self.second_formula_enlonged, 1)
                                             
                                             solution_and_contradiction_test_enlonged = self.output2_enlonged(self.first_formula_enlonged, self.second_formula_enlonged)
                                             
@@ -6634,9 +6647,9 @@ class TransformationsScreen(Screen):
         self.obversion_btn.bind(on_press=self.obversion_fn)
         self.layout_in_layout_2.add_widget(self.obversion_btn)
 
-        self.contradiction_btn = Button(text= 'Contraposition')
-        self.contradiction_btn.bind(on_press=self.contradiction_fn)
-        self.layout_in_layout_2.add_widget(self.contradiction_btn)
+        self.contraposition_btn = Button(text= 'Contraposition')
+        self.contraposition_btn.bind(on_press=self.contraposition_fn)
+        self.layout_in_layout_2.add_widget(self.contraposition_btn)
 
         self.layout_in_layout_3 = BoxLayout(orientation='horizontal', size_hint_y =.4)
         self.layout.add_widget(self.layout_in_layout_3)
@@ -6699,7 +6712,8 @@ class TransformationsScreen(Screen):
         solution = conversion
         output_judge = self.output_judge_fn(solution)
         self.output_buttons_function(solution)
-        self.conclusion_label.text = output_judge
+        self.explanation_label = 'S•P -> P•S'
+        self.conclusion_label.text = self.explanation_label+'\n'+output_judge
 
     def obversion_fn(self, button):
         inital_judge = self.inital_judge_variable
@@ -6708,16 +6722,18 @@ class TransformationsScreen(Screen):
         solution = obversion
         output_judge = self.output_judge_fn(solution)
         self.output_buttons_function(solution)
-        self.conclusion_label.text = output_judge
+        self.explanation_label = 'S•P -> S•~P'
+        self.conclusion_label.text = self.explanation_label+'\n'+output_judge
 
-    def contradiction_fn(self, button):
+    def contraposition_fn(self, button):
         inital_judge = self.inital_judge_variable
         inital_judge_values_ = self.inital_judge_values(inital_judge)
         contradiction = [inital_judge_values_[3], inital_judge_values_[1], inital_judge_values_[2], inital_judge_values_[0]]
         solution = contradiction
         output_judge = self.output_judge_fn(solution)
         self.output_buttons_function(solution)
-        self.conclusion_label.text = output_judge
+        self.explanation_label = 'S•P -> ~P•~S'
+        self.conclusion_label.text = self.explanation_label+'\n'+output_judge
 
     def partial_inversion_fn(self, button):
         inital_judge = self.inital_judge_variable
@@ -6726,7 +6742,8 @@ class TransformationsScreen(Screen):
         solution = partial_inversion
         output_judge = self.output_judge_fn(solution)
         self.output_buttons_function(solution)
-        self.conclusion_label.text = output_judge
+        self.explanation_label = 'S•P -> ~S•P'
+        self.conclusion_label.text = self.explanation_label+'\n'+output_judge
 
     def inversion_fn(self, button):
         inital_judge = self.inital_judge_variable
@@ -6735,7 +6752,8 @@ class TransformationsScreen(Screen):
         solution = inversion
         output_judge = self.output_judge_fn(solution)
         self.output_buttons_function(solution)
-        self.conclusion_label.text = output_judge
+        self.explanation_label = 'S•P -> ~S•~P'
+        self.conclusion_label.text = self.explanation_label+'\n'+output_judge
 
 
     def output_buttons_function(self, solution):
