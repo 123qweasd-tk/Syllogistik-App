@@ -34,6 +34,14 @@ import flatlatex
 
 Builder.load_string("""
 
+<LineRectangle>:
+    canvas:
+        Color:
+            rgba: 1, 1, 1, 1
+        Line:
+            width: 1.3
+            rectangle: (self.x, self.y, self.width, self.height)
+
 <CustomLabel_green>:
     canvas.before:
         Color: 
@@ -424,6 +432,9 @@ Builder.load_string("""
 <Sat_Screen>:
 
 """)
+
+class LineRectangle(Label):
+    pass
 
 class CustomLabel_green(Label):
     background_color = (0, 1, 0, 1)
@@ -830,9 +841,10 @@ class Menu_introductionScreen_2(Screen):
 
         self.label_box_3_1 = Label(text= ' ', size_hint_y= .2)
         self.box_4.add_widget(self.label_box_3_1)
-        self.label_box_3_2 = Label(text= 'A\u00A5', size_hint_y= .4, font_name= 'my_custom_font')
+        self.label_box_3_2 = LineRectangle(text= 'A\u00A5', size_hint_y= .4, font_name= 'my_custom_font')
         self.box_4.add_widget(self.label_box_3_2)
-        self.label_box_3_3 = Label(text= 'A\u00A5', size_hint_y= .4, font_name= 'my_custom_font')
+        self.label_box_3_3 = LineRectangle(text= 'A\u00A5', size_hint_y= .4, font_name= 'my_custom_font')
+        
         self.box_4.add_widget(self.label_box_3_3)
 
         self.box_5 = BoxLayout(orientation= 'vertical', size_hint_x= .4, size_hint_y=None)
@@ -840,7 +852,7 @@ class Menu_introductionScreen_2(Screen):
 
         self.label_box_4_1 = Label(text= ' ', size_hint_y= .2)
         self.box_5.add_widget(self.label_box_4_1)
-        self.label_box_4_2 = Label(text= 'A\u00A5', size_hint_y= .4, font_name= 'my_custom_font')
+        self.label_box_4_2 = LineRectangle(text= 'A\u00A5', size_hint_y= .8, font_name= 'my_custom_font')
         self.box_5.add_widget(self.label_box_4_2)
         
         self.layout.add_widget(self.box_1)
