@@ -478,9 +478,10 @@ class Menu_introductionScreen_1(Screen):
         self.layout = GridLayout(cols=1, spacing=70, size_hint_y=None)
         self.layout.bind(minimum_height=self.layout.setter('height'))
         
-        self.text_1 = Label(text='Die logischen Prinzipien:\n\n"Die logischen Prinzipien sind Grundbestimmungen, die für das in der Logik Festgesetzte gelten. Sie beruhen selbst auf Festsetzung.\nFür die Strenge Logik sind zwei Prinzipien festzusetzen: Das Prinzip der Identität und das Prinzip der Limitation.\n\n\nDas Prinzip der Identiät:\n\nPositive Formulierung:\nJedes in der Logik Festgesetzte ist mit sich selbst und nur mit sich selbst identisch.\n\nNegativeFormulierung:\n(Satz vom ausgeschlossenen Widerspruch)\nKein in der Logik Festgesetztes ist mit sich selbst nicht identisch (d. h. steht mit sich selbst im Widerspruch).\nKein Festgesetztes ist mit anderem identisch.\n(Diese letzte Bestimmung kann als Satz der ausgeschlossenen Fremdidentifizierung bezeichnet werden).\n\n\nDas Prinzip der Limitation\n\nPositive Formulierung:\nJedes Festgesetzte ist\n1. von den anderen\n2. aber auch nur von den anderen limitativ unterschieden.\n\nNegative Formulierung:\n1. Kein Festgesetztes ist von den anderen nicht limitativ unterschieden. D. h. zwischen einem Festgesetzten und den anderen gibt es nicht Drittes (Satz vom ausgeschlossenen Dritten).\n2. Kein Festgesetztes ist von sich selbst limitativ unterschieden (Satz der ausgeschlossenen Selbstlimitation)." (Grundlagen der Strengen Logik, Seite 58f)', size_hint_y=None)
+        self.text_1 = Label(text='[u]Die logischen Prinzipien:[/u]\n\n"Die logischen Prinzipien sind Grundbestimmungen, die für das in der Logik Festgesetzte gelten. Sie beruhen selbst auf Festsetzung.\nFür die Strenge Logik sind zwei Prinzipien festzusetzen: Das Prinzip der Identität und das Prinzip der Limitation.\n\n\n[u]Das Prinzip der Identiät[/u]:\n\nPositive Formulierung:\nJedes in der Logik Festgesetzte ist mit sich selbst und nur mit sich selbst identisch.\n\nNegativeFormulierung:\n(Satz vom ausgeschlossenen Widerspruch)\nKein in der Logik Festgesetztes ist mit sich selbst nicht identisch (d. h. steht mit sich selbst im Widerspruch).\nKein Festgesetztes ist mit anderem identisch.\n(Diese letzte Bestimmung kann als Satz der ausgeschlossenen Fremdidentifizierung bezeichnet werden).\n\n\n[u]Das Prinzip der Limitation[/u]:\n\nPositive Formulierung:\nJedes Festgesetzte ist\n1. von den anderen\n2. aber auch nur von den anderen limitativ unterschieden.\n\nNegative Formulierung:\n1. Kein Festgesetztes ist von den anderen nicht limitativ unterschieden. D. h. zwischen einem Festgesetzten und den anderen gibt es nicht Drittes (Satz vom ausgeschlossenen Dritten).\n2. Kein Festgesetztes ist von sich selbst limitativ unterschieden (Satz der ausgeschlossenen Selbstlimitation)." (Grundlagen der Strengen Logik, Seite 58f)', size_hint_y=None)
         self.text_1.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_1.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
+        self.text_1.markup = True
         self.layout.add_widget(self.text_1)
         
         #table "B, ~B":
@@ -778,8 +779,10 @@ class Menu_introductionScreen_2(Screen):
         self.layout.bind(minimum_height=self.layout.setter('height'))
         
         self.text_1 = Label(text='Die logischen Prinzipien: \n\nAm Anfang des logischen Denkens ist alles eins (A\u00A5A\u00A5):', font_name= 'my_custom_font', size_hint_y = None)
+        self.text_1.markup = True
         self.text_1.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_1.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
+        
         self.layout.add_widget(self.text_1)
 
         self.box_b_not_b = BoxLayout(orientation= 'horizontal', size_hint_y=None)
@@ -802,9 +805,10 @@ class Menu_introductionScreen_2(Screen):
 
         self.layout.add_widget(self.box_b_not_b)
         
-        self.text_2 = Label(text='\n\n\n\n\n\n1. DIE ERSTE STUFE: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien (das Prinzip der Identität und das Prinzip der Limitation) definiert wird, teilt das Eins in Zwei. Es entstehen vier Möglichkeiten, die sich alle ausschließen. Zudem entstehen Kollektiv-Kennzeichnungen (Au und uN bzw. Nu und uA (unmittelbare Schlüsse)):', size_hint_y = None)
+        self.text_2 = Label(text='\n\n\n1. [u]Die erste Stufe[/u]: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien (das Prinzip der Identität und das Prinzip der Limitation) definiert wird, teilt das Eins in Zwei. Es entstehen vier Möglichkeiten, die sich alle ausschließen. Zudem entstehen Kollektiv-Kennzeichnungen (Au und uN bzw. Nu und uA (unmittelbare Schlüsse)):', size_hint_y = None)
         self.text_2.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_2.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
+        self.text_2.markup = True
         self.layout.add_widget(self.text_2)
         
         self.box_1 = BoxLayout(orientation= 'horizontal', size_hint_y=None)
@@ -858,9 +862,10 @@ class Menu_introductionScreen_2(Screen):
         
         self.layout.add_widget(self.box_1)
         
-        self.text_3 = Label(text='Unmittelbare Schlüsse (auf derselben Stufe): \n\n   a) Ganzformel -> Ganzformel \nAN -> Au \nNN -> uN \nusw. \n\nAus der Annahme\n  "Es gibt keine Nicht-Menschen." (uN)\nfolgt nicht:\n  "Es gibt Menschen." (Au)\n\n\n\n\n\n2. DIE ZWEITE STUFE: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Zwei in Vier. Ab nun überschneiden sich Begriffe. Jetzt sind es Zwei. Es entstehen 16 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen unmittelbare Schlüsse zwischen Stufen: \n\nUnmittelbare Schlüsse zwischen Stufen: \n\n   b) Ganzformel -> Teilformeln: \nANNA -> auau \n            -> aauu \n\n   c) Teilformeln -> Ganzformel: \nuaua und \nuuaa und \nnunu und \nnnuu        -> NNNA \n\nZum Beispiel folgt aus: "Einige p sind q." (Auuu, piq)\n-->p (auau)\n-->q (aauu).\n\n[Und unmittelbare Schlüsse auf derselben (dyadischen) Stufe:] \n\n   [•) Ganzformel -> Ganzformel] \n[Subalternation; Konversion, Obversion, Kontraposition, Partielle Inversion, Inversion]; \n   [•) Ganzformel <-> Ganzformel] \n[Kontradiktorischer Widerspruch, Konträrer Widerspruch, Subkontrarietät] \n\n\n\n\n\n3. DIE DRITTE STUFE: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Vier in Acht. Jetzt überschneiden sich drei Begriffe. Es entstehen 256 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen mittelbare Schlüsse innerhalb einer Stufe (z. B. die traditionelle (und die vollständige traditionelle) Syllogistik): \n\nMittelbare Schlüsse innerhalb einer Stufe (über Mittelbegriff): \n\n   d) Teilformeln -> Teilformel: \naauunnaa und \naunaauna           -> auaunana \n\n\n\nMittelbar innerhalb einer Stufe kann erst ab dritter Stufe geschlossen werden. Dies geschieht über einen Mittelbegriff. Dabei werden die Geltungswertstellen und die dazugehörigen Geltungswerte jeweils um den sozusagen unbeteiligten Begriff verlängert. Aus zwei Formeln (zum Beispiel kategorische Urteile), folgt eine dritte Formel (zum Beispiel ein kategorisches Urteil):\n\nMaP, SaM -> SaP (Barbara). (Siehe "Ressources" -> "Artikel Syllogistik")', size_hint_y=None)
+        self.text_3 = Label(text='Unmittelbare Schlüsse (auf derselben Stufe): \n\n   a) [u]Ganzformel -> Ganzformel[/u] \nAN -> Au \nNN -> uN \nusw. \n\nAus der Annahme\n  "Es gibt keine Nicht-Menschen." (uN)\nfolgt nicht:\n  "Es gibt Menschen." (Au)\n\n\n2. [u]Die zweite Stufe[/u]: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Zwei in Vier. Ab nun überschneiden sich Begriffe. Jetzt sind es Zwei. Es entstehen 16 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen unmittelbare Schlüsse zwischen Stufen: \n\nUnmittelbare Schlüsse zwischen Stufen: \n\n   b) [u]Ganzformel -> Teilformeln[/u]: \nANNA -> auau \n            -> aauu \n\n   c) [u]Teilformeln -> Ganzformel[/u]: \nuaua und \nuuaa und \nnunu und \nnnuu        -> NNNA \n\nZum Beispiel folgt aus: "Einige p sind q." (Auuu, piq)\n-->p (auau)\n-->q (aauu).\n\n[Und unmittelbare Schlüsse auf derselben (dyadischen) Stufe:] \n\n   •) Ganzformel -> Ganzformel \nSubalternation; Konversion, Obversion, Kontraposition, Partielle Inversion, Inversion; \n   •) Ganzformel <-> Ganzformel \nKontradiktorischer Widerspruch, Konträrer Widerspruch, Subkontrarietät \n\n\n3. [u]Die dritte Stufe[/u]: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Vier in Acht. Jetzt überschneiden sich drei Begriffe. Es entstehen 256 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen mittelbare Schlüsse innerhalb einer Stufe (z. B. die traditionelle (und die vollständige traditionelle) Syllogistik): \n\nMittelbare Schlüsse innerhalb einer Stufe (über Mittelbegriff): \n\n   d) [u]Teilformeln -> Teilformel[/u]: \naauunnaa und \naunaauna           -> auaunana \n\n\n\nMittelbar innerhalb einer Stufe kann erst ab dritter Stufe geschlossen werden. Dies geschieht über einen Mittelbegriff. Dabei werden die Geltungswertstellen und die dazugehörigen Geltungswerte jeweils um den sozusagen unbeteiligten Begriff verlängert. Aus zwei Formeln (zum Beispiel kategorische Urteile), folgt eine dritte Formel (zum Beispiel ein kategorisches Urteil):\n\nMaP, SaM -> SaP (Barbara). (Siehe "Ressources" -> "Artikel Syllogistik")', size_hint_y=None)
         self.text_3.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_3.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
+        self.text_3.markup = True
         self.layout.add_widget(self.text_3)
 
         self.menu_button = Button(text='Menü', background_normal= '', background_color=(1, 1, 1, .5), color=(0, 0, 0, 1), size_hint_y=None)
@@ -2539,43 +2544,20 @@ class TrainingScreen(Screen):
             for r in range(len(self.a_goes_into_conclusion)):
                 for s in range(8):
                     if self.a_goes_into_conclusion[r][0][0] == 0 and self.a_goes_into_conclusion[r][1][0] == s:
-                        with self.buttons_premis_one[s].canvas:
-                            Color(0,0,0,1)
-                            Line(points=(self.buttons_premis_one[s].center_x-self.buttons_premis_one[s].width*.6/2,\
-                                                                                 self.buttons_premis_one[s].center_y-self.buttons_premis_one[s].height*.95/2,\
-                                                                                 self.buttons_premis_one[s].center_x+self.buttons_premis_one[s].width*.6/2,\
-                                                                                 self.buttons_premis_one[s].center_y-self.buttons_premis_one[s].height*.95/2),\
-                                                                            width=2)
+                        self.buttons_premis_one[s].underline = True
                     if self.a_goes_into_conclusion[r][0][0] == 1 and self.a_goes_into_conclusion[r][1][0] == s:
-                        with self.buttons_premis_two[s].canvas:
-                            Color(0,0,0,1)
-                            Line(points=(self.buttons_premis_two[s].center_x-self.buttons_premis_two[s].width*.6/2,\
-                                                                                 self.buttons_premis_two[s].center_y-self.buttons_premis_two[s].height*.95/2,\
-                                                                                 self.buttons_premis_two[s].center_x+self.buttons_premis_two[s].width*.6/2,\
-                                                                                 self.buttons_premis_two[s].center_y-self.buttons_premis_two[s].height*.95/2),\
-                                                                            width=2)
+                        self.buttons_premis_two[s].underline = True
+                        
             for r in range(len(self.n_goes_into_conclusion)):
                 for s in range(8):
                     if self.n_goes_into_conclusion[r][0][0] == 0 and self.n_goes_into_conclusion[r][1][0] == s:
-                        with self.buttons_premis_one[s].canvas:
-                            Color(0,0,0,1)
-                            Line(points=(self.buttons_premis_one[s].center_x-self.buttons_premis_one[s].width*.6/2,\
-                                                                                 self.buttons_premis_one[s].center_y-self.buttons_premis_one[s].height*.95/2,\
-                                                                                 self.buttons_premis_one[s].center_x+self.buttons_premis_one[s].width*.6/2,\
-                                                                                 self.buttons_premis_one[s].center_y-self.buttons_premis_one[s].height*.95/2),\
-                                                                            width=2)
+                        self.buttons_premis_one[s].underline = True
                     if self.n_goes_into_conclusion[r][0][0] == 1 and self.n_goes_into_conclusion[r][1][0] == s:
-                        with self.buttons_premis_two[s].canvas:
-                            Color(0,0,0,1)
-                            Line(points=(self.buttons_premis_two[s].center_x-self.buttons_premis_two[s].width*.6/2,\
-                                                                                 self.buttons_premis_two[s].center_y-self.buttons_premis_two[s].height*.95/2,\
-                                                                                 self.buttons_premis_two[s].center_x+self.buttons_premis_two[s].width*.6/2,\
-                                                                                 self.buttons_premis_two[s].center_y-self.buttons_premis_two[s].height*.95/2),\
-                                                                            width=2)
+                        self.buttons_premis_two[s].underline = True
                         
         
         if function_output_list[4] != [0]:
-            self.conclusion_label.text = "Contradiction!"
+            self.conclusion_label.text = "Widerspruch!"
             print(formulas_list)
             print(function_output_list[4])
             for r in range(len(function_output_list[4])):
@@ -2584,17 +2566,12 @@ class TrainingScreen(Screen):
                         if function_output_list[4][r][0][0] == 0 and function_output_list[4][r][1][0] == s:
                             self.buttons_conclusion[(s+s)+t].background_color = (0, 0, 1, 1)
                             self.buttons_conclusion[(s+s)+t].text = str((s+s)+t+1)
-                            with self.buttons_premis_one[(s+s)+t].canvas:
-                                Color(0,0,0,1)
-                                Line(points=(self.buttons_premis_one[(s+s)+t].center_x-self.buttons_premis_one[(s+s)+t].width*.6/2,\
-                                                                                     self.buttons_premis_one[(s+s)+t].center_y-self.buttons_premis_one[(s+s)+t].height*.95/2,\
-                                                                                     self.buttons_premis_one[(s+s)+t].center_x+self.buttons_premis_one[(s+s)+t].width*.6/2,\
-                                                                                     self.buttons_premis_one[(s+s)+t].center_y-self.buttons_premis_one[(s+s)+t].height*.95/2),\
-                                                                             width=2)
+                            self.buttons_premis_one[(s+s)+t].underline = True
                         if function_output_list[4][r][0][0] == 1 and function_output_list[4][r][1][0] == s:
                             print(t)
                             self.buttons_conclusion[s+4*t].background_color = (0, 0, 1, 1)
                             self.buttons_conclusion[s+4*t].text = str(s+4*t+1)
+                            self.buttons_premis_two[s+4*t].underline = True
                             
         
         self.btn_1_s.text = self.function_output_list[3][0]
