@@ -75,13 +75,14 @@ Builder.load_string("""
             size: self.size
 
 <EllipseLabel>:
-    canvas.before:
+    canvas:
         Color:
-            rgba: 1,1,1,1
-        Ellipse:
-            size: min(self.size)*.8, min(self.size)*.8
-            pos: self.center_x-min(self.size)*.8/2, self.center_y-min(self.size)*.8/2
-
+            rgba: 1, 1, 1, 1
+        Line:
+            width: 1.3
+            circle:
+                (self.center_x, self.center_y, min(self.width, self.height)*.8
+                / 2)
 
 <MenuScreen>:
     BoxLayout:
@@ -6895,7 +6896,7 @@ class Sat_Screen(Screen):
                 count_1 = count_1 + 1
                 self.col_x.add_widget(self.value)
                 if (j+1 == 2) or (j+1 == 4) or (j+1 == 6) or (j+1 == 7):
-                    self.number = EllipseLabel(text= str(j+1), font_name= 'my_custom_font', color= (0, 0, 0, 1))
+                    self.number = EllipseLabel(text= str(j+1), font_name= 'my_custom_font')
                 else:
                     self.number = Label(text= str(j+1), font_name= 'my_custom_font')
             self.col_x.add_widget(self.number)
