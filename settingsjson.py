@@ -2,12 +2,12 @@ import json
 
 settings_json = json.dumps([
     {'type': 'bool',
-     'title': 'Switch to completed Syllogistic',
-     'desc': 'Completed Syllogisitc contains also ã-, ë-, ï- and õ-judges',
+     'title': 'Wechsle zu vollständiger Syllogistik',
+     'desc': 'Vollständige Syllogistik beinhaltet auch ã-, ë-, ï- and õ-Urteile',
      'section': 'trainer',
      'key': 'completedsyllogistic'},
     {'type': 'bool',
-     'title': 'Switch to more than one particular premis possible',
-     'desc': '25% more of the conclusions will result in no relevant judge',
+     'title': 'Wechsle zu: Mehr als eine partikuläre Prämisse möglich',
+     'desc': '25% mehr der Konklusionen werden in keinem relevanten Urteil resultieren',
      'section': 'trainer',
      'key': 'particularpremis'}])
