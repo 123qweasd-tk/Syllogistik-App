@@ -217,7 +217,7 @@ Builder.load_string("""
         Button:
             text: 'Spielwiese'
             font_size: dp(27)
-            on_press: root.manager.current = 'conclusions'
+            
             background_normal: ''
             background_color: 1, .1, .1, .2
         Button:
@@ -230,8 +230,7 @@ Builder.load_string("""
         Button:
             text: 'Rechnen - Quiz'
             font_size: dp(27)
-            on_press:
-                root.manager.current = 'calculating_quiz'
+
             background_normal: ''
             background_color: 1, 0, .5, .3
     Button:
@@ -303,7 +302,7 @@ Builder.load_string("""
             Button:
                 text: 'Einleitung'
                 font_size: dp(27)
-                on_press: root.manager.current = 'total-formulas-playground-left_introduction'
+                
                 background_normal: ''
                 background_color: 1, .1, .1, .2
             Button:
@@ -396,14 +395,14 @@ Builder.load_string("""
     BoxLayout:
         orientation: "vertical"
         Label:
-            text: "Ressources"
+            text: "Ressourcen"
             font_size: dp(30)
         Button:
             text: 'P vs. NP-Problem'
             font_size: dp(27)
             on_press:
                 import webbrowser
-                webbrowser.open('https://en.wikiversity.org/w/index.php?title=User:123qweasd-tk/Proof_for_NP_unequal_P_by_Thomas_K%C3%A4fer&oldid=2614943')
+                webbrowser.open('https://de.wikiversity.org/w/index.php?title=Projekt:Beweis_f%C3%BCr_P_ungleich_NP_von_Thomas_K%C3%A4fer&oldid=930414')
         Button:
             text: 'SAT'
             font_size: dp(27)
@@ -418,7 +417,7 @@ Builder.load_string("""
             font_size: dp(27)
             on_press:
                 import webbrowser
-                webbrowser.open('https://en.wikipedia.org/w/index.php?oldid=1195852979#Pure_Strict_syllogistic')
+                webbrowser.open('https://de.wikipedia.org/w/index.php?title=Walther_Br%C3%BCning&oldid=185439594#Strenge_Syllogistik')
     Button:
         text: "Menü"
         on_press: root.manager.current = 'menu'
@@ -857,7 +856,7 @@ class Menu_introductionScreen_2(Screen):
         
         self.layout.add_widget(self.box_1)
         
-        self.text_3 = Label(text='Unmittelbare Schlüsse (auf derselben Stufe): \n\n   a) [u]Ganzformel -> Ganzformel[/u] \nAN -> Au \nNN -> uN \nusw. \n\nAus der Annahme\n  "Es gibt keine Nicht-Menschen." (uN)\nfolgt nicht:\n  "Es gibt Menschen." (Au)\n\n\n2. [u]Die zweite Stufe[/u]: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Zwei in Vier. Ab nun überschneiden sich Begriffe. Jetzt sind es Zwei. Es entstehen 16 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen unmittelbare Schlüsse zwischen Stufen: \n\nUnmittelbare Schlüsse zwischen Stufen: \n\n   b) [u]Ganzformel -> Teilformeln[/u]: \nANNA -> auau \n            -> aauu \n\n   c) [u]Teilformeln -> Ganzformel[/u]: \nuaua und \nuuaa und \nnunu und \nnnuu        -> NNNA \n\nZum Beispiel folgt aus: "Einige p sind q." (Auuu, piq)\n-->p (auau)\n-->q (aauu).\n\n[Und unmittelbare Schlüsse auf derselben (dyadischen) Stufe:] \n\n   •) Ganzformel -> Ganzformel \nSubalternation; Konversion, Obversion, Kontraposition, Partielle Inversion, Inversion; \n   •) Ganzformel <-> Ganzformel \nKontradiktorischer Widerspruch, Konträrer Widerspruch, Subkontrarietät \n\n\n3. [u]Die dritte Stufe[/u]: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Vier in Acht. Jetzt überschneiden sich drei Begriffe. Es entstehen 256 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen mittelbare Schlüsse innerhalb einer Stufe (z. B. die traditionelle (und die vollständige traditionelle) Syllogistik): \n\nMittelbare Schlüsse innerhalb einer Stufe (über Mittelbegriff): \n\n   d) [u]Teilformeln -> Teilformel[/u]: \naauunnaa und \naunaauna           -> auaunana \n\n\n\nMittelbar innerhalb einer Stufe kann erst ab dritter Stufe geschlossen werden. Dies geschieht über einen Mittelbegriff. Dabei werden die Geltungswertstellen und die dazugehörigen Geltungswerte jeweils um den sozusagen unbeteiligten Begriff verlängert. Aus zwei Formeln (zum Beispiel kategorische Urteile), folgt eine dritte Formel (zum Beispiel ein kategorisches Urteil):\n\nMaP, SaM -> SaP (Barbara). (Siehe "Ressources" -> "Artikel Syllogistik")', size_hint_y=None)
+        self.text_3 = Label(text='Unmittelbare Schlüsse (auf derselben Stufe): \n\n   a) [u]Ganzformel -> Ganzformel[/u] \nAN -> Au \nNN -> uN \nusw. \n\nAus der Annahme\n  "Es gibt keine Nicht-Menschen." (uN)\nfolgt nicht:\n  "Es gibt Menschen." (Au)\n\n\n2. [u]Die zweite Stufe[/u]: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Zwei in Vier. Ab nun überschneiden sich Begriffe. Jetzt sind es Zwei. Es entstehen 16 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen unmittelbare Schlüsse zwischen Stufen: \n\nUnmittelbare Schlüsse zwischen Stufen: \n\n   b) [u]Ganzformel -> Teilformeln[/u]: \nANNA -> auau \n            -> aauu \n\n   c) [u]Teilformeln -> Ganzformel[/u]: \nuaua und \nuuaa und \nnunu und \nnnuu        -> NNNA \n\nZum Beispiel folgt aus: "Einige p sind q." (Auuu, piq)\n-->p (auau)\n-->q (aauu).\n\n[Und unmittelbare Schlüsse auf derselben (dyadischen) Stufe:] \n\n   •) Ganzformel -> Ganzformel \nSubalternation; Konversion, Obversion, Kontraposition, Partielle Inversion, Inversion; \n   •) Ganzformel <-> Ganzformel \nKontradiktorischer Widerspruch, Konträrer Widerspruch, Subkontrarietät \n\n\n3. [u]Die dritte Stufe[/u]: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Vier in Acht. Jetzt überschneiden sich drei Begriffe. Es entstehen 256 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen mittelbare Schlüsse innerhalb einer Stufe (z. B. die traditionelle (und die vollständige traditionelle) Syllogistik): \n\nMittelbare Schlüsse innerhalb einer Stufe (über Mittelbegriff): \n\n   d) [u]Teilformeln -> Teilformel[/u]: \naauunnaa und \naunaauna           -> auaunana \n\n\n\nMittelbar innerhalb einer Stufe kann erst ab dritter Stufe geschlossen werden. Dies geschieht über einen Mittelbegriff. Dabei werden die Geltungswertstellen und die dazugehörigen Geltungswerte jeweils um den sozusagen unbeteiligten Begriff verlängert. Aus zwei Formeln (zum Beispiel kategorische Urteile), folgt eine dritte Formel (zum Beispiel ein kategorisches Urteil):\n\nMaP, SaM -> SaP (Barbara). (Siehe "Ressourcen" -> "Strenge Syllogistik")', size_hint_y=None)
         self.text_3.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_3.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
         self.text_3.markup = True
@@ -1757,23 +1756,23 @@ class TrainingScreen(Screen):
         completedsyllogistic = self.function_completed_syllogistic_settings()#looks for setting
         
         if solution == ["a", "u", "n", "a"]: # traditionelle Syllogistik
-            return "Alle S sind P,\nauch bekannt als SaP"
+            return "All S are P,\nalso known as SaP"
         elif solution == ["a", "u", "u", "u"]:
-            return "Einige S sind P,\nauch bekannt als SiP"
+            return "Some S are P,\nalso known as SiP"
         elif solution == ["n", "a", "a", "u"]:
-            return "Kein S ist P,\nauch bekannt als SeP"
+            return "No S is P,\nalso known as SeP"
         elif solution == ["u", "u", "a", "u"]:
-            return "Einige S sind nicht P,\nauch bekannt als SoP"
+            return "Some S are no P,\nalso known as SoP"
         elif (completedsyllogistic == 0) and (self.advice_premis_1 == "anua") and (self.advice_premis_2 == "anua"): #traditionelle Syllogistik: wegen des (abgeschwächten) Schlusses "Darapti"
-            return "Einige S sind P,\nauch bekannt als SiP"
+            return "Some S are P,\nalso known as SiP"
         elif (completedsyllogistic == 1) and (solution == ["a", "n", "u", "a"]): # vervollständigte Syllogistik
-            return "Alle P sind S,\nauch bekannt als SãP"
+            return "All P are S,\nalso known as SãP"
         elif (completedsyllogistic == 1) and (solution == ["u", "a", "a", "n"]):
-            return "Kein P ist S,\nauch bekannt als SëP"
+            return "No P is S,\nalso known as SëP"
         elif (completedsyllogistic == 1) and (solution == ["u", "u", "u", "a"]):
-            return "Einige ~S sind ~P,\nauch bekannt als SïP"
+            return "Some ~S are ~P,\nalso known as SïP"
         elif (completedsyllogistic == 1) and (solution == ["u", "a", "u", "u"]):
-            return "Einige P sind keine S,\nauch bekannt als SõP"
+            return "Some P are no S,\nalso known as SõP"
         else:
             return ("No (allowed) \njudge possible!")
 
@@ -2288,7 +2287,7 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_4 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_4)
         
-        self.premis_one_label = Label(text='premis one', size_hint_x = 2.0, font_name = 'my_custom_font')
+        self.premis_one_label = Label(text='Erste Prämisse', size_hint_x = 2.0, font_name = 'my_custom_font')
         self.syllogism_box_row_4.add_widget(self.premis_one_label)
 
         self.btn_1_p1 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -2314,7 +2313,7 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_5 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_5)
         
-        self.premis_two_label = Label(text='premis two', size_hint_x = 2.0, font_name = 'my_custom_font')
+        self.premis_two_label = Label(text='Zweite Prämisse', size_hint_x = 2.0, font_name = 'my_custom_font')
         self.syllogism_box_row_5.add_widget(self.premis_two_label)
 
         self.btn_1_p2 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -2340,7 +2339,7 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_6 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_6)
         
-        self.conclusion_label = Label(text='conclusion', size_hint_x = 2.0, font_name = 'my_custom_font')
+        self.conclusion_label = Label(text='Konklusion', size_hint_x = 2.0, font_name = 'my_custom_font')
         self.syllogism_box_row_6.add_widget(self.conclusion_label)
 
         self.btn_1_c = Button(color= (0, 0, 0, 1), background_normal='')
@@ -2366,7 +2365,7 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_7 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_7)
         
-        self.solution_label = Label(text='solution', size_hint_x = 2.0, font_name = 'my_custom_font')
+        self.solution_label = Label(text='Lösung', size_hint_x = 2.0, font_name = 'my_custom_font')
         self.syllogism_box_row_7.add_widget(self.solution_label)
 
         self.btn_1_s = Button(color= (0, 0, 0, 1))
@@ -2668,7 +2667,8 @@ class Menu_conclusionsScreen(Screen):
     pass   
 
 class ConclusionsScreen(Screen):
-    global foo
+    pass
+"""    global foo
     foo = []
 
     def syllogism_example_function(self, premis_one, premis_two, solution):
@@ -3210,7 +3210,7 @@ class ConclusionsScreen(Screen):
         horizontal = BoxLayout(orientation='horizontal')
         self.add_widget(horizontal)
         
-        self.label_1 = Label(size_hint_x = .5)
+        self.label_1 = Label(size_hint_x = .02)
         horizontal.add_widget(self.label_1)
         
         vertical = BoxLayout(orientation='vertical')
@@ -3294,7 +3294,7 @@ class ConclusionsScreen(Screen):
         self.syllogism_box_row_4 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_4)
         
-        self.premis_one_label = Label(text='premis one', size_hint_x = 2.0)
+        self.premis_one_label = Label(text='Erste Prämisse', size_hint_x = 2.0)
         self.syllogism_box_row_4.add_widget(self.premis_one_label)
 
         self.btn_1_p1 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -3317,7 +3317,7 @@ class ConclusionsScreen(Screen):
         self.syllogism_box_row_5 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_5)
         
-        self.premis_two_label = Label(text='premis two', size_hint_x = 2.0)
+        self.premis_two_label = Label(text='Zweite Prämisse', size_hint_x = 2.0)
         self.syllogism_box_row_5.add_widget(self.premis_two_label)
 
         self.btn_1_p2 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -3340,7 +3340,7 @@ class ConclusionsScreen(Screen):
         self.syllogism_box_row_6 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_6)
         
-        self.conclusion_label = Label(text='conclusion', size_hint_x = 2.0)
+        self.conclusion_label = Label(text='Konklusion', size_hint_x = 2.0)
         self.syllogism_box_row_6.add_widget(self.conclusion_label)
 
         self.btn_1_c = Button(color= (0, 0, 0, 1), background_normal='')
@@ -3384,7 +3384,7 @@ class ConclusionsScreen(Screen):
         variable_btn_u ='u'
         self.btn_u.bind(on_press=self.append_function)
 
-        self.label_3 = Label(size_hint_x = .5)
+        self.label_3 = Label(size_hint_x = .02)
         horizontal.add_widget(self.label_3)
         
 
@@ -3480,11 +3480,11 @@ class ConclusionsScreen(Screen):
                 self.btn_8_c.background_color=(0, 1, 0, 1)
             elif function_output_list[3][3] == 'u':
                 self.btn_6_c.background_color=(1, 1, 1, 1)
-                self.btn_8_c.background_color=(1, 1, 1, 1)
+                self.btn_8_c.background_color=(1, 1, 1, 1)"""
 
 class Menu_total_formulas_Screen(Screen):
-    label_left_menu_total_formulas = StringProperty('Enlonged formulas ->\nTotal-formulas')
-    label_right_menu_total_formulas = StringProperty('Total-formulas ->\nEnlonged formulas')
+    label_left_menu_total_formulas = StringProperty('Verlängerte Formeln ->\nGanzformeln')
+    label_right_menu_total_formulas = StringProperty('Ganzformeln ->\nVerlängerte Formeln')
 
     def __init__(self, **kwargs):
         super(RelativeLayout, self).__init__(**kwargs)
@@ -5615,7 +5615,7 @@ class Total_formulas_Playground_left_Screen(Screen):
         horizontal = BoxLayout(orientation='horizontal')
         self.add_widget(horizontal)
         
-        self.label_1 = Label(size_hint_x = .5)
+        self.label_1 = Label(size_hint_x = .2)
         horizontal.add_widget(self.label_1)
         
         vertical = BoxLayout(orientation='vertical')
@@ -5699,7 +5699,7 @@ class Total_formulas_Playground_left_Screen(Screen):
         self.syllogism_box_row_4 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_4)
         
-        self.premis_one_label = Label(text='1. Formula', size_hint_x = 2.5)
+        self.premis_one_label = Label(text='1. Formel', size_hint_x = 2.5)
         self.syllogism_box_row_4.add_widget(self.premis_one_label)
 
         self.btn_1_p1 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -5722,7 +5722,7 @@ class Total_formulas_Playground_left_Screen(Screen):
         self.syllogism_box_row_5 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_5)
         
-        self.premis_two_label = Label(text='2. Formula', size_hint_x = 2.5)
+        self.premis_two_label = Label(text='2. Formel', size_hint_x = 2.5)
         self.syllogism_box_row_5.add_widget(self.premis_two_label)
 
         self.btn_1_p2 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -5745,7 +5745,7 @@ class Total_formulas_Playground_left_Screen(Screen):
         self.syllogism_box_row_6 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_6)
         
-        self.premis_three_label = Label(text='3. Formula', size_hint_x = 2.5)
+        self.premis_three_label = Label(text='3. Formel', size_hint_x = 2.5)
         self.syllogism_box_row_6.add_widget(self.premis_three_label)
 
         self.btn_1_p3 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -5768,7 +5768,7 @@ class Total_formulas_Playground_left_Screen(Screen):
         self.syllogism_box_row_6 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_6)
         
-        self.conclusion_label = Label(text='Total-formula', size_hint_x = 2.5)
+        self.conclusion_label = Label(text='Ganzformel', size_hint_x = 2.5)
         self.syllogism_box_row_6.add_widget(self.conclusion_label)
 
         self.btn_1_c = Button(color= (0, 0, 0, 1), background_normal='')
@@ -5812,7 +5812,7 @@ class Total_formulas_Playground_left_Screen(Screen):
         variable_btn_u ='u'
         self.btn_u.bind(on_press=self.append_function)
 
-        self.label_3 = Label(size_hint_x = .5)
+        self.label_3 = Label(size_hint_x = .2)
         horizontal.add_widget(self.label_3)
         
 
@@ -6219,7 +6219,7 @@ class Total_formulas_Playground_right_Screen(Screen):
         horizontal = BoxLayout(orientation='horizontal')
         self.add_widget(horizontal)
         
-        self.label_1 = Label(size_hint_x = .5)
+        self.label_1 = Label(size_hint_x = .2)
         horizontal.add_widget(self.label_1)
         
         vertical = BoxLayout(orientation='vertical')
@@ -6303,7 +6303,7 @@ class Total_formulas_Playground_right_Screen(Screen):
         self.syllogism_box_row_6 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_6)
         
-        self.conclusion_label = Label(text='Total-formula', size_hint_x = 2.5)
+        self.conclusion_label = Label(text='Ganzformel', size_hint_x = 2.5)
         self.syllogism_box_row_6.add_widget(self.conclusion_label)
 
         self.btn_1_c = Button(color= (0, 0, 0, 1), background_normal='')
@@ -6329,7 +6329,7 @@ class Total_formulas_Playground_right_Screen(Screen):
         self.syllogism_box_row_4 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_4)
         
-        self.premis_one_label = Label(text='1. Formula', size_hint_x = 2.5)
+        self.premis_one_label = Label(text='1. Formel', size_hint_x = 2.5)
         self.syllogism_box_row_4.add_widget(self.premis_one_label)
 
         self.btn_1_p1 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -6352,7 +6352,7 @@ class Total_formulas_Playground_right_Screen(Screen):
         self.syllogism_box_row_5 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_5)
         
-        self.premis_two_label = Label(text='2. Formula', size_hint_x = 2.5)
+        self.premis_two_label = Label(text='2. Formel', size_hint_x = 2.5)
         self.syllogism_box_row_5.add_widget(self.premis_two_label)
 
         self.btn_1_p2 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -6375,7 +6375,7 @@ class Total_formulas_Playground_right_Screen(Screen):
         self.syllogism_box_row_6 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_6)
         
-        self.premis_three_label = Label(text='3. Formula', size_hint_x = 2.5)
+        self.premis_three_label = Label(text='3. Formel', size_hint_x = 2.5)
         self.syllogism_box_row_6.add_widget(self.premis_three_label)
 
         self.btn_1_p3 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -6416,7 +6416,7 @@ class Total_formulas_Playground_right_Screen(Screen):
         variable_btn_u ='u'
         self.btn_u.bind(on_press=self.append_function)
 
-        self.label_3 = Label(size_hint_x = .5)
+        self.label_3 = Label(size_hint_x = .2)
         horizontal.add_widget(self.label_3)
         
 
@@ -6790,7 +6790,7 @@ class TransformationsScreen(Screen):
             self.btn_4_transformed_judge.background_color=(1, 1, 1, 1)
 
 class RessourcesScreen(Screen):
-    text_syllogism_ressource = 'Pure Strict syllogistic,\n Version from 16:44,\n 15 January 2024'
+    text_syllogism_ressource = 'Strenge Syllogistik,\n Version vom 6. Februar 2019'
             
     def __init__(self, **kwargs):
         super(RelativeLayout, self).__init__(**kwargs)
