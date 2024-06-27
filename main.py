@@ -1819,7 +1819,6 @@ class TrainingScreen(Screen):
 
 
     def append_function(self, button):
-        print(button)
         if foo_1 == []:
             if button == self.btn_n:
                 z = foo_1.append('n')
@@ -2012,7 +2011,7 @@ class TrainingScreen(Screen):
         if isActive:
             self.lbl_active_example.text = self.syllogism_example_text
         else:
-            self.lbl_active_example.text = "OFF"
+            self.lbl_active_example.text = "AUS"
         
     def on_checkbox_Active_4(self, checkboxInstance, isActive):
         global active_4_dummy
@@ -2243,8 +2242,8 @@ class TrainingScreen(Screen):
         self.checkboxes_BoxLayout.add_widget(self.dummy_label_checkboxes_BoxLayout_right)
         
         
-        self.label_example = Label(text='Example:')
-        self.label_sentences = Label(text='Sentences')
+        self.label_example = Label(text='Beispiel:')
+        self.label_sentences = Label(text='Sätze')
         
         self.active_3 = CheckBox(active=False)
 
@@ -2333,7 +2332,7 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_4 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_4)
         
-        self.premis_one_label = Label(text='Erste Prämisse', size_hint_x = 2.0, font_name = 'my_custom_font')
+        self.premis_one_label = Label(text='1. Prämisse', size_hint_x = 2.0, font_name = 'my_custom_font')
         self.syllogism_box_row_4.add_widget(self.premis_one_label)
 
         self.btn_1_p1 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -2359,7 +2358,7 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_5 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_5)
         
-        self.premis_two_label = Label(text='Zweite Prämisse', size_hint_x = 2.0, font_name = 'my_custom_font')
+        self.premis_two_label = Label(text='2. Prämisse', size_hint_x = 2.0, font_name = 'my_custom_font')
         self.syllogism_box_row_5.add_widget(self.premis_two_label)
 
         self.btn_1_p2 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -2495,7 +2494,7 @@ class TrainingScreen(Screen):
         self.box_advices_and_example_BoxLayout = BoxLayout(orientation='vertical')
         self.answer_buttons_and_advices.add_widget(self.box_advices_and_example_BoxLayout)
 
-        self.lbl_active_example = Label(text="Example OFF", font_size= 20)
+        self.lbl_active_example = Label(text="Beispiel AUS", font_size= 20)
         self.box_advices_and_example_BoxLayout.add_widget(self.lbl_active_example)
 
         self.box_horizontal_buttons_down = BoxLayout(orientation='horizontal', size_hint_y= .75)
@@ -2629,7 +2628,6 @@ class TrainingScreen(Screen):
         self.refresh2_button.bind(on_press=self.clear_widgets_function)
 
     def append_function_calculate(self, button):
-        print(button)
         if foo_calc == []:
             if button == self.btn_n:
                 z = foo_calc.append('n')
@@ -2820,10 +2818,10 @@ class TrainingScreen(Screen):
         advice_premis_2 = self.second_formula_values(second_formula)
         function_output_list = self.output2(my_text, my_text2)
         formulas_list_first_premis = first_formula[0:4][:]
-        print(formulas_list_first_premis)
-        print(second_formula)
+
+
         formulas_list = [formulas_list_first_premis, second_formula]
-        print(function_output_list[3])
+
 
         solution = [self.function_output_list[3][0][:], self.function_output_list[3][1][:], self.function_output_list[3][0][:], self.function_output_list[3][1][:], \
             self.function_output_list[3][2][:], self.function_output_list[3][3][:], self.function_output_list[3][2][:], self.function_output_list[3][3][:]] 
@@ -2894,8 +2892,6 @@ class TrainingScreen(Screen):
         
         if function_output_list[4] != [0]:
             self.conclusion_label.text = "Widerspruch!"
-            print(formulas_list)
-            print(function_output_list[4])
             for r in range(len(function_output_list[4])):
                 for s in range(4):
                     for t in range(2):
@@ -2904,7 +2900,6 @@ class TrainingScreen(Screen):
                             self.buttons_conclusion[(s+s)+t].text = str((s+s)+t+1)
                             self.buttons_premis_one[(s+s)+t].underline = True
                         if function_output_list[4][r][0][0] == 1 and function_output_list[4][r][1][0] == s:
-                            print(t)
                             self.buttons_conclusion[s+4*t].background_color = (0, 0, 1, 1)
                             self.buttons_conclusion[s+4*t].text = str(s+4*t+1)
                             self.buttons_premis_two[s+4*t].underline = True
@@ -2989,7 +2984,6 @@ class TrainingScreen(Screen):
                             self.buttons_solution[(s+s)+t].background_color = (0, 0, 1, 1)
                             self.buttons_solution[(s+s)+t].text = str((s+s)+t+1)
                         if self.function_output_list[4][r][0][0] == 1 and self.function_output_list[4][r][1][0] == s:
-                            print(t)
                             self.buttons_solution[s+4*t].background_color = (0, 0, 1, 1)
                             self.buttons_solution[s+4*t].text = str(s+4*t+1)
 
@@ -5325,42 +5319,34 @@ class Total_formulas_Playground_left_Screen(Screen):
         conclusion[0] = self.total_formula_deduction_first_value_n(first_formula, second_formula, third_formula)
         conclusion[1] = self.total_formula_deduction_first_value_a(first_formula, second_formula, third_formula)
         if conclusion[0] == 'n' and conclusion[1] == 'a':
-            print('first error at 0')
             return (1)
         conclusion[2] = self.total_formula_deduction_second_value_n(first_formula, second_formula, third_formula)
         conclusion[3] = self.total_formula_deduction_second_value_a(first_formula, second_formula, third_formula)
         if conclusion[2] == 'n' and conclusion[3] == 'a':
-            print('first error at 1')
             return (1)
         conclusion[4] = self.total_formula_deduction_third_value_n(first_formula, second_formula, third_formula)
         conclusion[5] = self.total_formula_deduction_third_value_a(first_formula, second_formula, third_formula)
         if conclusion[4] == 'n' and conclusion[5] == 'a':
-            print('first error at 2')
             return (1)
         conclusion[6] = self.total_formula_deduction_fourth_value_n(first_formula, second_formula, third_formula)
         conclusion[7] = self.total_formula_deduction_fourth_value_a(first_formula, second_formula, third_formula)
         if conclusion[6] == 'n' and conclusion[7] == 'a':
-            print('first error at 3')
             return (1)
         conclusion[8] = self.total_formula_deduction_fifth_value_n(first_formula, second_formula, third_formula)
         conclusion[9] = self.total_formula_deduction_fifth_value_a(first_formula, second_formula, third_formula)
         if conclusion[8] == 'n' and conclusion[9] == 'a':
-            print('first error at 4')
             return (1)
         conclusion[10] = self.total_formula_deduction_sixth_value_n(first_formula, second_formula, third_formula)
         conclusion[11] = self.total_formula_deduction_sixth_value_a(first_formula, second_formula, third_formula)
         if conclusion[10] == 'n' and conclusion[11] == 'a':
-            print('first error at 5')
             return (1)
         conclusion[12] = self.total_formula_deduction_seventh_value_n(first_formula, second_formula, third_formula)
         conclusion[13] = self.total_formula_deduction_seventh_value_a(first_formula, second_formula, third_formula)
         if conclusion[12] == 'n' and conclusion[13] == 'a':
-            print('first error at 6')
             return (1)
         conclusion[14] = self.total_formula_deduction_eighth_value_n(first_formula, second_formula, third_formula)
         conclusion[15] = self.total_formula_deduction_eighth_value_a(first_formula, second_formula, third_formula)
         if conclusion[14] == 'n' and conclusion[15] == 'a':
-            print('first error at 7')
             return (1)
         else:
             return (0)
@@ -5565,7 +5551,6 @@ class Total_formulas_Playground_left_Screen(Screen):
         self.parent.current = 'menu'
 
     def append_function(self, button):
-        print(button)
         if foo_3 == []:
             if button == self.btn_n:
                 z = foo_3.append('n')
@@ -5643,7 +5628,6 @@ class Total_formulas_Playground_left_Screen(Screen):
                 self.btn_8_p1.text ='u'
                 self.btn_8_p1.background_color=(1, 1, 1, 1)
         elif len(foo_3) == 4:
-            print('test')
             self.first_formula = foo_3
             if button == self.btn_n:
                 z = foo_3.append('n')
@@ -5721,7 +5705,6 @@ class Total_formulas_Playground_left_Screen(Screen):
                 self.btn_8_p2.text ='u'
                 self.btn_8_p2.background_color=(1, 1, 1, 1)
         elif len(foo_3) == 8:
-            print('test')
             self.second_formula = foo_3[4:8]
             if button == self.btn_n:
                 z = foo_3.append('n')
@@ -6106,6 +6089,8 @@ class Total_formulas_Playground_left_Screen(Screen):
         self.syllogism_box_row_6.add_widget(self.btn_7_p3)
         self.btn_8_p3 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_8_p3)
+        
+        self.syllogism_box_col_1.add_widget(Label(text= ' ', size_hint_y= .2))
 
         self.syllogism_box_row_6 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_6)
@@ -6270,7 +6255,6 @@ class Total_formulas_Playground_right_Screen(Screen):
         self.parent.current = 'menu'
 
     def append_function(self, button):
-        print(button)
         if foo_4 == []:
             if button == self.btn_n:
                 z = foo_4.append('n')
@@ -6398,12 +6382,9 @@ class Total_formulas_Playground_right_Screen(Screen):
         self.refresh2_button.bind(on_press=self.clear_widgets_function)
 
     def click(self,my_button2):
-        print(self.total_formula)
-        print(self.total_formula)
         my_text = self.total_formula
 
         function_output_list = self.analyize_solution(my_text)
-        print(function_output_list)
 
         self.btn_1_p1.text = function_output_list[0][0]
         self.btn_2_p1.text = function_output_list[0][0]
@@ -6667,6 +6648,8 @@ class Total_formulas_Playground_right_Screen(Screen):
 
         self.syllogism_box_col_2 = BoxLayout(orientation='vertical')
         vertical.add_widget(self.syllogism_box_col_2)
+        
+        self.syllogism_box_col_1.add_widget(Label(text= ' ', size_hint_y= .2))
 
         self.syllogism_box_row_4 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_4)
@@ -6809,7 +6792,6 @@ class TransformationsScreen(Screen):
             return ("\n\nNo traditional\njudge!")
 
     def append_function(self, button):
-        print(button)
         if foo_5 == []:
             if button == self.btn_n:
                 z = foo_5.append('N')
@@ -6943,6 +6925,8 @@ class TransformationsScreen(Screen):
     
         self.dummy_label_five = Label(text=' ', size_hint_x = 2.5)
         self.syllogism_box_row_3.add_widget(self.dummy_label_five)
+        
+        self.syllogism_box_col_1.add_widget(Label(text= ' ', size_hint_y= .2))
 
         self.syllogism_box_row_4 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_4)
@@ -7043,13 +7027,12 @@ class TransformationsScreen(Screen):
 
     def conversion_fn(self, button):
         inital_judge = self.inital_judge_variable
-        print(inital_judge)
         inital_judge_values_ = self.inital_judge_values(inital_judge)
         conversion = [inital_judge_values_[0], inital_judge_values_[2], inital_judge_values_[1], inital_judge_values_[3]]           
         solution = conversion
         output_judge = self.output_judge_fn(solution)
         self.output_buttons_function(solution)
-        self.explanation_label = 'S•P \u00A9 P•S'
+        self.explanation_label = 'S§P \u00A9 P§S'
         self.conclusion_label.text = self.explanation_label+'\n'+output_judge
 
     def obversion_fn(self, button):
@@ -7059,7 +7042,7 @@ class TransformationsScreen(Screen):
         solution = obversion
         output_judge = self.output_judge_fn(solution)
         self.output_buttons_function(solution)
-        self.explanation_label = 'S•P \u00A9 S•~P'
+        self.explanation_label = 'S§P \u00A9 S§~P'
         self.conclusion_label.text = self.explanation_label+'\n'+output_judge
 
     def contraposition_fn(self, button):
@@ -7069,7 +7052,7 @@ class TransformationsScreen(Screen):
         solution = contradiction
         output_judge = self.output_judge_fn(solution)
         self.output_buttons_function(solution)
-        self.explanation_label = 'S•P \u00A9 ~P•~S'
+        self.explanation_label = 'S§P \u00A9 ~P§~S'
         self.conclusion_label.text = self.explanation_label+'\n'+output_judge
 
     def partial_inversion_fn(self, button):
@@ -7079,7 +7062,7 @@ class TransformationsScreen(Screen):
         solution = partial_inversion
         output_judge = self.output_judge_fn(solution)
         self.output_buttons_function(solution)
-        self.explanation_label = 'S•P \u00A9 ~S•P'
+        self.explanation_label = 'S§P \u00A9 ~S§P'
         self.conclusion_label.text = self.explanation_label+'\n'+output_judge
 
     def inversion_fn(self, button):
@@ -7089,7 +7072,7 @@ class TransformationsScreen(Screen):
         solution = inversion
         output_judge = self.output_judge_fn(solution)
         self.output_buttons_function(solution)
-        self.explanation_label = 'S•P \u00A9 ~S•~P'
+        self.explanation_label = 'S§P \u00A9 ~S§~P'
         self.conclusion_label.text = self.explanation_label+'\n'+output_judge
 
 
@@ -7327,7 +7310,6 @@ class TestApp(App):
                                 data=settings_json)
     
     def on_config_change(self, config, section, key, value):
-        print(config, section, key, value)
         if config is self.config:
             token = (section, key)
             if token == ('trainer', 'calculate_exercise'):
