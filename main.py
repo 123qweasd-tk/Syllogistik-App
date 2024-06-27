@@ -1087,9 +1087,11 @@ class Table_overviewScreen_2(Screen):
         
 class TrainingScreen(Screen):
     global foo_1
+    global foo_calc
     global active_4_dummy
     
     foo_1 = []
+    foo_calc = []
     active_4_dummy = False
     
     def dyadic_name_first_formula(self, formula):
@@ -1997,11 +1999,11 @@ class TrainingScreen(Screen):
             self.height*.7
         ]
 
-    def right_answer(self, button):
+    def right_answer(self, *args):
         right_label = Label(color= (0, 1, 0, 1), text='Right!', size_hint=(.5, .3), pos_hint={'x': .25, 'y': .2})
         self.add_widget(right_label)
 
-    def wrong_answer(self, button):
+    def wrong_answer(self, *args):
         wrong_label = Label(color= (1, 0, 0, 1), text='Wrong!', size_hint=(.5, .3), pos_hint={'x': .25, 'y': .15})
         self.add_widget(wrong_label)
 
@@ -2108,6 +2110,7 @@ class TrainingScreen(Screen):
                 self.remove_widget(child)
         
         foo_1.clear()
+        foo_calc.clear()
         self.error_number_enlonged.clear()
         self.a_goes_into_conclusion.clear()
         self.n_goes_into_conclusion.clear()
@@ -2123,6 +2126,12 @@ class TrainingScreen(Screen):
 
         
         self.refresh2_button.bind(on_press=self.clear_widgets_function)
+    
+    
+    def function_calculate_exercise_settings(self, *args):
+        config = ConfigParser.get_configparser('app')
+        value = config.getint('trainer', 'calculate_exercise')
+        return value
     
     def function_completed_syllogistic_settings(self, *args):
         config = ConfigParser.get_configparser('app')
@@ -2145,6 +2154,7 @@ class TrainingScreen(Screen):
 
         completedsyllogistic = self.function_completed_syllogistic_settings()#looks for setting
         particularpremis = self.function_particularpremis_settings()#looks for setting
+        calculate_exercise = self.function_calculate_exercise_settings()#looks for setting
 
         if completedsyllogistic == 1:
             a = random.randint(0, 15)
@@ -2179,7 +2189,9 @@ class TrainingScreen(Screen):
         first_formula = judges_premis_one[b]
         self.my_text = first_formula
 
+        self.advice_premis_1 = self.first_formula_values(first_formula)
         advice_premis_1 = self.first_formula_values(first_formula)
+        self.advice_premis_2 = self.second_formula_values(second_formula)
         advice_premis_2 = self.second_formula_values(second_formula)
         
         self.function_output_list = self.output2(self.my_text, self.my_text2)
@@ -2211,7 +2223,9 @@ class TrainingScreen(Screen):
         vertical_left_up.add_widget(self.label_second_premis)
         vertical_left_up.add_widget(self.label_questionmark)
         
-        horizontal_up.add_widget(Label(text='Syllogism-\nTrainer'))
+        
+        horizontal_up.add_widget(Label(text='Syllogistik-\nTrainer', halign= 'center'))
+        
         horizontal_up.add_widget(Label(text=' '))
         
         self.boxlayout_up = BoxLayout(orientation='horizontal')
@@ -2426,51 +2440,53 @@ class TrainingScreen(Screen):
         self.answer_buttons = BoxLayout(orientation='vertical', size_hint_x = .75)
         self.answer_buttons_and_advices.add_widget(self.answer_buttons)
         
-        self.button1 = Button()
-        self.button2 = Button()
-        self.button3 = Button()
-
-        self.answer_buttons.add_widget(self.button1)
-        self.answer_buttons.add_widget(self.button2)
-        self.answer_buttons.add_widget(self.button3)
-
-        self.buttons = [self.button1, self.button2, self.button3]
-        correct_answer = random.randrange(len(self.buttons))
-
-        button_text = self.function_output_list[0]
+        if calculate_exercise == 0:
         
-        completedsyllogistic = self.function_completed_syllogistic_settings()
-        
-        for i, button in enumerate(self.buttons):
-            if i == correct_answer:
-                button.text = button_text
-                button.bind(on_press=self.right_answer)
-            else:
-                if completedsyllogistic == 1:
-                    conclusion_judges = ["All S are P,\nalso known as SaP", "Some S are P,\nalso known as SiP", "No S is P,\nalso known as SeP", "Some S are no P,\nalso known as SoP", "No (allowed) \njudge possible!", # traditionelle Syllogistik
-                                                 "All P are S,\nalso known as SãP", "No P is S,\nalso known as SëP", "Some ~S are ~P,\nalso known as SïP", "Some P are no S,\nalso known as SõP"] # vollständige Syllogistik
-                    if button_text == "All S are P,\nalso known as SaP" or button_text == "All P are S,\nalso known as SãP":
-                        for i, ele in enumerate(conclusion_judges):
-                            if (ele == "Some S are P,\nalso known as SiP") or (ele == "Some ~S are ~P,\nalso known as SïP"):
-                                conclusion_judges.pop(i)
-                    elif button_text == "No S is P,\nalso known as SeP" or button_text == "No P is S,\nalso known as SëP":
-                        for i, ele in enumerate(conclusion_judges):
-                            if (ele == "Some S are no P,\nalso known as SoP") or (ele == "Some P are no S,\nalso known as SõP"):
-                                conclusion_judges.pop(i)
+            self.button1 = Button()
+            self.button2 = Button()
+            self.button3 = Button()
+
+            self.answer_buttons.add_widget(self.button1)
+            self.answer_buttons.add_widget(self.button2)
+            self.answer_buttons.add_widget(self.button3)
+
+            self.buttons = [self.button1, self.button2, self.button3]
+            correct_answer = random.randrange(len(self.buttons))
+
+            button_text = self.function_output_list[0]
+            
+            completedsyllogistic = self.function_completed_syllogistic_settings()
+            
+            for i, button in enumerate(self.buttons):
+                if i == correct_answer:
+                    button.text = button_text
+                    button.bind(on_press=self.right_answer)
                 else:
-                    conclusion_judges = ["All S are P,\nalso known as SaP", "Some S are P,\nalso known as SiP", "No S is P,\nalso known as SeP", "Some S are no P,\nalso known as SoP", "No (allowed) \njudge possible!"] # traditionelle Syllogistik
-                    if button_text == "All S are P,\nalso known as SaP":
-                        for i, ele in enumerate(conclusion_judges):
-                            if (ele == "Some S are P,\nalso known as SiP"):
-                                conclusion_judges.pop(i)
-                    elif button_text == "No S is P,\nalso known as SeP":
-                        for i, ele in enumerate(conclusion_judges):
-                            if (ele == "Some S are no P,\nalso known as SoP"):
-                                conclusion_judges.pop(i)
-                conclusion_judges.remove(button_text)
-                m = random.choice(conclusion_judges)
-                button.text = m
-                button.bind(on_press=self.wrong_answer)
+                    if completedsyllogistic == 1:
+                        conclusion_judges = ["All S are P,\nalso known as SaP", "Some S are P,\nalso known as SiP", "No S is P,\nalso known as SeP", "Some S are no P,\nalso known as SoP", "No (allowed) \njudge possible!", # traditionelle Syllogistik
+                                                     "All P are S,\nalso known as SãP", "No P is S,\nalso known as SëP", "Some ~S are ~P,\nalso known as SïP", "Some P are no S,\nalso known as SõP"] # vollständige Syllogistik
+                        if button_text == "All S are P,\nalso known as SaP" or button_text == "All P are S,\nalso known as SãP":
+                            for i, ele in enumerate(conclusion_judges):
+                                if (ele == "Some S are P,\nalso known as SiP") or (ele == "Some ~S are ~P,\nalso known as SïP"):
+                                    conclusion_judges.pop(i)
+                        elif button_text == "No S is P,\nalso known as SeP" or button_text == "No P is S,\nalso known as SëP":
+                            for i, ele in enumerate(conclusion_judges):
+                                if (ele == "Some S are no P,\nalso known as SoP") or (ele == "Some P are no S,\nalso known as SõP"):
+                                    conclusion_judges.pop(i)
+                    else:
+                        conclusion_judges = ["All S are P,\nalso known as SaP", "Some S are P,\nalso known as SiP", "No S is P,\nalso known as SeP", "Some S are no P,\nalso known as SoP", "No (allowed) \njudge possible!"] # traditionelle Syllogistik
+                        if button_text == "All S are P,\nalso known as SaP":
+                            for i, ele in enumerate(conclusion_judges):
+                                if (ele == "Some S are P,\nalso known as SiP"):
+                                    conclusion_judges.pop(i)
+                        elif button_text == "No S is P,\nalso known as SeP":
+                            for i, ele in enumerate(conclusion_judges):
+                                if (ele == "Some S are no P,\nalso known as SoP"):
+                                    conclusion_judges.pop(i)
+                    conclusion_judges.remove(button_text)
+                    m = random.choice(conclusion_judges)
+                    button.text = m
+                    button.bind(on_press=self.wrong_answer)
 
         self.box_advices_and_example_BoxLayout = BoxLayout(orientation='vertical')
         self.answer_buttons_and_advices.add_widget(self.box_advices_and_example_BoxLayout)
@@ -2484,22 +2500,312 @@ class TrainingScreen(Screen):
         self.btn_n = Button(text='n', color= (0, 0, 0, 1), background_normal='', background_color=(1, 0, 0, 1))
         self.box_horizontal_buttons_down.add_widget(self.btn_n)
         variable_btn_n ='n'
-        self.btn_n.bind(on_press=self.append_function)
-
+        
         self.btn_a = Button(text='a', color= (0, 0, 0, 1), background_normal='', background_color=(0, 1, 0, 1))
         self.box_horizontal_buttons_down.add_widget(self.btn_a)
         variable_btn_a ='a'
-        self.btn_a.bind(on_press=self.append_function)
 
         self.btn_u = Button(text='u', color= (0, 0, 0, 1), background_normal='', background_color=(1, 1, 1, 1))
         self.box_horizontal_buttons_down.add_widget(self.btn_u)
         variable_btn_u ='u'
-        self.btn_u.bind(on_press=self.append_function)
+
+        if calculate_exercise == 0:
+            self.btn_n.bind(on_press=self.append_function)
+            self.btn_a.bind(on_press=self.append_function)
+            self.btn_u.bind(on_press=self.append_function)
+        else:
+            advice_premis_1 = self.first_formula_values(first_formula)
+            advice_premis_2 = self.second_formula_values(second_formula)
+
+            self.btn_1_p1.text = advice_premis_1[0]
+            self.btn_2_p1.text = advice_premis_1[0]
+            self.btn_3_p1.text = advice_premis_1[1]
+            self.btn_4_p1.text = advice_premis_1[1]
+            self.btn_5_p1.text = advice_premis_1[2]
+            self.btn_6_p1.text = advice_premis_1[2]
+            self.btn_7_p1.text = advice_premis_1[3]
+            self.btn_8_p1.text = advice_premis_1[3]
+
+            self.btn_1_p2.text = advice_premis_2[0]
+            self.btn_2_p2.text = advice_premis_2[1]
+            self.btn_3_p2.text = advice_premis_2[2]
+            self.btn_4_p2.text = advice_premis_2[3]
+            self.btn_5_p2.text = advice_premis_2[0]
+            self.btn_6_p2.text = advice_premis_2[1]
+            self.btn_7_p2.text = advice_premis_2[2]
+            self.btn_8_p2.text = advice_premis_2[3]
+
+            if advice_premis_1[0] == 'n':
+                self.btn_1_p1.background_color=(1, 0, 0, 1)
+                self.btn_1_p1.background_color=(1, 0, 0, 1)
+                self.btn_2_p1.background_color=(1, 0, 0, 1)
+                self.btn_2_p1.background_color=(1, 0, 0, 1)
+            elif advice_premis_1[0] == 'a':
+                self.btn_1_p1.background_color=(0, 1, 0, 1)
+                self.btn_1_p1.background_color=(0, 1, 0, 1)
+                self.btn_2_p1.background_color=(0, 1, 0, 1)
+                self.btn_2_p1.background_color=(0, 1, 0, 1)
+            if advice_premis_1[1] == 'n':
+                self.btn_3_p1.background_color=(1, 0, 0, 1)
+                self.btn_3_p1.background_color=(1, 0, 0, 1)
+                self.btn_4_p1.background_color=(1, 0, 0, 1)
+                self.btn_4_p1.background_color=(1, 0, 0, 1)
+            elif advice_premis_1[1] == 'a':
+                self.btn_3_p1.background_color=(0, 1, 0, 1)
+                self.btn_3_p1.background_color=(0, 1, 0, 1)
+                self.btn_4_p1.background_color=(0, 1, 0, 1)
+                self.btn_4_p1.background_color=(0, 1, 0, 1)
+            if advice_premis_1[2] == 'n':
+                self.btn_5_p1.background_color=(1, 0, 0, 1)
+                self.btn_5_p1.background_color=(1, 0, 0, 1)
+                self.btn_6_p1.background_color=(1, 0, 0, 1)
+                self.btn_6_p1.background_color=(1, 0, 0, 1)
+            elif advice_premis_1[2] == 'a':
+                self.btn_5_p1.background_color=(0, 1, 0, 1)
+                self.btn_5_p1.background_color=(0, 1, 0, 1)
+                self.btn_6_p1.background_color=(0, 1, 0, 1)
+                self.btn_6_p1.background_color=(0, 1, 0, 1)
+            if advice_premis_1[3] == 'n':
+                self.btn_7_p1.background_color=(1, 0, 0, 1)
+                self.btn_7_p1.background_color=(1, 0, 0, 1)
+                self.btn_8_p1.background_color=(1, 0, 0, 1)
+                self.btn_8_p1.background_color=(1, 0, 0, 1)
+            elif advice_premis_1[3] == 'a':
+                self.btn_7_p1.background_color=(0, 1, 0, 1)
+                self.btn_7_p1.background_color=(0, 1, 0, 1)
+                self.btn_8_p1.background_color=(0, 1, 0, 1)
+                self.btn_8_p1.background_color=(0, 1, 0, 1)
+
+            if advice_premis_2[0] == 'n':
+                self.btn_1_p2.background_color=(1, 0, 0, 1)
+                self.btn_1_p2.background_color=(1, 0, 0, 1)
+                self.btn_5_p2.background_color=(1, 0, 0, 1)
+                self.btn_5_p2.background_color=(1, 0, 0, 1)
+            elif advice_premis_2[0] == 'a':
+                self.btn_1_p2.background_color=(0, 1, 0, 1)
+                self.btn_1_p2.background_color=(0, 1, 0, 1)
+                self.btn_5_p2.background_color=(0, 1, 0, 1)
+                self.btn_5_p2.background_color=(0, 1, 0, 1)
+            if advice_premis_2[1] == 'n':
+                self.btn_2_p2.background_color=(1, 0, 0, 1)
+                self.btn_2_p2.background_color=(1, 0, 0, 1)
+                self.btn_6_p2.background_color=(1, 0, 0, 1)
+                self.btn_6_p2.background_color=(1, 0, 0, 1)
+            elif advice_premis_2[1] == 'a':
+                self.btn_2_p2.background_color=(0, 1, 0, 1)
+                self.btn_2_p2.background_color=(0, 1, 0, 1)
+                self.btn_6_p2.background_color=(0, 1, 0, 1)
+                self.btn_6_p2.background_color=(0, 1, 0, 1)
+            if advice_premis_2[2] == 'n':
+                self.btn_3_p2.background_color=(1, 0, 0, 1)
+                self.btn_3_p2.background_color=(1, 0, 0, 1)
+                self.btn_7_p2.background_color=(1, 0, 0, 1)
+                self.btn_7_p2.background_color=(1, 0, 0, 1)
+            elif advice_premis_2[2] == 'a':
+                self.btn_3_p2.background_color=(0, 1, 0, 1)
+                self.btn_3_p2.background_color=(0, 1, 0, 1)
+                self.btn_7_p2.background_color=(0, 1, 0, 1)
+                self.btn_7_p2.background_color=(0, 1, 0, 1)
+            if advice_premis_2[3] == 'n':
+                self.btn_4_p2.background_color=(1, 0, 0, 1)
+                self.btn_4_p2.background_color=(1, 0, 0, 1)
+                self.btn_8_p2.background_color=(1, 0, 0, 1)
+                self.btn_8_p2.background_color=(1, 0, 0, 1)
+            elif advice_premis_2[3] == 'a':
+                self.btn_4_p2.background_color=(0, 1, 0, 1)
+                self.btn_4_p2.background_color=(0, 1, 0, 1)
+                self.btn_8_p2.background_color=(0, 1, 0, 1)
+                self.btn_8_p2.background_color=(0, 1, 0, 1)
+            
+            self.btn_n.bind(on_press=self.append_function_calculate)
+            self.btn_a.bind(on_press=self.append_function_calculate)
+            self.btn_u.bind(on_press=self.append_function_calculate)
+
   
         self.refresh2_button.bind(on_press=self.clear_widgets_function)
 
+    def append_function_calculate(self, button):
+        print(button)
+        if foo_calc == []:
+            if button == self.btn_n:
+                z = foo_calc.append('n')
+                self.btn_1_c.text ='n'
+                self.btn_1_c.background_color=(1, 0, 0, 1)
+                self.btn_3_c.text ='n'
+                self.btn_3_c.background_color=(1, 0, 0, 1)
+            elif button == self.btn_a:
+                z = foo_calc.append('a')
+                self.btn_1_c.text ='a'
+                self.btn_1_c.background_color=(0, 1, 0, 1)
+                self.btn_3_c.text ='a'
+                self.btn_3_c.background_color=(0, 1, 0, 1)
+            elif button == self.btn_u:
+                z = foo_calc.append('u')
+                self.btn_1_c.text ='u'
+                self.btn_1_c.background_color=(1, 1, 1, 1)
+                self.btn_3_c.text ='u'
+                self.btn_3_c.background_color=(1, 1, 1, 1)
+        elif len(foo_calc) == 1:
+            if button == self.btn_n:
+                z = foo_calc.append('n')
+                self.btn_2_c.text ='n'
+                self.btn_2_c.background_color=(1, 0, 0, 1)
+                self.btn_4_c.text ='n'
+                self.btn_4_c.background_color=(1, 0, 0, 1)
+            elif button == self.btn_a:
+                z = foo_calc.append('a')
+                self.btn_2_c.text ='a'
+                self.btn_2_c.background_color=(0, 1, 0, 1)
+                self.btn_4_c.text ='a'
+                self.btn_4_c.background_color=(0, 1, 0, 1)
+            elif button == self.btn_u:
+                z = foo_calc.append('u')
+                self.btn_2_c.text ='u'
+                self.btn_2_c.background_color=(1, 1, 1, 1)
+                self.btn_4_c.text ='u'
+                self.btn_4_c.background_color=(1, 1, 1, 1)
+        elif len(foo_calc) == 2:
+            if button == self.btn_n:
+                z = foo_calc.append('n')
+                self.btn_5_c.text ='n'
+                self.btn_5_c.background_color=(1, 0, 0, 1)
+                self.btn_7_c.text ='n'
+                self.btn_7_c.background_color=(1, 0, 0, 1)
+            elif button == self.btn_a:
+                z = foo_calc.append('a')
+                self.btn_5_c.text ='a'
+                self.btn_5_c.background_color=(0, 1, 0, 1)
+                self.btn_7_c.text ='a'
+                self.btn_7_c.background_color=(0, 1, 0, 1)
+            elif button == self.btn_u:
+                z = foo_calc.append('u')
+                self.btn_5_c.text ='u'
+                self.btn_5_c.background_color=(1, 1, 1, 1)
+                self.btn_7_c.text ='u'
+                self.btn_7_c.background_color=(1, 1, 1, 1)
+        elif len(foo_calc) == 3:
+            if button == self.btn_n:
+                z = foo_calc.append('n')
+                self.btn_6_c.text ='n'
+                self.btn_6_c.background_color=(1, 0, 0, 1)
+                self.btn_8_c.text ='n'
+                self.btn_8_c.background_color=(1, 0, 0, 1)
+            elif button == self.btn_a:
+                z = foo_calc.append('a')
+                self.btn_6_c.text ='a'
+                self.btn_6_c.background_color=(0, 1, 0, 1)
+                self.btn_8_c.text ='a'
+                self.btn_8_c.background_color=(0, 1, 0, 1)
+            elif button == self.btn_u:
+                z = foo_calc.append('u')
+                self.btn_6_c.text ='u'
+                self.btn_6_c.background_color=(1, 1, 1, 1)
+                self.btn_8_c.text ='u'
+                self.btn_8_c.background_color=(1, 1, 1, 1)
+        if len(foo_calc) == 4:
+            self.conclusion_formula = foo_calc
+            self.conclusion_label.text = self.dyadic_name_third_formula(self.conclusion_formula)
+            self.btn_n.disabled = True
+            self.btn_a.disabled = True
+            self.btn_u.disabled = True
+            self.click_calc(button)
+            foo_calc.clear()
+
     def change_screen_menu(self, *args):
         self.parent.current = 'menu'
+
+    def click_calc(self, button):
+        my_text = self.conclusion_formula
+        self.solution_label.text =  self.dyadic_name_third_formula(self.function_output_list[3])
+        
+        for r in range(len(self.a_goes_into_conclusion)):
+            for s in range(8):
+                if self.a_goes_into_conclusion[r][0][0] == 0 and self.a_goes_into_conclusion[r][1][0] == s:
+                    self.buttons_premis_one[s].underline = True
+                if self.a_goes_into_conclusion[r][0][0] == 1 and self.a_goes_into_conclusion[r][1][0] == s:
+                    self.buttons_premis_two[s].underline = True
+                        
+        for r in range(len(self.n_goes_into_conclusion)):
+            for s in range(8):
+                if self.n_goes_into_conclusion[r][0][0] == 0 and self.n_goes_into_conclusion[r][1][0] == s:
+                    self.buttons_premis_one[s].underline = True
+                if self.n_goes_into_conclusion[r][0][0] == 1 and self.n_goes_into_conclusion[r][1][0] == s:
+                    self.buttons_premis_two[s].underline = True
+        
+        self.btn_1_s.text = self.function_output_list[3][0]
+        self.btn_3_s.text = self.function_output_list[3][0]
+        self.btn_2_s.text = self.function_output_list[3][1]
+        self.btn_4_s.text = self.function_output_list[3][1]
+        self.btn_5_s.text = self.function_output_list[3][2]
+        self.btn_7_s.text = self.function_output_list[3][2]
+        self.btn_6_s.text = self.function_output_list[3][3]
+        self.btn_8_s.text = self.function_output_list[3][3]
+        if self.function_output_list[3][0] == 'n':
+            self.btn_1_s.background_color=(1, 0, 0, 1)
+            self.btn_1_s.background_normal= ''
+            self.btn_3_s.background_color=(1, 0, 0, 1)
+            self.btn_3_s.background_normal= ''
+        elif self.function_output_list[3][0] == 'a':
+            self.btn_1_s.background_color=(0, 1, 0, 1)
+            self.btn_1_s.background_normal= ''
+            self.btn_3_s.background_color=(0, 1, 0, 1)
+            self.btn_3_s.background_normal= ''
+        elif self.function_output_list[3][0] == 'u':
+            self.btn_1_s.background_color=(1, 1, 1, 1)
+            self.btn_1_s.background_normal= ''
+            self.btn_3_s.background_color=(1, 1, 1, 1)
+            self.btn_3_s.background_normal= ''
+        if self.function_output_list[3][1] == 'n':
+            self.btn_2_s.background_color=(1, 0, 0, 1)
+            self.btn_2_s.background_normal= ''
+            self.btn_4_s.background_color=(1, 0, 0, 1)
+            self.btn_4_s.background_normal= ''
+        elif self.function_output_list[3][1] == 'a':
+            self.btn_2_s.background_color=(0, 1, 0, 1)
+            self.btn_2_s.background_normal= ''
+            self.btn_4_s.background_color=(0, 1, 0, 1)
+            self.btn_4_s.background_normal= ''
+        elif self.function_output_list[3][1] == 'u':
+            self.btn_2_s.background_color=(1, 1, 1, 1)
+            self.btn_2_s.background_normal= ''
+            self.btn_4_s.background_color=(1, 1, 1, 1)
+            self.btn_4_s.background_normal= ''
+        if self.function_output_list[3][2] == 'n':
+            self.btn_5_s.background_color=(1, 0, 0, 1)
+            self.btn_5_s.background_normal= ''
+            self.btn_7_s.background_color=(1, 0, 0, 1)
+            self.btn_7_s.background_normal= ''
+        elif self.function_output_list[3][2] == 'a':
+            self.btn_5_s.background_color=(0, 1, 0, 1)
+            self.btn_5_s.background_normal= ''
+            self.btn_7_s.background_color=(0, 1, 0, 1)
+            self.btn_7_s.background_normal= ''
+        elif self.function_output_list[3][2] == 'u':
+            self.btn_5_s.background_color=(1, 1, 1, 1)
+            self.btn_5_s.background_normal= ''
+            self.btn_7_s.background_color=(1, 1, 1, 1)
+            self.btn_7_s.background_normal= ''
+        if self.function_output_list[3][3] == 'n':
+            self.btn_6_s.background_color=(1, 0, 0, 1)
+            self.btn_6_s.background_normal= ''
+            self.btn_8_s.background_color=(1, 0, 0, 1)
+            self.btn_8_s.background_normal= ''
+        elif self.function_output_list[3][3] == 'a':
+            self.btn_6_s.background_color=(0, 1, 0, 1)
+            self.btn_6_s.background_normal= ''
+            self.btn_8_s.background_color=(0, 1, 0, 1)
+            self.btn_8_s.background_normal= ''
+        elif self.function_output_list[3][3] == 'u':
+            self.btn_6_s.background_color=(1, 1, 1, 1)
+            self.btn_6_s.background_normal= ''
+            self.btn_8_s.background_color=(1, 1, 1, 1)
+            self.btn_8_s.background_normal= ''
+
+        if self.function_output_list[3] == my_text:
+            self.right_answer()
+        else:
+            self.wrong_answer()
+        
 
     def click(self,my_button2):
         my_text = self.first_formula
@@ -2671,7 +2977,7 @@ class TrainingScreen(Screen):
         
         
         if self.function_output_list[4] != [0]:
-            self.conclusion_label.text = "Contradiction!"
+            self.conclusion_label.text = "Widerspruch!"
             for r in range(len(self.function_output_list[4])):
                 for s in range(4):
                     for t in range(2):
@@ -7007,8 +7313,9 @@ class TestApp(App):
     
     def build_config(self, config):
         config.setdefaults('trainer', {
+            'calculate_exercise': 1,
             'completedsyllogistic': 0,
-            'particularpremis': 0})
+            'particularpremis': 0,})
         
     def build_settings(self, settings):
         settings.add_json_panel('Einstellungen - Syllogistik Trainer',
@@ -7019,7 +7326,9 @@ class TestApp(App):
         print(config, section, key, value)
         if config is self.config:
             token = (section, key)
-            if token == ('trainer', 'completedsyllogistic'):
+            if token == ('trainer', 'calculate_exercise'):
+                TrainingScreen.function_calculate_exercise_settings(self)
+            elif token == ('trainer', 'completedsyllogistic'):
                 TrainingScreen.function_completed_syllogistic_settings(self)
             elif token == ('trainer', 'particularpremis'):
                 TrainingScreen.function_particularpremis_settings(self)
