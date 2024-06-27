@@ -157,8 +157,8 @@ Builder.load_string("""
     Button:
         text: "Menü"
         on_press: root.manager.current = 'menu'
-        size_hint: "0.1", "0.1"
-        pos_hint: {"x":0.9,"y":0.9}
+        size_hint: "0.2", "0.1"
+        pos_hint: {"x":0.8,"y":0.9}
 
 <Menu_introductionScreen>:
     BoxLayout:
@@ -182,7 +182,12 @@ Builder.load_string("""
             background_normal: ''
             background_color: 1, .1, .1, .2
         Button:
-            text: 'Allgemeine und angewandte Logik'
+            text: 'Reine und Angewandte Logik'
+            font_size: dp(27)
+            background_normal: ''
+            background_color: 1, .1, .1, .2
+        Button:
+            text: 'Das Problem der Wahrheit und transgressives Denken'
             font_size: dp(27)
             background_normal: ''
             background_color: 1, .1, .1, .2
@@ -194,8 +199,8 @@ Builder.load_string("""
     Button:
         text: "Menü"
         on_press: root.manager.current = 'menu'
-        size_hint: "0.1", "0.1"
-        pos_hint: {"x":0.9,"y":0.9}
+        size_hint: "0.2", "0.1"
+        pos_hint: {"x":0.8,"y":0.9}
 
 <Menu_introductionScreen_1>
 
@@ -236,8 +241,8 @@ Builder.load_string("""
     Button:
         text: 'Menü'
         on_press: root.manager.current = 'menu'
-        size_hint: "0.1", "0.1"
-        pos_hint: {"x":0.9,"y":0.9}
+        size_hint: "0.2", "0.1"
+        pos_hint: {"x":0.8,"y":0.9}
 
 <Menu_conclusion_introductionScreen>:
     BoxLayout:
@@ -263,26 +268,26 @@ Builder.load_string("""
     Button:
         text: 'Menü'
         on_press: root.manager.current = 'menu'
-        size_hint: "0.1", "0.1"
-        pos_hint: {"x":0.9,"y":0.9}
+        size_hint: "0.2", "0.1"
+        pos_hint: {"x":0.8,"y":0.9}
 
 <TrainingScreen>:
     Button:
         text: 'Menü'
         on_press: root.manager.current = 'menu'
-        size_hint: "0.1", "0.1"
-        pos_hint: {"x":0.9,"y":0.9}
+        size_hint: "0.2", "0.1"
+        pos_hint: {"x":0.8,"y":0.9}
     Button:
         text: 'Generiere!'
         on_press: root.refresh_function()
-        size_hint: "0.1", "0.1"
-        pos_hint: {"x":0.9,"y":0.8}
+        size_hint: "0.2", "0.1"
+        pos_hint: {"x":0.8,"y":0.8}
     Button:
         id: 'settings_button'
         text: 'Einstellungen'
         on_release: app.open_settings()
-        size_hint: "0.1", "0.1"
-        pos_hint: {"x":0.9,"y":0.7}
+        size_hint: "0.2", "0.1"
+        pos_hint: {"x":0.8,"y":0.7}
 
 <Training_calculating_quiz_Screen>
 
@@ -347,22 +352,22 @@ Builder.load_string("""
     Button:
         text: 'Menü'
         on_press: root.manager.current = 'menu'
-        size_hint: "0.1", "0.1"
-        pos_hint: {"x":0.9,"y":0.9}
+        size_hint: "0.2", "0.1"
+        pos_hint: {"x":0.8,"y":0.9}
 
 <Total_formulas_Playground_right_Screen>:
     Button:
         text: 'Menü'
         on_press: root.manager.current = 'menu'
-        size_hint: "0.1", "0.1"
-        pos_hint: {"x":0.9,"y":0.9}
+        size_hint: "0.2", "0.1"
+        pos_hint: {"x":0.8,"y":0.9}
 
 <Total_formulas_QuizScreen>:
     Button:
         text: 'Menü'
         on_press: root.manager.current = 'menu'
-        size_hint: "0.1", "0.1"
-        pos_hint: {"x":0.9,"y":0.9}
+        size_hint: "0.2", "0.1"
+        pos_hint: {"x":0.8,"y":0.9}
 
 <Menu_TransformationsScreen>:
     BoxLayout:
@@ -388,8 +393,8 @@ Builder.load_string("""
     Button:
         text: 'Menü'
         on_press: root.manager.current = 'menu'
-        size_hint: "0.1", "0.1"
-        pos_hint: {"x":0.9,"y":0.9}
+        size_hint: "0.2", "0.1"
+        pos_hint: {"x":0.8,"y":0.9}
 
 <RessourcesScreen>:
     BoxLayout:
@@ -421,8 +426,8 @@ Builder.load_string("""
     Button:
         text: "Menü"
         on_press: root.manager.current = 'menu'
-        size_hint: "0.1", "0.1"
-        pos_hint: {"x":0.9,"y":0.9}
+        size_hint: "0.2", "0.1"
+        pos_hint: {"x":0.8,"y":0.9}
 
 <Sat_Screen>:
 
@@ -871,10 +876,32 @@ class Menu_introductionScreen_2(Screen):
         self.add_widget(self.root)
         
 class Menu_introductionScreen_3(Screen):
-    label_Menu_introductionScreen_3_text = StringProperty(' ')
+    pass
     
+"""    def change_screen_menu(self, *args):
+        self.parent.current = 'menu'
+        
     def __init__(self, **kwargs):
         super(RelativeLayout, self).__init__(**kwargs)
+        
+        self.layout = GridLayout(cols=1, spacing=13, size_hint_y=None)
+        # Make sure the height is such that there is something to scroll.
+        self.layout.bind(minimum_height=self.layout.setter('height'))
+        
+        self.text_1 = Label(text='[u]Das Problem der Wahrheit[/u] \n\n"Ein [...] Problem [...] der Angewandten Logik überhaupt ist das der Wahrheit, d. h. der Richtigkeit im außerformalen Sinn. \nDafür gilt: Aus wahren Prämissen können sich (formallogisch korrekt) nur wahre Konklusionen ergeben. \n Wahre Konklusionen können aber unter Umständen auch aus falschen Prämissen folgen. \nz. B. \n   Alle Steine sind Lebewesen (f) \n   [u]Alle Menschen sind Steine (f)[/u] \n   Alle Menschen sind Lebewesen (w) \n[...]" \n(Grundlagen der Strengen Logik, S.161) \n\n\n[u]Transgressives Denken[/u] \n"[...] Ist für die Zukunft zu fordern, daß transgressives Denken grundsätzlich vermieden wird? Nicht unbedingt; unbekannte Bereiche sollte man möglichst weiterer Forschung zugänglich machen. Versuche mit Widerspruchsdialektiken und Selbstlimitationskonstruktionen können vielleicht ihre fruchtbaren Aspekte haben, aber nur dann, wenn sie von einem festen Ausgangspunkt unternommen werden. Sonst gerät man in willkürliche Kombinatorik und leere Spielerei." (Grundlagen der Strengen Logik, S. 223)', size_hint_y = None)
+        self.text_1.markup = True
+        self.text_1.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
+        self.text_1.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
+        
+        self.layout.add_widget(self.text_1)
+        
+        self.menu_button = Button(text='Menü', background_normal= '', background_color=(1, 1, 1, .5), color=(0, 0, 0, 1), size_hint_y=None)
+        self.layout.add_widget(self.menu_button)
+        self.menu_button.bind(on_press=self.change_screen_menu)
+        
+        self.root = ScrollView(size=(Window.width, Window.height))
+        self.root.add_widget(self.layout)
+        self.add_widget(self.root)"""
         
 class Menu_conclusion_introductionScreen(Screen):
     pass
@@ -2085,11 +2112,11 @@ class TrainingScreen(Screen):
         self.a_goes_into_conclusion.clear()
         self.n_goes_into_conclusion.clear()
         
-        self.menu_button = Button(text='Menü', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .9})
+        self.menu_button = Button(text='Menü', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .9})
         self.add_widget(self.menu_button)
         self.menu_button.bind(on_press=self.change_screen_menu)
         
-        self.settings_button = Button(text='Einstellungen', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .7})
+        self.settings_button = Button(text='Einstellungen', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .7})
         self.add_widget(self.settings_button)
         self.settings_button.bind(on_press=self.open_settings)
         
@@ -2126,7 +2153,7 @@ class TrainingScreen(Screen):
                 while (((a == 4) or (a == 5) or (a == 6) or (a == 7) or (a == 12) or (a == 13) or (a == 14) or (a == 15)) and ((b == 4) or (b == 5) or (b == 6) or (b == 7) or (b == 12) or (b == 13) or (b == 14) or (b == 15))):
                     a = random.randint(0, 15)
                     b = random.randint(0, 15)
-            self.refresh2_button = Button(text='Generiere!', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .8})
+            self.refresh2_button = Button(text='Generiere!', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .8})
             self.add_widget(self.refresh2_button)
             self.refresh2_button.bind(on_press=lambda x:self.refresh_function(a, b))
         else:
@@ -2136,7 +2163,7 @@ class TrainingScreen(Screen):
                 while (((a == 4) or (a == 5) or (a == 6) or (a == 7)) and ((b == 4) or (b == 5) or (b == 6) or (b == 7))):
                     a = random.randint(0, 7)
                     b = random.randint(0, 7)
-            self.refresh2_button = Button(text='Generiere!', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .8})
+            self.refresh2_button = Button(text='Generiere!', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .8})
             self.add_widget(self.refresh2_button)
             self.refresh2_button.bind(on_press=lambda x:self.refresh_function(a, b))
 
@@ -2185,6 +2212,7 @@ class TrainingScreen(Screen):
         vertical_left_up.add_widget(self.label_questionmark)
         
         horizontal_up.add_widget(Label(text='Syllogism-\nTrainer'))
+        horizontal_up.add_widget(Label(text=' '))
         
         self.boxlayout_up = BoxLayout(orientation='horizontal')
         vertical.add_widget(self.boxlayout_up)
@@ -2196,6 +2224,10 @@ class TrainingScreen(Screen):
         self.checkboxes_BoxLayout.add_widget(self.boxlayout_Checkbox_3)
         self.boxlayout_Checkbox_4 = BoxLayout(orientation='vertical')
         self.checkboxes_BoxLayout.add_widget(self.boxlayout_Checkbox_4)
+        
+        self.dummy_label_checkboxes_BoxLayout_right = Label(text= ' ')
+        self.checkboxes_BoxLayout.add_widget(self.dummy_label_checkboxes_BoxLayout_right)
+        
         
         self.label_example = Label(text='Example:')
         self.label_sentences = Label(text='Sentences')
@@ -2658,7 +2690,7 @@ class TrainingScreen(Screen):
         self.add_widget(self.active_4)
         self.active_4.bind(active=self.on_checkbox_Active_4)
 
-        self.active_4.pos_hint = {'x': .7, 'y': .6} # not beautiful code
+        self.active_4.pos_hint = {'x': .45, 'y': .6} # not beautiful code
         self.active_4.size_hint = (.1, .1)
 
         lambda x:self.clear_widgets_function
@@ -3398,10 +3430,10 @@ class ConclusionsScreen(Screen):
         self.clear_widgets()
         foo.clear()
         
-        self.refresh2_button = Button(text='Generiere!', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .8})
+        self.refresh2_button = Button(text='Generiere!', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .8})
         self.add_widget(self.refresh2_button)
         
-        self.menu_button = Button(text='Menü', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .9})
+        self.menu_button = Button(text='Menü', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .9})
         self.add_widget(self.menu_button)
         self.menu_button.bind(on_press=self.change_screen_menu)
         
@@ -3412,7 +3444,7 @@ class ConclusionsScreen(Screen):
     def __init__(self,**kwargs):
         super (ConclusionsScreen,self).__init__(**kwargs)
         
-        self.refresh_button = Button(text='Generiere!', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .8})
+        self.refresh_button = Button(text='Generiere!', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .8})
         self.add_widget(self.refresh_button)
         self.refresh_button.bind(on_press=self.refresh_function)
 
@@ -5468,10 +5500,10 @@ class Total_formulas_Playground_left_Screen(Screen):
         self.clear_widgets()
         foo_3.clear()
         
-        self.refresh2_button = Button(text='Generiere!', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .8})
+        self.refresh2_button = Button(text='Generiere!', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .8})
         self.add_widget(self.refresh2_button)
         
-        self.menu_button = Button(text='Menü', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .9})
+        self.menu_button = Button(text='Menü', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .9})
         self.add_widget(self.menu_button)
         self.menu_button.bind(on_press=self.change_screen_menu)
         
@@ -5822,7 +5854,7 @@ class Total_formulas_Playground_left_Screen(Screen):
     def __init__(self, **kwargs):
         super(Total_formulas_Playground_left_Screen, self).__init__(**kwargs)
         
-        self.refresh_button = Button(text='Generiere!', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .8})
+        self.refresh_button = Button(text='Generiere!', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .8})
         self.add_widget(self.refresh_button)
         self.refresh_button.bind(on_press=self.refresh_function)
 
@@ -6044,10 +6076,10 @@ class Total_formulas_Playground_right_Screen(Screen):
         self.clear_widgets()
         foo_4.clear()
         
-        self.refresh2_button = Button(text='Generiere!', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .8})
+        self.refresh2_button = Button(text='Generiere!', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .8})
         self.add_widget(self.refresh2_button)
         
-        self.menu_button = Button(text='Menü', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .9})
+        self.menu_button = Button(text='Menü', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .9})
         self.add_widget(self.menu_button)
         self.menu_button.bind(on_press=self.change_screen_menu)
         
@@ -6427,7 +6459,7 @@ class Total_formulas_Playground_right_Screen(Screen):
     def __init__(self, **kwargs):
         super(Total_formulas_Playground_right_Screen, self).__init__(**kwargs)
         
-        self.refresh_button = Button(text='Generiere!', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .8})
+        self.refresh_button = Button(text='Generiere!', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .8})
         self.add_widget(self.refresh_button)
         self.refresh_button.bind(on_press=self.refresh_function)
 
@@ -6681,10 +6713,10 @@ class TransformationsScreen(Screen):
         self.clear_widgets()
         foo_5.clear()
         
-        self.refresh2_button = Button(text='Generiere!', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .8})
+        self.refresh2_button = Button(text='Generiere!', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .8})
         self.add_widget(self.refresh2_button)
         
-        self.menu_button = Button(text='Menü', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .9})
+        self.menu_button = Button(text='Menü', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .9})
         self.add_widget(self.menu_button)
         self.menu_button.bind(on_press=self.change_screen_menu)
         
@@ -6695,7 +6727,7 @@ class TransformationsScreen(Screen):
     def __init__(self, **kwargs):
         super(TransformationsScreen, self).__init__(**kwargs)
 
-        self.refresh_button = Button(text='Generiere!', size_hint=(.1, .1), pos_hint={'x': .9, 'y': .8})
+        self.refresh_button = Button(text='Generiere!', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .8})
         self.add_widget(self.refresh_button)
         self.refresh_button.bind(on_press=self.refresh_function)
 
