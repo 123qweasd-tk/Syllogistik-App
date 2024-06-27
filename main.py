@@ -2382,8 +2382,12 @@ class TrainingScreen(Screen):
         self.buttons_premis_two = [self.btn_1_p2, self.btn_2_p2, self.btn_3_p2, self.btn_4_p2, \
                                    self.btn_5_p2, self.btn_6_p2, self.btn_7_p2, self.btn_8_p2]
         
+        self.syllogism_box_col_1.add_widget(Label(text= ' ', size_hint_y= .2))
+        
         self.syllogism_box_row_6 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_6)
+        
+        self.syllogism_box_col_1.add_widget(Label(text= ' '))
         
         self.conclusion_label = Label(text='Konklusion', size_hint_x = 2.0, font_name = 'my_custom_font')
         self.syllogism_box_row_6.add_widget(self.conclusion_label)
@@ -6961,7 +6965,7 @@ class TransformationsScreen(Screen):
         self.syllogism_box_col_2 = BoxLayout(orientation='vertical')
         self.vertical.add_widget(self.syllogism_box_col_2)
 
-        self.conclusion_label = Label(text='Gib eine Formel ein!')
+        self.conclusion_label = Label(text='Gib eine Formel ein!', font_name= 'my_custom_font')
         self.layout.add_widget(self.conclusion_label)
 
         self.layout_in_layout_2 = BoxLayout(orientation='horizontal', size_hint_y =.4)
@@ -7045,7 +7049,7 @@ class TransformationsScreen(Screen):
         solution = conversion
         output_judge = self.output_judge_fn(solution)
         self.output_buttons_function(solution)
-        self.explanation_label = 'S•P -> P•S'
+        self.explanation_label = 'S•P \u00A9 P•S'
         self.conclusion_label.text = self.explanation_label+'\n'+output_judge
 
     def obversion_fn(self, button):
@@ -7055,7 +7059,7 @@ class TransformationsScreen(Screen):
         solution = obversion
         output_judge = self.output_judge_fn(solution)
         self.output_buttons_function(solution)
-        self.explanation_label = 'S•P -> S•~P'
+        self.explanation_label = 'S•P \u00A9 S•~P'
         self.conclusion_label.text = self.explanation_label+'\n'+output_judge
 
     def contraposition_fn(self, button):
@@ -7065,7 +7069,7 @@ class TransformationsScreen(Screen):
         solution = contradiction
         output_judge = self.output_judge_fn(solution)
         self.output_buttons_function(solution)
-        self.explanation_label = 'S•P -> ~P•~S'
+        self.explanation_label = 'S•P \u00A9 ~P•~S'
         self.conclusion_label.text = self.explanation_label+'\n'+output_judge
 
     def partial_inversion_fn(self, button):
@@ -7075,7 +7079,7 @@ class TransformationsScreen(Screen):
         solution = partial_inversion
         output_judge = self.output_judge_fn(solution)
         self.output_buttons_function(solution)
-        self.explanation_label = 'S•P -> ~S•P'
+        self.explanation_label = 'S•P \u00A9 ~S•P'
         self.conclusion_label.text = self.explanation_label+'\n'+output_judge
 
     def inversion_fn(self, button):
@@ -7085,7 +7089,7 @@ class TransformationsScreen(Screen):
         solution = inversion
         output_judge = self.output_judge_fn(solution)
         self.output_buttons_function(solution)
-        self.explanation_label = 'S•P -> ~S•~P'
+        self.explanation_label = 'S•P \u00A9 ~S•~P'
         self.conclusion_label.text = self.explanation_label+'\n'+output_judge
 
 
