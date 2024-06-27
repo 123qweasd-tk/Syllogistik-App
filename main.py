@@ -97,7 +97,7 @@ Builder.load_string("""
             halign: 'center'
             valign: 'center'
             font_size: dp(27)
-            on_press: root.manager.current = 'general'
+            on_press: root.manager.current = 'menu_introduction'
             background_normal: ''
             background_color: 1, .3, .4, .85
         Button:
@@ -140,26 +140,6 @@ Builder.load_string("""
             background_normal: ''
             background_color: 1, .5, .3, .3
 
-<GeneralScreen>:
-    BoxLayout:
-        orientation: "vertical"
-        Button:
-            text: 'Einleitung'
-            font_size: dp(27)
-            on_press: root.manager.current = 'menu_introduction'
-            background_normal: ''
-            background_color: 1, .1, .1, .2
-        Button:
-            text: 'Quiz'
-            font_size: dp(27)
-            background_normal: ''
-            background_color: 1, .1, .1, .2
-    Button:
-        text: "Menü"
-        on_press: root.manager.current = 'menu'
-        size_hint: "0.2", "0.1"
-        pos_hint: {"x":0.8,"y":0.9}
-
 <Menu_introductionScreen>:
     BoxLayout:
         orientation: "vertical"
@@ -181,21 +161,6 @@ Builder.load_string("""
             font_size: dp(27)
             background_normal: ''
             background_color: 1, .1, .1, .2
-        Button:
-            text: 'Reine und Angewandte Logik'
-            font_size: dp(27)
-            background_normal: ''
-            background_color: 1, .1, .1, .2
-        Button:
-            text: 'Das Problem der Wahrheit und transgressives Denken'
-            font_size: dp(27)
-            background_normal: ''
-            background_color: 1, .1, .1, .2
-        Button:
-            text: 'Struktur der App'
-            font_size: dp(27)
-            background_normal: ''
-            background_color: 1, .1, .1, .2
     Button:
         text: "Menü"
         on_press: root.manager.current = 'menu'
@@ -214,28 +179,16 @@ Builder.load_string("""
     BoxLayout:
         orientation: "vertical"
         Button:
-            text: 'Einleitung'
+            text: 'Tabellen'
             font_size: dp(27)
             on_press: root.manager.current = 'menu_conclusion_introduction'
             background_normal: ''
             background_color: 1, .1, .1, .2
         Button:
-            text: 'Spielwiese'
-            font_size: dp(27)
-            
-            background_normal: ''
-            background_color: 1, .1, .1, .2
-        Button:
-            text: 'Übungen - Quiz'
+            text: 'Syllogistik Trainer'
             font_size: dp(27)
             on_press:
                 root.manager.current = 'training'
-            background_normal: ''
-            background_color: 1, 0, .5, .3
-        Button:
-            text: 'Rechnen - Quiz'
-            font_size: dp(27)
-
             background_normal: ''
             background_color: 1, 0, .5, .3
     Button:
@@ -248,13 +201,13 @@ Builder.load_string("""
     BoxLayout:
         orientation: "vertical"
         Button:
-            text: 'Überblick - Tabelle: Syllogistik'
+            text: 'Überblick -  Syllogistik'
             on_press: root.manager.current = 'table_overview'
             font_size: dp(27)
             background_normal: ''
             background_color: 1, .1, .1, .2
         Button:
-            text: 'Überblick - Tabelle: Verlängerte dyadische Formeln'
+            text: 'Überblick - Verlängerte dyadische Formeln'
             on_press: root.manager.current = 'table_overview_2'
             font_size: dp(27)
             background_normal: ''
@@ -305,22 +258,11 @@ Builder.load_string("""
                 text_size: self.size
                 halign: 'center'
             Button:
-                text: 'Einleitung'
-                font_size: dp(27)
-                
-                background_normal: ''
-                background_color: 1, .1, .1, .2
-            Button:
                 text: 'Spielwiese'
                 font_size: dp(27)
                 on_press: root.manager.current = 'total-formulas-playground-left'
                 background_normal: ''
                 background_color: 1, .1, .1, .2
-            Button:
-                text: 'Quiz'
-                font_size: dp(27)
-                background_normal: ''
-                background_color: 1, 0, .5, .3
         BoxLayout:
             orientation: "vertical"
             Label:
@@ -332,21 +274,11 @@ Builder.load_string("""
                 text_size: self.size
                 halign: 'center'
             Button:
-                text: 'Einleitung'
-                font_size: dp(27)
-                background_normal: ''
-                background_color: 1, .1, .1, .2
-            Button:
                 text: 'Spielwiese'
                 font_size: dp(27)
                 on_press: root.manager.current = 'total-formulas-playground-right'
                 background_normal: ''
                 background_color: 1, .1, .1, .2
-            Button:
-                text: 'Quiz'
-                font_size: dp(27)
-                background_normal: ''
-                background_color: 1, 0, .5, .3
 
 <Total_formulas_Playground_left_Screen>:
     Button:
@@ -362,32 +294,15 @@ Builder.load_string("""
         size_hint: "0.2", "0.1"
         pos_hint: {"x":0.8,"y":0.9}
 
-<Total_formulas_QuizScreen>:
-    Button:
-        text: 'Menü'
-        on_press: root.manager.current = 'menu'
-        size_hint: "0.2", "0.1"
-        pos_hint: {"x":0.8,"y":0.9}
-
 <Menu_TransformationsScreen>:
     BoxLayout:
         orientation: "vertical"
-        Button:
-            text: 'Einleitung'
-            font_size: dp(27)
-            background_normal: ''
-            background_color: 1, .1, .1, .2
         Button:
             text: 'Spielwiese'
             font_size: dp(27)
             on_press: root.manager.current = 'transformations'
             background_normal: ''
             background_color: 1, .1, .1, .2
-        Button:
-            text: 'Quiz'
-            font_size: dp(27)
-            background_normal: ''
-            background_color: 1, 0, .5, .3
 
 <TransformationsScreen>:
     Button:
@@ -477,7 +392,7 @@ class Menu_introductionScreen_1(Screen):
         self.layout = GridLayout(cols=1, spacing=70, size_hint_y=None)
         self.layout.bind(minimum_height=self.layout.setter('height'))
         
-        self.text_1 = Label(text='[u]Die logischen Prinzipien:[/u]\n\n"Die logischen Prinzipien sind Grundbestimmungen, die für das in der Logik Festgesetzte gelten. Sie beruhen selbst auf Festsetzung.\nFür die Strenge Logik sind zwei Prinzipien festzusetzen: Das Prinzip der Identität und das Prinzip der Limitation.\n\n\n[u]Das Prinzip der Identiät[/u]:\n\nPositive Formulierung:\nJedes in der Logik Festgesetzte ist mit sich selbst und nur mit sich selbst identisch.\n\nNegativeFormulierung:\n(Satz vom ausgeschlossenen Widerspruch)\nKein in der Logik Festgesetztes ist mit sich selbst nicht identisch (d. h. steht mit sich selbst im Widerspruch).\nKein Festgesetztes ist mit anderem identisch.\n(Diese letzte Bestimmung kann als Satz der ausgeschlossenen Fremdidentifizierung bezeichnet werden).\n\n\n[u]Das Prinzip der Limitation[/u]:\n\nPositive Formulierung:\nJedes Festgesetzte ist\n1. von den anderen\n2. aber auch nur von den anderen limitativ unterschieden.\n\nNegative Formulierung:\n1. Kein Festgesetztes ist von den anderen nicht limitativ unterschieden. D. h. zwischen einem Festgesetzten und den anderen gibt es nicht Drittes (Satz vom ausgeschlossenen Dritten).\n2. Kein Festgesetztes ist von sich selbst limitativ unterschieden (Satz der ausgeschlossenen Selbstlimitation)." (Grundlagen der Strengen Logik, Seite 58f)', size_hint_y=None)
+        self.text_1 = Label(text='[u]Die logischen Prinzipien:[/u]\n\n"Die logischen Prinzipien sind Grundbestimmungen, die für das in der Logik Festgesetzte gelten. Sie beruhen selbst auf Festsetzung.\nFür die Strenge Logik sind zwei Prinzipien festzusetzen: Das Prinzip der Identität und das Prinzip der Limitation.\n\n\n[u]Das Prinzip der Identiät[/u]:\n\nPositive Formulierung:\nJedes in der Logik Festgesetzte ist mit sich selbst und nur mit sich selbst identisch.\n\nNegativeFormulierung:\n(Satz vom ausgeschlossenen Widerspruch)\nKein in der Logik Festgesetztes ist mit sich selbst nicht identisch (d. h. steht mit sich selbst im Widerspruch).\nKein Festgesetztes ist mit anderem identisch.\n(Diese letzte Bestimmung kann als Satz der ausgeschlossenen Fremdidentifizierung bezeichnet werden).\n\n\n[u]Das Prinzip der Limitation[/u]:\n\nPositive Formulierung:\nJedes Festgesetzte ist\n1. von den anderen\n2. aber auch nur von den anderen limitativ unterschieden.\n\nNegative Formulierung:\n1. Kein Festgesetztes ist von den anderen nicht limitativ unterschieden. D. h. zwischen einem Festgesetzten und den anderen gibt es nicht Drittes (Satz vom ausgeschlossenen Dritten).\n2. Kein Festgesetztes ist von sich selbst limitativ unterschieden (Satz der ausgeschlossenen Selbstlimitation)." (Grundlagen der Strengen Logik, Seite 58f)', size_hint_y=None, font_size= 18)
         self.text_1.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_1.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
         self.text_1.markup = True
@@ -751,7 +666,7 @@ class Menu_introductionScreen_1b(Screen):
         self.layout = GridLayout(cols=1, spacing=70, size_hint_y=None)
         self.layout.bind(minimum_height=self.layout.setter('height'))
         
-        self.text_1 = Label(text='"Aus den beiden Prinzipien ergibt sich weiterhin:\n\n\nAnalytische (Identitäts-) Verhältnisse und synthetische Verbindungen sind scharf voneinander zu scheiden.\nEin Sachverhalt oder eine Sachverhaltsverbindung kann mit sich selbst nur durch das Identitätszeichen verknüpft werden, \nz. B. \n      B <-> B\n(BaC)<->(BaC)\n\nDie folgenden Verknüpfungen sind nicht zugelassen: \n           BaB\n (BaC) a (BaC) \nSie stellen Selbstlimitation dar.\n[...]\n\n\nEin Sachverhalt kann mit seinem Komplement gar nicht verknüpft werden. Hier besteht weder analytische noch synthetische Verknüpfung. \nHier besteht nur komplementäre Limitation. \nEs gilt aber: \nB <-> ~~B\n[...]" (Grundlagen der Strengen Logik, S.60f)\n\n\n', size_hint_y=None)
+        self.text_1 = Label(text='"Aus den beiden Prinzipien ergibt sich weiterhin:\n\n\nAnalytische (Identitäts-) Verhältnisse und synthetische Verbindungen sind scharf voneinander zu scheiden.\nEin Sachverhalt oder eine Sachverhaltsverbindung kann mit sich selbst nur durch das Identitätszeichen verknüpft werden, \nz. B. \n      B <-> B\n(BaC)<->(BaC)\n\nDie folgenden Verknüpfungen sind nicht zugelassen: \n           BaB\n (BaC) a (BaC) \nSie stellen Selbstlimitation dar.\n[...]\n\n\nEin Sachverhalt kann mit seinem Komplement gar nicht verknüpft werden. Hier besteht weder analytische noch synthetische Verknüpfung. \nHier besteht nur komplementäre Limitation. \nEs gilt aber: \nB <-> ~~B\n[...]" (Grundlagen der Strengen Logik, S.60f)\n\n\n', size_hint_y=None, font_size= 18)
         self.text_1.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_1.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
         self.layout.add_widget(self.text_1)
@@ -777,7 +692,7 @@ class Menu_introductionScreen_2(Screen):
         # Make sure the height is such that there is something to scroll.
         self.layout.bind(minimum_height=self.layout.setter('height'))
         
-        self.text_1 = Label(text='Die logischen Prinzipien: \n\nAm Anfang des logischen Denkens ist alles eins (A\u00A5A\u00A5):', font_name= 'my_custom_font', size_hint_y = None)
+        self.text_1 = Label(text='Die logischen Prinzipien: \n\nAm Anfang des logischen Denkens ist alles eins (A\u00A5A\u00A5):', font_name= 'my_custom_font', size_hint_y = None, font_size= 18)
         self.text_1.markup = True
         self.text_1.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_1.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
@@ -804,7 +719,7 @@ class Menu_introductionScreen_2(Screen):
 
         self.layout.add_widget(self.box_b_not_b)
         
-        self.text_2 = Label(text='\n\n\n1. [u]Die erste Stufe[/u]: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien (das Prinzip der Identität und das Prinzip der Limitation) definiert wird, teilt das Eins in Zwei. Es entstehen vier Möglichkeiten, die sich alle ausschließen. Zudem entstehen Kollektiv-Kennzeichnungen (Au und uN bzw. Nu und uA (unmittelbare Schlüsse)):', size_hint_y = None)
+        self.text_2 = Label(text='\n\n\n1. [u]Die erste Stufe[/u]: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien (das Prinzip der Identität und das Prinzip der Limitation) definiert wird, teilt das Eins in Zwei. Es entstehen vier Möglichkeiten, die sich alle ausschließen. Zudem entstehen Kollektiv-Kennzeichnungen (Au und uN bzw. Nu und uA (unmittelbare Schlüsse)):', size_hint_y = None, font_size= 18)
         self.text_2.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_2.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
         self.text_2.markup = True
@@ -861,7 +776,7 @@ class Menu_introductionScreen_2(Screen):
         
         self.layout.add_widget(self.box_1)
         
-        self.text_3 = Label(text='Unmittelbare Schlüsse (auf derselben Stufe): \n\n   a) [u]Ganzformel -> Ganzformel[/u] \nAN -> Au \nNN -> uN \nusw. \n\nAus der Annahme\n  "Es gibt keine Nicht-Menschen." (uN)\nfolgt nicht:\n  "Es gibt Menschen." (Au)\n\n\n2. [u]Die zweite Stufe[/u]: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Zwei in Vier. Ab nun überschneiden sich Begriffe. Jetzt sind es Zwei. Es entstehen 16 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen unmittelbare Schlüsse zwischen Stufen: \n\nUnmittelbare Schlüsse zwischen Stufen: \n\n   b) [u]Ganzformel -> Teilformeln[/u]: \nANNA -> auau \n            -> aauu \n\n   c) [u]Teilformeln -> Ganzformel[/u]: \nuaua und \nuuaa und \nnunu und \nnnuu        -> NNNA \n\nZum Beispiel folgt aus: "Einige p sind q." (Auuu, piq)\n-->p (auau)\n-->q (aauu).\n\n[Und unmittelbare Schlüsse auf derselben (dyadischen) Stufe:] \n\n   •) Ganzformel -> Ganzformel \nSubalternation; Konversion, Obversion, Kontraposition, Partielle Inversion, Inversion; \n   •) Ganzformel <-> Ganzformel \nKontradiktorischer Widerspruch, Konträrer Widerspruch, Subkontrarietät \n\n\n3. [u]Die dritte Stufe[/u]: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Vier in Acht. Jetzt überschneiden sich drei Begriffe. Es entstehen 256 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen mittelbare Schlüsse innerhalb einer Stufe (z. B. die traditionelle (und die vollständige traditionelle) Syllogistik): \n\nMittelbare Schlüsse innerhalb einer Stufe (über Mittelbegriff): \n\n   d) [u]Teilformeln -> Teilformel[/u]: \naauunnaa und \naunaauna           -> auaunana \n\n\n\nMittelbar innerhalb einer Stufe kann erst ab dritter Stufe geschlossen werden. Dies geschieht über einen Mittelbegriff. Dabei werden die Geltungswertstellen und die dazugehörigen Geltungswerte jeweils um den sozusagen unbeteiligten Begriff verlängert. Aus zwei Formeln (zum Beispiel kategorische Urteile), folgt eine dritte Formel (zum Beispiel ein kategorisches Urteil):\n\nMaP, SaM -> SaP (Barbara). (Siehe "Ressourcen" -> "Strenge Syllogistik")', size_hint_y=None)
+        self.text_3 = Label(text='Unmittelbare Schlüsse (auf derselben Stufe): \n\n   a) [u]Ganzformel -> Ganzformel[/u] \nAN -> Au \nNN -> uN \nusw. \n\nAus der Annahme\n  "Es gibt keine Nicht-Menschen." (uN)\nfolgt nicht:\n  "Es gibt Menschen." (Au)\n\n\n2. [u]Die zweite Stufe[/u]: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Zwei in Vier. Ab nun überschneiden sich Begriffe. Jetzt sind es Zwei. Es entstehen 16 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen unmittelbare Schlüsse zwischen Stufen: \n\nUnmittelbare Schlüsse zwischen Stufen: \n\n   b) [u]Ganzformel -> Teilformeln[/u]: \nANNA -> auau \n            -> aauu \n\n   c) [u]Teilformeln -> Ganzformel[/u]: \nuaua und \nuuaa und \nnunu und \nnnuu        -> NNNA \n\nZum Beispiel folgt aus: "Einige p sind q." (Auuu, piq)\n-->p (auau)\n-->q (aauu).\n\n[Und unmittelbare Schlüsse auf derselben (dyadischen) Stufe:] \n\n   •) Ganzformel -> Ganzformel \nSubalternation; Konversion, Obversion, Kontraposition, Partielle Inversion, Inversion; \n   •) Ganzformel <-> Ganzformel \nKontradiktorischer Widerspruch, Konträrer Widerspruch, Subkontrarietät \n\n\n3. [u]Die dritte Stufe[/u]: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Vier in Acht. Jetzt überschneiden sich drei Begriffe. Es entstehen 256 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen mittelbare Schlüsse innerhalb einer Stufe (z. B. die traditionelle (und die vollständige traditionelle) Syllogistik): \n\nMittelbare Schlüsse innerhalb einer Stufe (über Mittelbegriff): \n\n   d) [u]Teilformeln -> Teilformel[/u]: \naauunnaa und \naunaauna           -> auaunana \n\n\n\nMittelbar innerhalb einer Stufe kann erst ab dritter Stufe geschlossen werden. Dies geschieht über einen Mittelbegriff. Dabei werden die Geltungswertstellen und die dazugehörigen Geltungswerte jeweils um den sozusagen unbeteiligten Begriff verlängert. Aus zwei Formeln (zum Beispiel kategorische Urteile), folgt eine dritte Formel (zum Beispiel ein kategorisches Urteil):\n\nMaP, SaM -> SaP (Barbara). (Siehe "Ressourcen" -> "Strenge Syllogistik")', size_hint_y=None, font_size= 18)
         self.text_3.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_3.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
         self.text_3.markup = True
@@ -888,7 +803,7 @@ class Menu_introductionScreen_3(Screen):
         # Make sure the height is such that there is something to scroll.
         self.layout.bind(minimum_height=self.layout.setter('height'))
         
-        self.text_1 = Label(text='[u]Das Problem der Wahrheit[/u] \n\n"Ein [...] Problem [...] der Angewandten Logik überhaupt ist das der Wahrheit, d. h. der Richtigkeit im außerformalen Sinn. \nDafür gilt: Aus wahren Prämissen können sich (formallogisch korrekt) nur wahre Konklusionen ergeben. \n Wahre Konklusionen können aber unter Umständen auch aus falschen Prämissen folgen. \nz. B. \n   Alle Steine sind Lebewesen (f) \n   [u]Alle Menschen sind Steine (f)[/u] \n   Alle Menschen sind Lebewesen (w) \n[...]" \n(Grundlagen der Strengen Logik, S.161) \n\n\n[u]Transgressives Denken[/u] \n"[...] Ist für die Zukunft zu fordern, daß transgressives Denken grundsätzlich vermieden wird? Nicht unbedingt; unbekannte Bereiche sollte man möglichst weiterer Forschung zugänglich machen. Versuche mit Widerspruchsdialektiken und Selbstlimitationskonstruktionen können vielleicht ihre fruchtbaren Aspekte haben, aber nur dann, wenn sie von einem festen Ausgangspunkt unternommen werden. Sonst gerät man in willkürliche Kombinatorik und leere Spielerei." (Grundlagen der Strengen Logik, S. 223)', size_hint_y = None)
+        self.text_1 = Label(text='[u]Das Problem der Wahrheit[/u] \n\n"Ein [...] Problem [...] der Angewandten Logik überhaupt ist das der Wahrheit, d. h. der Richtigkeit im außerformalen Sinn. \nDafür gilt: Aus wahren Prämissen können sich (formallogisch korrekt) nur wahre Konklusionen ergeben. \n Wahre Konklusionen können aber unter Umständen auch aus falschen Prämissen folgen. \nz. B. \n   Alle Steine sind Lebewesen (f) \n   [u]Alle Menschen sind Steine (f)[/u] \n   Alle Menschen sind Lebewesen (w) \n[...]" \n(Grundlagen der Strengen Logik, S.161) \n\n\n[u]Transgressives Denken[/u] \n"[...] Ist für die Zukunft zu fordern, daß transgressives Denken grundsätzlich vermieden wird? Nicht unbedingt; unbekannte Bereiche sollte man möglichst weiterer Forschung zugänglich machen. Versuche mit Widerspruchsdialektiken und Selbstlimitationskonstruktionen können vielleicht ihre fruchtbaren Aspekte haben, aber nur dann, wenn sie von einem festen Ausgangspunkt unternommen werden. Sonst gerät man in willkürliche Kombinatorik und leere Spielerei." (Grundlagen der Strengen Logik, S. 223)', size_hint_y = None, font_size= 18)
         self.text_1.markup = True
         self.text_1.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_1.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
@@ -1785,25 +1700,25 @@ class TrainingScreen(Screen):
         completedsyllogistic = self.function_completed_syllogistic_settings()#looks for setting
         
         if solution == ["a", "u", "n", "a"]: # traditionelle Syllogistik
-            return "All S are P,\nalso known as SaP"
+            return "Alle S sind P,\nauch bekannt als SaP"
         elif solution == ["a", "u", "u", "u"]:
-            return "Some S are P,\nalso known as SiP"
+            return "Einige S sind P,\nauch bekannt als SiP"
         elif solution == ["n", "a", "a", "u"]:
-            return "No S is P,\nalso known as SeP"
+            return "Kein S ist P,\nauch bekannt als SeP"
         elif solution == ["u", "u", "a", "u"]:
-            return "Some S are no P,\nalso known as SoP"
+            return "Einige S sind nicht P,\nauch bekannt als SoP"
         elif (completedsyllogistic == 0) and (self.advice_premis_1 == "anua") and (self.advice_premis_2 == "anua"): #traditionelle Syllogistik: wegen des (abgeschwächten) Schlusses "Darapti"
-            return "Some S are P,\nalso known as SiP"
+            return "Some S are P,\nauch bekannt als SiP"
         elif (completedsyllogistic == 1) and (solution == ["a", "n", "u", "a"]): # vervollständigte Syllogistik
-            return "All P are S,\nalso known as SãP"
+            return "Alle P sind S,\nauch bekannt als SãP"
         elif (completedsyllogistic == 1) and (solution == ["u", "a", "a", "n"]):
-            return "No P is S,\nalso known as SëP"
+            return "Kein P ist S,\nauch bekannt als SëP"
         elif (completedsyllogistic == 1) and (solution == ["u", "u", "u", "a"]):
-            return "Some ~S are ~P,\nalso known as SïP"
+            return "Einige ~S sind ~P,\nauch bekannt als SïP"
         elif (completedsyllogistic == 1) and (solution == ["u", "a", "u", "u"]):
-            return "Some P are no S,\nalso known as SõP"
+            return "Einige P sind nicht S,\nauch bekannt als SõP"
         else:
-            return ("No (allowed) \njudge possible!")
+            return ("Kein (erlaubtes) \nUrteil möglich!")
 
     def output2(self, my_text, my_text2):
         first_formula = my_text
@@ -1999,11 +1914,11 @@ class TrainingScreen(Screen):
         ]
 
     def right_answer(self, *args):
-        right_label = Label(color= (0, 1, 0, 1), text='Right!', size_hint=(.5, .3), pos_hint={'x': .25, 'y': .2})
+        right_label = Label(color= (0, 1, 0, 1), text='Richtig!', size_hint=(.5, .3), pos_hint={'x': .25, 'y': .2})
         self.add_widget(right_label)
 
     def wrong_answer(self, *args):
-        wrong_label = Label(color= (1, 0, 0, 1), text='Wrong!', size_hint=(.5, .3), pos_hint={'x': .25, 'y': .15})
+        wrong_label = Label(color= (1, 0, 0, 1), text='Falsch!', size_hint=(.5, .3), pos_hint={'x': .25, 'y': .15})
         self.add_widget(wrong_label)
 
 
@@ -2027,72 +1942,72 @@ class TrainingScreen(Screen):
 
     def premises_to_sentences_function_premis_one(self, my_text):
         if my_text == "MaP": # traditionelle Syllogistik
-            premis_one_sentence = "All M are P"
+            premis_one_sentence = "Alle M sind P"
         elif my_text == "MeP":
-            premis_one_sentence = "No M are P"
+            premis_one_sentence = "Kein M ist P"
         elif my_text == "MiP":
-            premis_one_sentence = "Some M are P"
+            premis_one_sentence = "Einige M sind P"
         elif my_text == "MoP":
-            premis_one_sentence = "Some M are not P"
+            premis_one_sentence = "Einige M sind nicht P"
         elif my_text == "PaM":
-            premis_one_sentence = "All P are M"
+            premis_one_sentence = "Alle P sind M"
         elif my_text == "PeM":
-            premis_one_sentence = "No P are M"
+            premis_one_sentence = "Kein P ist M"
         elif my_text == "PiM":
-            premis_one_sentence = "Some P are M"
+            premis_one_sentence = "Einige P sind M"
         elif my_text == "PoM":
-            premis_one_sentence = "Some P are not M"
+            premis_one_sentence = "Einige P sind nicht M"
         elif my_text == "MãP": # vervollständigte Syllogistik
-            premis_one_sentence = "All P are M"
+            premis_one_sentence = "Alle P sind M"
         elif my_text == "MëP":
-            premis_one_sentence = "All not-M are P"
+            premis_one_sentence = "Alle nicht-M sind P"
         elif my_text == "MïP":
-            premis_one_sentence = "Some not-M are not P"
+            premis_one_sentence = "Einige nicht-M sind nicht P"
         elif my_text == "MõP":
-            premis_one_sentence = "Some not-M are P"
+            premis_one_sentence = "Einige nicht-M sind P"
         elif my_text == "PãM":
-            premis_one_sentence = "All M are P"
+            premis_one_sentence = "Alle M sind P"
         elif my_text == "PëM":
-            premis_one_sentence = "All not-P are M"
+            premis_one_sentence = "Alle nicht-P sind M"
         elif my_text == "PïM":
-            premis_one_sentence = "Some not-P are not M"
+            premis_one_sentence = "Einige nicht-P sind nicht M"
         elif my_text == "PõM":
-            premis_one_sentence = "Some not-P are M"
+            premis_one_sentence = "Einige nicht-P sind M"
         return (premis_one_sentence)
 
     def premises_to_sentences_function_premis_two(self, my_text2):
         if my_text2 == "SaM": # traditionelle Syllogistik
-            premis_two_sentence = "All S are M"
+            premis_two_sentence = "Alle S sind M"
         elif my_text2 == "SeM":
-            premis_two_sentence = "No S are M"
+            premis_two_sentence = "Kein S ist M"
         elif my_text2 == "SiM":
-            premis_two_sentence = "Some S are M"
+            premis_two_sentence = "Einige S sind M"
         elif my_text2 == "SoM":
-            premis_two_sentence = "Some S are not M"
+            premis_two_sentence = "Einige S sind nicht M"
         elif my_text2 == "MaS":
-            premis_two_sentence = "All M are S"
+            premis_two_sentence = "Alle M sind S"
         elif my_text2 == "MeS":
-            premis_two_sentence = "No M are S"
+            premis_two_sentence = "Kein M ist S"
         elif my_text2 == "MiS":
-            premis_two_sentence = "Some M are S"
+            premis_two_sentence = "Einige M sind S"
         elif my_text2 == "MoS":
-            premis_two_sentence = "Some M are not S"
+            premis_two_sentence = "Einige M sind nicht S"
         elif my_text2 == "SãM": # vervollständigte Syllogistik
-            premis_two_sentence = "All S are M"
+            premis_two_sentence = "Alle S sind M"
         elif my_text2 == "SëM":
-            premis_two_sentence = "All not-M are S"
+            premis_two_sentence = "Alle nicht-M sind S"
         elif my_text2 == "SïM":
-            premis_two_sentence = "Some not-M are not S"
+            premis_two_sentence = "Einige nicht-M sind nicht S"
         elif my_text2 == "SõM":
-            premis_two_sentence = "Some not-M are S"
+            premis_two_sentence = "Einige nicht-M sind S"
         elif my_text2 == "MãS":
-            premis_two_sentence = "All S are M"
+            premis_two_sentence = "Alle S sind M"
         elif my_text2 == "MëS":
-            premis_two_sentence = "All not-M are S"
+            premis_two_sentence = "Alle nicht-M sind S"
         elif my_text2 == "MïS":
-            premis_two_sentence = "Some not-M are not S"
+            premis_two_sentence = "Einige nicht-M sind nicht S"
         elif my_text2 == "MõS":
-            premis_two_sentence = "Some not-M are S"
+            premis_two_sentence = "Einige nicht-M sind S"
         return (premis_two_sentence)
 
     def change_screen_menu(self, *args):
@@ -2466,25 +2381,25 @@ class TrainingScreen(Screen):
                     button.bind(on_press=self.right_answer)
                 else:
                     if completedsyllogistic == 1:
-                        conclusion_judges = ["All S are P,\nalso known as SaP", "Some S are P,\nalso known as SiP", "No S is P,\nalso known as SeP", "Some S are no P,\nalso known as SoP", "No (allowed) \njudge possible!", # traditionelle Syllogistik
-                                                     "All P are S,\nalso known as SãP", "No P is S,\nalso known as SëP", "Some ~S are ~P,\nalso known as SïP", "Some P are no S,\nalso known as SõP"] # vollständige Syllogistik
-                        if button_text == "All S are P,\nalso known as SaP" or button_text == "All P are S,\nalso known as SãP":
+                        conclusion_judges = ["Alle S sind P,\nauch bekannt als SaP", "Einige S sind P,\nauch bekannt als SiP", "Kein S ist P,\nauch bekannt als SeP", "Einige S sind nicht P,\nauch bekannt als SoP", "Kein (erlaubtes) \nUrteil möglich!", # traditionelle Syllogistik
+                                                     "Alle P sind S,\nauch bekannt als SãP", "Kein P ist S,\nauch bekannt als SëP", "Einige ~S sind ~P,\nauch bekannt als SïP", "Einige P sind nicht S,\nauch bekannt als SõP"] # vollständige Syllogistik
+                        if button_text == "Alle S sind P,\nauch bekannt als SaP" or button_text == "All P are S,\nalso known as SãP":
                             for i, ele in enumerate(conclusion_judges):
-                                if (ele == "Some S are P,\nalso known as SiP") or (ele == "Some ~S are ~P,\nalso known as SïP"):
+                                if (ele == "Einige S sind P,\nauch bekannt als SiP") or (ele == "Einige ~S sind ~P,\nauch bekannt als SïP"):
                                     conclusion_judges.pop(i)
-                        elif button_text == "No S is P,\nalso known as SeP" or button_text == "No P is S,\nalso known as SëP":
+                        elif button_text == "Kein S ist P,\nauch bekannt als SeP" or button_text == "Kein P ist S,\nauch bekannt als SëP":
                             for i, ele in enumerate(conclusion_judges):
-                                if (ele == "Some S are no P,\nalso known as SoP") or (ele == "Some P are no S,\nalso known as SõP"):
+                                if (ele == "Einige S sind nicht P,\nauch bekannt als SoP") or (ele == "Einige P sind nicht S,\nauch bekannt als SõP"):
                                     conclusion_judges.pop(i)
                     else:
-                        conclusion_judges = ["All S are P,\nalso known as SaP", "Some S are P,\nalso known as SiP", "No S is P,\nalso known as SeP", "Some S are no P,\nalso known as SoP", "No (allowed) \njudge possible!"] # traditionelle Syllogistik
-                        if button_text == "All S are P,\nalso known as SaP":
+                        conclusion_judges = ["Alle S sind P,\nauch bekannt als SaP", "Einige S sind P,\nauch bekannt als SiP", "Kein S ist P,\nauch bekannt als SeP", "Einige S sind nicht P,\nauch bekannt als SoP", "Kein (erlaubtes) \nUrteil möglich!"] # traditionelle Syllogistik
+                        if button_text == "Alle S sind P,\nauch bekannt als SaP":
                             for i, ele in enumerate(conclusion_judges):
-                                if (ele == "Some S are P,\nalso known as SiP"):
+                                if (ele == "Einige S sind P,\nauch bekannt als SiP"):
                                     conclusion_judges.pop(i)
-                        elif button_text == "No S is P,\nalso known as SeP":
+                        elif button_text == "Kein S ist P,\nauch bekannt als SeP":
                             for i, ele in enumerate(conclusion_judges):
-                                if (ele == "Some S are no P,\nalso known as SoP"):
+                                if (ele == "Einige S sind nicht P,\nauch bekannt als SoP"):
                                     conclusion_judges.pop(i)
                     conclusion_judges.remove(button_text)
                     m = random.choice(conclusion_judges)
@@ -7136,7 +7051,7 @@ class Sat_Screen(Screen):
         # Make sure the height is such that there is something to scroll.
         self.layout.bind(minimum_height=self.layout.setter('height'))
         
-        self.text_1 = Label(text='(x \u00F3 y \u00F3 z) \u00F2 (\u00ACx \u00F3 y \u00F3 \u00ACz) \u00F2 \n(\u00ACx \u00F3 \u00ACy \u00F3 z) \u00F2 (\u00ACx \u00F3 \u00ACy \u00F3 \u00ACz)', font_name= 'my_custom_font', size_hint_y = None)
+        self.text_1 = Label(text='(x \u00F3 y \u00F3 z) \u00F2 (\u00ACx \u00F3 y \u00F3 \u00ACz) \u00F2 \n(\u00ACx \u00F3 \u00ACy \u00F3 z) \u00F2 (\u00ACx \u00F3 \u00ACy \u00F3 \u00ACz)', font_name= 'my_custom_font', size_hint_y = None, font_size= 18)
         self.text_1.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_1.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
         self.layout.add_widget(self.text_1)
