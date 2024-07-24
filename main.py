@@ -396,7 +396,7 @@ class EllipseLabel(Label):
 class MenuScreen(Screen):
     button_transformations_in_main_menu = StringProperty('Dyadische Formeln\n(S•P <-> S•P)')
     button_conclusion_in_main_menu = StringProperty('Verlängerte dyadische Formeln\n(M•P, S•M -> S•P)')
-    button_total_formulas_in_main_menu = StringProperty('Triadische Ganzformeln\n(M•P, S•M, S•P <-> S•M•P)')
+    button_total_formulas_in_main_menu = StringProperty('Triadische Ganzformeln\n(S•M, M•P, S•P <-> S•M•P)')
 
 
     def __init__(self, **kwargs):
@@ -1151,9 +1151,10 @@ class Table_overviewScreen_2(Screen):
         
         self.first_figure_label_one = Label(text= 'B§C,', font_name= 'my_custom_font')
         self.figure_one_box.add_widget(self.first_figure_label_one)
-        self.first_figure_label_two = Label(text= 'C§D', font_name= 'my_custom_font')
+        self.first_figure_label_two = Label(text= '[u]C§D[/u]', font_name= 'my_custom_font')
+        self.first_figure_label_two.markup = True
         self.figure_one_box.add_widget(self.first_figure_label_two)
-        self.first_figure_label_three = Label(text= '->B§D', font_name= 'my_custom_font')
+        self.first_figure_label_three = Label(text= 'B§D', font_name= 'my_custom_font')
         self.figure_one_box.add_widget(self.first_figure_label_three)
         
         
