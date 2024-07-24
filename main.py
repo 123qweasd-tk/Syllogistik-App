@@ -16,12 +16,12 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.widget import Widget
 from kivy.graphics import Color
 from kivy.base import runTouchApp
-from kivy.vector import Vector
 from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
 from kivy.core.text import LabelBase
 from kivy.clock import Clock
 from kivy.uix.scatter import Scatter
+from kivy.metrics import dp, sp
 
 
 from kivy.config import Config
@@ -30,11 +30,24 @@ from kivy.config import ConfigParser
 from settingsjson import settings_json
 import webbrowser
 import random
-import flatlatex
 
 Builder.load_string("""
 
+<Grow_and_wrap_Label>:
+    text_size: root.width, None
+    size: self.texture_size
+    valign: 'top'
+
+<ConclusionLabel>:
+    canvas.before:
+        Color:
+            rgba: 1,1,1,1
+        Line:
+            points: self.center_x-((self.width/2)*.6),self.center_y+self.height/2,self.center_x+((self.width/2)*.6),self.center_y+self.height/2
+            width: 1
+
 <LineRectangle>:
+    size: self.texture_size
     canvas:
         Color:
             rgba: 1, 1, 1, 1
@@ -150,13 +163,17 @@ Builder.load_string("""
             background_normal: ''
             background_color: 1, .1, .1, .2
         Button:
-            text: 'Analytische Verhältnisse und synthetische Verbindungen'
+            text: root.analytischeVerhältnisse_headline
+            halign: 'center'
+            valign: 'center'
             on_press: root.manager.current = 'menu_introduction_1b'
             font_size: dp(27)
             background_normal: ''
             background_color: 1, .1, .1, .2
         Button:
-            text: 'Unmittelbare und mittelbare Schlüsse'
+            text: root.schlüsse_headline
+            halign: 'center'
+            valign: 'center'
             on_press: root.manager.current = 'menu_introduction_2'
             font_size: dp(27)
             background_normal: ''
@@ -201,13 +218,25 @@ Builder.load_string("""
     BoxLayout:
         orientation: "vertical"
         Button:
-            text: 'Überblick -  Syllogistik'
-            on_press: root.manager.current = 'table_overview'
+            text: root.tabelle_1b_text
+            on_press: root.manager.current = 'table_overview_1b'
+            halign: 'center'
+            valign: 'center'
             font_size: dp(27)
             background_normal: ''
             background_color: 1, .1, .1, .2
         Button:
-            text: 'Überblick - Verlängerte dyadische Formeln'
+            text: root.tabelle_2_text
+            on_press: root.manager.current = 'table_overview'
+            halign: 'center'
+            valign: 'center'
+            font_size: dp(27)
+            background_normal: ''
+            background_color: 1, .1, .1, .2
+        Button:
+            text: root.tabelle2text
+            halign: 'center'
+            valign: 'center'
             on_press: root.manager.current = 'table_overview_2'
             font_size: dp(27)
             background_normal: ''
@@ -238,6 +267,7 @@ Builder.load_string("""
     Button:
         id: 'settings_button'
         text: 'Einstellungen'
+        font_size: dp(11)
         on_release: app.open_settings()
         size_hint: "0.2", "0.1"
         pos_hint: {"x":0.8,"y":0.7}
@@ -329,15 +359,6 @@ Builder.load_string("""
             on_press: root.manager.current = 'sat'
             background_normal: ''
             background_color: 1, 0, .5, .3
-        Button:
-            text: root.text_syllogism_ressource
-            text_size: self.size
-            halign: 'center'
-            valign: 'center'
-            font_size: dp(27)
-            on_press:
-                import webbrowser
-                webbrowser.open('https://de.wikipedia.org/w/index.php?title=Walther_Br%C3%BCning&oldid=185439594#Strenge_Syllogistik')
     Button:
         text: "Menü"
         on_press: root.manager.current = 'menu'
@@ -347,6 +368,12 @@ Builder.load_string("""
 <Sat_Screen>:
 
 """)
+
+class Grow_and_wrap_Label(Label):
+    pass
+
+class ConclusionLabel(Label):
+    pass
 
 class LineRectangle(Label):
     pass
@@ -379,7 +406,12 @@ class GeneralScreen(Screen):
     pass
 
 class Menu_introductionScreen(Screen):
-    pass
+    prinzipien_headline = StringProperty('Die beiden logischen\nPrinzipien')
+    analytischeVerhältnisse_headline = StringProperty('Analytische Verhältnisse und\nsynthetische Verbindungen')
+    schlüsse_headline = StringProperty('Unmittelbare und\nmittelbare Schlüsse')
+
+    def __init__(self, **kwargs):
+        super(RelativeLayout, self).__init__(**kwargs)
 
 class Menu_introductionScreen_1(Screen):
     
@@ -392,14 +424,21 @@ class Menu_introductionScreen_1(Screen):
         self.layout = GridLayout(cols=1, spacing=70, size_hint_y=None)
         self.layout.bind(minimum_height=self.layout.setter('height'))
         
-        self.text_1 = Label(text='[u]Die logischen Prinzipien:[/u]\n\n"Die logischen Prinzipien sind Grundbestimmungen, die für das in der Logik Festgesetzte gelten. Sie beruhen selbst auf Festsetzung.\nFür die Strenge Logik sind zwei Prinzipien festzusetzen: Das Prinzip der Identität und das Prinzip der Limitation.\n\n\n[u]Das Prinzip der Identiät[/u]:\n\nPositive Formulierung:\nJedes in der Logik Festgesetzte ist mit sich selbst und nur mit sich selbst identisch.\n\nNegativeFormulierung:\n(Satz vom ausgeschlossenen Widerspruch)\nKein in der Logik Festgesetztes ist mit sich selbst nicht identisch (d. h. steht mit sich selbst im Widerspruch).\nKein Festgesetztes ist mit anderem identisch.\n(Diese letzte Bestimmung kann als Satz der ausgeschlossenen Fremdidentifizierung bezeichnet werden).\n\n\n[u]Das Prinzip der Limitation[/u]:\n\nPositive Formulierung:\nJedes Festgesetzte ist\n1. von den anderen\n2. aber auch nur von den anderen limitativ unterschieden.\n\nNegative Formulierung:\n1. Kein Festgesetztes ist von den anderen nicht limitativ unterschieden. D. h. zwischen einem Festgesetzten und den anderen gibt es nicht Drittes (Satz vom ausgeschlossenen Dritten).\n2. Kein Festgesetztes ist von sich selbst limitativ unterschieden (Satz der ausgeschlossenen Selbstlimitation)." (Grundlagen der Strengen Logik, Seite 58f)', size_hint_y=None, font_size= 18)
+        self.text_1 = Label(text='[u]Die logischen Prinzipien:[/u]\n\n"Die logischen Prinzipien sind Grundbestimmungen, die für das in der Logik Festgesetzte gelten. Sie beruhen selbst auf Festsetzung.\nFür die Strenge Logik sind zwei Prinzipien festzusetzen: Das Prinzip der Identität und das Prinzip der Limitation.\n\n\n[u]Das Prinzip der Identiät[/u]:\n\nPositive Formulierung:\nJedes in der Logik Festgesetzte ist mit sich selbst und nur mit sich selbst identisch.\n\nNegativeFormulierung:\n(Satz vom ausgeschlossenen Widerspruch)\nKein in der Logik Festgesetztes ist mit sich selbst nicht identisch (d. h. steht mit sich selbst im Widerspruch).\nKein Festgesetztes ist mit anderem identisch.\n(Diese letzte Bestimmung kann als Satz der ausgeschlossenen Fremdidentifizierung bezeichnet werden).\n\n\n[u]Das Prinzip der Limitation[/u]:\n\nPositive Formulierung:\nJedes Festgesetzte ist\n1. von den anderen\n2. aber auch nur von den anderen limitativ unterschieden.\n\nNegative Formulierung:\n1. Kein Festgesetztes ist von den anderen nicht limitativ unterschieden. D. h. zwischen einem Festgesetzten und den anderen gibt es nicht Drittes (Satz vom ausgeschlossenen Dritten).\n2. Kein Festgesetztes ist von sich selbst limitativ unterschieden (Satz der ausgeschlossenen Selbstlimitation)." (Grundlagen der Strengen Logik, Seite 58f)', size_hint_y=None, font_size= dp(18))
         self.text_1.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_1.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
         self.text_1.markup = True
         self.layout.add_widget(self.text_1)
+
+        #text dummy 1
+        for r in range(5):
+            self.text_2 = Label(text='')
+            self.text_2.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
+            self.text_2.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
+            self.layout.add_widget(self.text_2)
         
         #table "B, ~B":
-        self.box_layout_introduction_formulas_0 = BoxLayout(orientation='horizontal', size_hint_y=None)
+        self.box_layout_introduction_formulas_0 = BoxLayout(orientation='horizontal')
         self.layout.add_widget(self.box_layout_introduction_formulas_0)
 
         self.syllogism_box_1_col_0 = BoxLayout(orientation='vertical', size_hint_y=None)
@@ -454,24 +493,21 @@ class Menu_introductionScreen_1(Screen):
         self.syllogism_box_1_col_3.add_widget(self.dummy_1_4)
         self.dummy_1_5 = Label(text=' ')
         self.syllogism_box_1_col_3.add_widget(self.dummy_1_5)
-
-        #text dummy 1
-        self.text_2 = Label(text='')
-        self.text_2.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
-        self.text_2.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
-        self.layout.add_widget(self.text_2)
-
-        #text dummy 2
-        self.text_3 = Label(text='')
-        self.text_3.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
-        self.text_3.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
-        self.layout.add_widget(self.text_3)
         
-        #text dummy 3
-        self.text_4 = Label(text='')
-        self.text_4.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
-        self.text_4.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
-        self.layout.add_widget(self.text_4)
+        for i, box in enumerate(self.box_layout_introduction_formulas_0.children):
+            for j, lbl in enumerate(box.children):
+                lbl.height = 60
+                lbl.size_hint_y = None
+                lbl.font_size = dp(18)
+        
+        #text dummy 1
+        for i in range(15):
+            self.text_2 = Label(text='')
+            self.text_2.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
+            self.text_2.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
+            self.layout.add_widget(self.text_2)
+
+
 
         #table "BC, ~BC, B~C, ~B~C":
         self.box_layout_introduction_formulas = BoxLayout(orientation='horizontal', size_hint_y=None)
@@ -491,7 +527,7 @@ class Menu_introductionScreen_1(Screen):
             self.formula_BC_label = Label(text= dyadic_junctor, font_name='my_custom_font')
             self.syllogism_box_2_col_0.add_widget(self.formula_BC_label)
 
-        self.syllogism_box_col_2_1 = BoxLayout(orientation='vertical', size_hint_y=3.5)
+        self.syllogism_box_col_2_1 = BoxLayout(orientation='vertical', size_hint_y=None)
         self.box_layout_introduction_formulas.add_widget(self.syllogism_box_col_2_1)
 
         self.s1 = Label(text='B', font_name='my_custom_font')
@@ -505,7 +541,7 @@ class Menu_introductionScreen_1(Screen):
             self.button_2_1_N = CustomLabel_red(text='N',color= (0, 0, 0, 1), font_name= 'my_custom_font')
             self.syllogism_box_col_2_1.add_widget(self.button_2_1_N)
 
-        self.syllogism_box_2_col_2 = BoxLayout(orientation='vertical', size_hint_y=3.5)
+        self.syllogism_box_2_col_2 = BoxLayout(orientation='vertical', size_hint_y=None)
         self.box_layout_introduction_formulas.add_widget(self.syllogism_box_2_col_2)
 
         self.s_2_1 = Label(text='~B', font_name='my_custom_font')
@@ -520,7 +556,7 @@ class Menu_introductionScreen_1(Screen):
                 self.button_2_2_N = CustomLabel_red(text='N',color= (0, 0, 0, 1), font_name= 'my_custom_font')
                 self.syllogism_box_2_col_2.add_widget(self.button_2_2_N)
 
-        self.syllogism_box_2_col_3 = BoxLayout(orientation='vertical', size_hint_y=3.5)
+        self.syllogism_box_2_col_3 = BoxLayout(orientation='vertical', size_hint_y=None)
         self.box_layout_introduction_formulas.add_widget(self.syllogism_box_2_col_3)
 
         self.s_2_3 = Label(text='B', font_name='my_custom_font')
@@ -535,7 +571,7 @@ class Menu_introductionScreen_1(Screen):
                 self.button_2_3_N = CustomLabel_red(text='N',color= (0, 0, 0, 1), font_name= 'my_custom_font')
                 self.syllogism_box_2_col_3.add_widget(self.button_2_3_N)
 
-        self.syllogism_box_2_col_4 = BoxLayout(orientation='vertical', size_hint_y=3.5)
+        self.syllogism_box_2_col_4 = BoxLayout(orientation='vertical', size_hint_y=None)
         self.box_layout_introduction_formulas.add_widget(self.syllogism_box_2_col_4)
 
         self.s_2_4 = Label(text='~B', font_name='my_custom_font')
@@ -548,7 +584,7 @@ class Menu_introductionScreen_1(Screen):
             self.button_2_4_N = CustomLabel_red(text='N',color= (0, 0, 0, 1), font_name= 'my_custom_font')
             self.syllogism_box_2_col_4.add_widget(self.button_2_4_N)
 
-        self.syllogism_box_2_col_5 = BoxLayout(orientation='vertical', size_hint_y=3.5)
+        self.syllogism_box_2_col_5 = BoxLayout(orientation='vertical', size_hint_y=None)
         self.box_layout_introduction_formulas.add_widget(self.syllogism_box_2_col_5)
 
         self.dummy_1 = Label(text=' ')
@@ -559,9 +595,15 @@ class Menu_introductionScreen_1(Screen):
         self.syllogism_box_2_col_5.add_widget(self.dummy_3)
         self.dummy_4 = Label(text=' ')
         self.syllogism_box_2_col_5.add_widget(self.dummy_4)
+        
+        for i, box in enumerate(self.box_layout_introduction_formulas.children):
+            for j, lbl in enumerate(box.children):
+                lbl.height = 60
+                lbl.size_hint_y = None
+                lbl.font_size = dp(18)
 
         #text dummy 1
-        for r in range(77):
+        for r in range(221):
             self.text_5 = Label(text='')
             self.text_5.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
             self.text_5.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
@@ -584,7 +626,7 @@ class Menu_introductionScreen_1(Screen):
         self.box_layout_introduction_formulas_2 = BoxLayout(orientation='horizontal', size_hint_y=None)
         self.layout.add_widget(self.box_layout_introduction_formulas_2)
         
-        self.syllogism_box_3_col_0 = BoxLayout(orientation='vertical', size_hint_y=55, size_hint_x=12)
+        self.syllogism_box_3_col_0 = BoxLayout(orientation='vertical', size_hint_y=None, size_hint_x=12)
         self.box_layout_introduction_formulas_2.add_widget(self.syllogism_box_3_col_0)
         
         self.s_3_0 = Label(text=' ')
@@ -628,15 +670,15 @@ class Menu_introductionScreen_1(Screen):
             d_list.append('~D')
 
         for i in range(8): 
-            self.col_boxlayout = BoxLayout(orientation='vertical', size_hint_y=55)
+            self.col_boxlayout = BoxLayout(orientation='vertical', size_hint_y=None)
             self.box_layout_introduction_formulas_2.add_widget(self.col_boxlayout)
             
                                                  
-            self.s_3_1 = CustomLabel(text=b_list[i], background_color = [0, 0, 0, 1], font_name='my_custom_font')
+            self.s_3_1 = Label(text=b_list[i], font_name='my_custom_font')
             self.col_boxlayout.add_widget(self.s_3_1)
-            self.p_3_1 = CustomLabel(text=c_list[i], background_color = [0, 0, 0, 1], font_name='my_custom_font')
+            self.p_3_1 = Label(text=c_list[i], font_name='my_custom_font')
             self.col_boxlayout.add_widget(self.p_3_1)
-            self.m_3_1 = CustomLabel(text=d_list[i], background_color = [0, 0, 0, 1], font_name='my_custom_font')
+            self.m_3_1 = Label(text=d_list[i], font_name='my_custom_font')
             self.col_boxlayout.add_widget(self.m_3_1)
 
             for j, triadic_formula in enumerate(self.triadic_formulas_list):
@@ -647,11 +689,17 @@ class Menu_introductionScreen_1(Screen):
                 self.col_boxlayout.add_widget(self.formula_BCD_label_x)
 
 
+        for i, box in enumerate(self.box_layout_introduction_formulas_2.children):
+            for j, lbl in enumerate(box.children):
+                lbl.height = 60
+                lbl.size_hint_y = None
+                lbl.font_size = dp(18)
+
         self.menu_button = Button(text='Menü', background_normal= '', background_color=(1, 1, 1, .5), color=(0, 0, 0, 1), size_hint_y=None)
         self.layout.add_widget(self.menu_button)
         self.menu_button.bind(on_press=self.change_screen_menu)
         
-        self.root = ScrollView(size=(Window.width, Window.height))
+        self.root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
         self.root.add_widget(self.layout)
         self.add_widget(self.root)
         
@@ -666,7 +714,7 @@ class Menu_introductionScreen_1b(Screen):
         self.layout = GridLayout(cols=1, spacing=70, size_hint_y=None)
         self.layout.bind(minimum_height=self.layout.setter('height'))
         
-        self.text_1 = Label(text='"Aus den beiden Prinzipien ergibt sich weiterhin:\n\n\nAnalytische (Identitäts-) Verhältnisse und synthetische Verbindungen sind scharf voneinander zu scheiden.\nEin Sachverhalt oder eine Sachverhaltsverbindung kann mit sich selbst nur durch das Identitätszeichen verknüpft werden, \nz. B. \n      B <-> B\n(BaC)<->(BaC)\n\nDie folgenden Verknüpfungen sind nicht zugelassen: \n           BaB\n (BaC) a (BaC) \nSie stellen Selbstlimitation dar.\n[...]\n\n\nEin Sachverhalt kann mit seinem Komplement gar nicht verknüpft werden. Hier besteht weder analytische noch synthetische Verknüpfung. \nHier besteht nur komplementäre Limitation. \nEs gilt aber: \nB <-> ~~B\n[...]" (Grundlagen der Strengen Logik, S.60f)\n\n\n', size_hint_y=None, font_size= 18)
+        self.text_1 = Label(text='"Aus den beiden Prinzipien ergibt sich weiterhin:\n\n\nAnalytische (Identitäts-) Verhältnisse und synthetische Verbindungen sind scharf voneinander zu scheiden.\n\nEin Sachverhalt oder eine Sachverhaltsverbindung kann mit sich selbst nur durch das Identitätszeichen verknüpft werden, \nz. B. \n      B <-> B\n(BaC)<->(BaC)\n\nDie folgenden Verknüpfungen sind nicht zugelassen: \n           BaB\n (BaC) a (BaC) \nSie stellen Selbstlimitation dar.\n[...]\n\n\nEin Sachverhalt kann mit seinem Komplement gar nicht verknüpft werden. Hier besteht weder analytische noch synthetische Verknüpfung. \nHier besteht nur komplementäre Limitation. \nEs gilt aber: \nB <-> ~~B\n[...]" (Grundlagen der Strengen Logik, S.60f)\n\n\n', size_hint_y=None, font_size= dp(18))
         self.text_1.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_1.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
         self.layout.add_widget(self.text_1)
@@ -676,7 +724,7 @@ class Menu_introductionScreen_1b(Screen):
         self.menu_button.bind(on_press=self.change_screen_menu)
         
         
-        self.root = ScrollView(size=(Window.width, Window.height))
+        self.root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
         self.root.add_widget(self.layout)
         self.add_widget(self.root)
         
@@ -685,14 +733,20 @@ class Menu_introductionScreen_2(Screen):
     def change_screen_menu(self, *args):
         self.parent.current = 'menu'
 
+    def new_height_one(self, *args):
+        self.height = 120
+
+    def new_height_two(self, *args):
+        self.height = 240
+
     def __init__(self, **kwargs):
         super(RelativeLayout, self).__init__(**kwargs)
         
-        self.layout = GridLayout(cols=1, spacing=13, size_hint_y=None)
-        # Make sure the height is such that there is something to scroll.
+        self.layout = GridLayout(cols=1, spacing=60, size_hint_y=None)
         self.layout.bind(minimum_height=self.layout.setter('height'))
+        # Make sure the height is such that there is something to scroll.
         
-        self.text_1 = Label(text='Die logischen Prinzipien: \n\nAm Anfang des logischen Denkens ist alles eins (A\u00A5A\u00A5):', font_name= 'my_custom_font', size_hint_y = None, font_size= 18)
+        self.text_1 = Label(text='Die logischen Prinzipien: \n\nAm Anfang des logischen Denkens ist alles eins (A\u00A5A\u00A5):', font_name= 'my_custom_font', size_hint_y = None, font_size= dp(18))
         self.text_1.markup = True
         self.text_1.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_1.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
@@ -704,79 +758,107 @@ class Menu_introductionScreen_2(Screen):
         self.box_1_1 = BoxLayout(orientation= 'vertical', size_hint_y=None, size_hint_x=None)
         self.box_b_not_b.add_widget(self.box_1_1)
 
-        self.label_box_0_0_1 = Button(text= 'B', background_normal= '', background_color=(.5, .5, 1, 1), color=(0, 0, 0, 1), font_name= 'my_custom_font')
+        self.label_box_0_0_1 = CustomLabel(text= 'B', background_color=[.5, .5, 1, 1], color=(0, 0, 0, 1), font_name= 'my_custom_font')
         self.box_1_1.add_widget(self.label_box_0_0_1)
-        self.label_box_0_0_2 = Button(text= 'A\u00A5', background_normal= '', background_color=(1, 1, 1, 1), color=(0, 0, 0, 1), font_name= 'my_custom_font')
+        self.label_box_0_0_2 = CustomLabel(text= 'A\u00A5', background_color=[1, 1, 1, 1], color=(0, 0, 0, 1), font_name= 'my_custom_font')
         self.box_1_1.add_widget(self.label_box_0_0_2)
 
         self.box_1_2 = BoxLayout(orientation= 'vertical', size_hint_y=None, size_hint_x=None)
         self.box_b_not_b.add_widget(self.box_1_2)
 
-        self.label_box_0_1_1 = Button(text= '~B', background_normal= '', background_color=(.5, .5, 1, 1), color=(0, 0, 0, 1), font_name= 'my_custom_font')
+        self.label_box_0_1_1 = CustomLabel(text= '~B', background_color=[.5, .5, 1, 1], color=(0, 0, 0, 1), font_name= 'my_custom_font')
         self.box_1_2.add_widget(self.label_box_0_1_1)
-        self.label_box_0_1_2 = Button(text= 'A\u00A5', background_normal= '', background_color=(1, 1, 1, 1), color=(0, 0, 0, 1), font_name= 'my_custom_font')
+        self.label_box_0_1_2 = CustomLabel(text= 'A\u00A5', background_color=[1, 1, 1, 1], color=(0, 0, 0, 1), font_name= 'my_custom_font')
         self.box_1_2.add_widget(self.label_box_0_1_2)
 
+        for i, box in enumerate(self.box_b_not_b.children):
+            for j, lbl in enumerate(box.children):
+                lbl.height = 60
+                lbl.size_hint_y = None
+                lbl.font_size = dp(18)
+
         self.layout.add_widget(self.box_b_not_b)
+
+
         
-        self.text_2 = Label(text='\n\n\n1. [u]Die erste Stufe[/u]: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien (das Prinzip der Identität und das Prinzip der Limitation) definiert wird, teilt das Eins in Zwei. Es entstehen vier Möglichkeiten, die sich alle ausschließen. Zudem entstehen Kollektiv-Kennzeichnungen (Au und uN bzw. Nu und uA (unmittelbare Schlüsse)):', size_hint_y = None, font_size= 18)
+        self.text_2 = Label(text='\n1. [u]Die erste Stufe[/u]: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien (das Prinzip der Identität und das Prinzip der Limitation) definiert wird, teilt das Eins in Zwei. Es entstehen vier Möglichkeiten, die sich alle ausschließen. Zudem entstehen Kollektiv-Kennzeichnungen (Au und uN bzw. Nu und uA (unmittelbare Schlüsse)): \n', size_hint_y = None, font_size= dp(18))
         self.text_2.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_2.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
         self.text_2.markup = True
         self.layout.add_widget(self.text_2)
+        
+        for i in range(2):
+            self.text_dummys = Label(text=' ', size_hint_y = None)
+            self.text_dummys.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
+            self.text_dummys.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
+            self.layout.add_widget(self.text_dummys)
         
         self.box_1 = BoxLayout(orientation= 'horizontal', size_hint_y=None)
 
         self.box_2 = BoxLayout(orientation= 'vertical', size_hint_y=None, size_hint_x=None)
         self.box_1.add_widget(self.box_2)
 
-        self.label_box_1_1 = Button(text= 'B', background_normal= '', background_color=(.5, .5, 1, 1), color=(0, 0, 0, 1), font_name= 'my_custom_font')
+        self.label_box_1_1 = CustomLabel(text= 'B', background_color=[.5, .5, 1, 1], color=(0, 0, 0, 1), font_name= 'my_custom_font')
         self.box_2.add_widget(self.label_box_1_1)
-        self.label_box_1_2 = Button(text= 'A', background_normal= '', background_color=(0, 1, 0, 1), color=(0, 0, 0, 1), font_name= 'my_custom_font')
+        self.label_box_1_2 = CustomLabel(text= 'A', background_color=[0, 1, 0, 1], color=(0, 0, 0, 1), font_name= 'my_custom_font')
         self.box_2.add_widget(self.label_box_1_2)
-        self.label_box_1_3 = Button(text= 'u', background_normal= '', background_color=(1, 1, 1, 1), color=(0, 0, 0, 1), font_name= 'my_custom_font')
+        self.label_box_1_3 = CustomLabel(text= 'u', background_color=[1, 1, 1, 1], color=(0, 0, 0, 1), font_name= 'my_custom_font')
         self.box_2.add_widget(self.label_box_1_3)
-        self.label_box_1_4 = Button(text= 'N', background_normal= '', background_color=(1, 0, 0, 1), color=(0, 0, 0, 1), font_name= 'my_custom_font')
+        self.label_box_1_4 = CustomLabel(text= 'N', background_color=[1, 0, 0, 1], color=(0, 0, 0, 1), font_name= 'my_custom_font')
         self.box_2.add_widget(self.label_box_1_4)
-        self.label_box_1_5 = Button(text= 'u', background_normal= '', background_color=(1, 1, 1, 1), color=(0, 0, 0, 1), font_name= 'my_custom_font')
+        self.label_box_1_5 = CustomLabel(text= 'u', background_color=[1, 1, 1, 1], color=(0, 0, 0, 1), font_name= 'my_custom_font')
         self.box_2.add_widget(self.label_box_1_5)
 
         self.box_3 = BoxLayout(orientation= 'vertical', size_hint_y=None, size_hint_x=None)
         self.box_1.add_widget(self.box_3)
 
-        self.label_box_2_1 = Button(text= '~B', background_normal= '', background_color=(.5, .5, 1, 1), color=(0, 0, 0, 1), font_name= 'my_custom_font')
+        self.label_box_2_1 = CustomLabel(text= '~B', background_color=[.5, .5, 1, 1], color=(0, 0, 0, 1), font_name= 'my_custom_font')
         self.box_3.add_widget(self.label_box_2_1)
-        self.label_box_2_2 = Button(text= 'u', background_normal= '', background_color=(1, 1, 1, 1), color=(0, 0, 0, 1), font_name= 'my_custom_font')
+        self.label_box_2_2 = CustomLabel(text= 'u', background_color=[1, 1, 1, 1], color=(0, 0, 0, 1), font_name= 'my_custom_font')
         self.box_3.add_widget(self.label_box_2_2)
-        self.label_box_2_3 = Button(text= 'N', background_normal= '', background_color=(1, 0, 0, 1), color=(0, 0, 0, 1), font_name= 'my_custom_font')
+        self.label_box_2_3 = CustomLabel(text= 'N', background_color=[1, 0, 0, 1], color=(0, 0, 0, 1), font_name= 'my_custom_font')
         self.box_3.add_widget(self.label_box_2_3)
-        self.label_box_2_4 = Button(text= 'u', background_normal= '', background_color=(1, 1, 1, 1), color=(0, 0, 0, 1), font_name= 'my_custom_font')
+        self.label_box_2_4 = CustomLabel(text= 'u', background_color=[1, 1, 1, 1], color=(0, 0, 0, 1), font_name= 'my_custom_font')
         self.box_3.add_widget(self.label_box_2_4)
-        self.label_box_2_5 = Button(text= 'A', background_normal= '', background_color=(0, 1, 0, 1), color=(0, 0, 0, 1), font_name= 'my_custom_font')
+        self.label_box_2_5 = CustomLabel(text= 'A', background_color=[0, 1, 0, 1], color=(0, 0, 0, 1), font_name= 'my_custom_font')
         self.box_3.add_widget(self.label_box_2_5)
-
+                    
         self.box_4 = BoxLayout(orientation= 'vertical', size_hint_x= .4, size_hint_y=None)
         self.box_1.add_widget(self.box_4)
 
-        self.label_box_3_1 = Label(text= ' ', size_hint_y= .2)
+        self.label_box_3_1 = Label(text= ' ', font_size = dp(18))
         self.box_4.add_widget(self.label_box_3_1)
-        self.label_box_3_2 = LineRectangle(text= 'A\u00A5', size_hint_y= .4, font_name= 'my_custom_font')
+        self.label_box_3_2 = LineRectangle(text= 'A\u00A5', font_name= 'my_custom_font', font_size = dp(18))
         self.box_4.add_widget(self.label_box_3_2)
-        self.label_box_3_3 = LineRectangle(text= 'A\u00A5', size_hint_y= .4, font_name= 'my_custom_font')
-        
+        self.label_box_3_3 = LineRectangle(text= 'A\u00A5', font_name= 'my_custom_font', font_size = dp(18))
         self.box_4.add_widget(self.label_box_3_3)
 
         self.box_5 = BoxLayout(orientation= 'vertical', size_hint_x= .4, size_hint_y=None)
         self.box_1.add_widget(self.box_5)
 
-        self.label_box_4_1 = Label(text= ' ', size_hint_y= .2)
+        self.label_box_4_1 = Label(text= ' ')
         self.box_5.add_widget(self.label_box_4_1)
-        self.label_box_4_2 = LineRectangle(text= 'A\u00A5', size_hint_y= .8, font_name= 'my_custom_font')
+        self.label_box_4_2 = LineRectangle(text= 'A\u00A5', size_hint_y=.8, font_name= 'my_custom_font')
         self.box_5.add_widget(self.label_box_4_2)
+        
+        for i, box in enumerate(self.box_1.children):
+            for j, lbl in enumerate(box.children):
+                if (lbl != self.label_box_3_2) and (lbl != self.label_box_3_3) and (lbl != self.label_box_4_1) and (lbl != self.label_box_4_2):
+                    lbl.height = 60
+                    lbl.size_hint_y = None
+                    lbl.font_size = dp(18)
+                elif (lbl != self.label_box_4_2):
+                    lbl.bind(height=Menu_introductionScreen_2.new_height_one)
+                    lbl.size_hint_y = None
+                    lbl.font_size = dp(18)
+                else:
+                    lbl.bind(height=Menu_introductionScreen_2.new_height_two)
+                    lbl.size_hint_y = None
+                    lbl.font_size = dp(18)
         
         self.layout.add_widget(self.box_1)
         
-        self.text_3 = Label(text='Unmittelbare Schlüsse (auf derselben Stufe): \n\n   a) [u]Ganzformel -> Ganzformel[/u] \nAN -> Au \nNN -> uN \nusw. \n\nAus der Annahme\n  "Es gibt keine Nicht-Menschen." (uN)\nfolgt nicht:\n  "Es gibt Menschen." (Au)\n\n\n2. [u]Die zweite Stufe[/u]: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Zwei in Vier. Ab nun überschneiden sich Begriffe. Jetzt sind es Zwei. Es entstehen 16 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen unmittelbare Schlüsse zwischen Stufen: \n\nUnmittelbare Schlüsse zwischen Stufen: \n\n   b) [u]Ganzformel -> Teilformeln[/u]: \nANNA -> auau \n            -> aauu \n\n   c) [u]Teilformeln -> Ganzformel[/u]: \nuaua und \nuuaa und \nnunu und \nnnuu        -> NNNA \n\nZum Beispiel folgt aus: "Einige p sind q." (Auuu, piq)\n-->p (auau)\n-->q (aauu).\n\n[Und unmittelbare Schlüsse auf derselben (dyadischen) Stufe:] \n\n   •) Ganzformel -> Ganzformel \nSubalternation; Konversion, Obversion, Kontraposition, Partielle Inversion, Inversion; \n   •) Ganzformel <-> Ganzformel \nKontradiktorischer Widerspruch, Konträrer Widerspruch, Subkontrarietät \n\n\n3. [u]Die dritte Stufe[/u]: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Vier in Acht. Jetzt überschneiden sich drei Begriffe. Es entstehen 256 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen mittelbare Schlüsse innerhalb einer Stufe (z. B. die traditionelle (und die vollständige traditionelle) Syllogistik): \n\nMittelbare Schlüsse innerhalb einer Stufe (über Mittelbegriff): \n\n   d) [u]Teilformeln -> Teilformel[/u]: \naauunnaa und \naunaauna           -> auaunana \n\n\n\nMittelbar innerhalb einer Stufe kann erst ab dritter Stufe geschlossen werden. Dies geschieht über einen Mittelbegriff. Dabei werden die Geltungswertstellen und die dazugehörigen Geltungswerte jeweils um den sozusagen unbeteiligten Begriff verlängert. Aus zwei Formeln (zum Beispiel kategorische Urteile), folgt eine dritte Formel (zum Beispiel ein kategorisches Urteil):\n\nMaP, SaM -> SaP (Barbara). (Siehe "Ressourcen" -> "Strenge Syllogistik")', size_hint_y=None, font_size= 18)
+        self.text_3 = Label(text='Unmittelbare Schlüsse (auf derselben Stufe): \n\n   a) [u]Ganzformel -> Ganzformel[/u] \nAN -> Au \nNN -> uN \nusw. \n\nAus der Annahme\n  "Es gibt keine Nicht-Menschen." (uN)\nfolgt nicht:\n  "Es gibt Menschen." (Au)\n\n\n2. [u]Die zweite Stufe[/u]: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Zwei in Vier. Ab nun überschneiden sich Begriffe. Jetzt sind es Zwei. Es entstehen 16 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen unmittelbare Schlüsse zwischen Stufen: \n\nUnmittelbare Schlüsse zwischen Stufen: \n\n   b) [u]Ganzformel -> Teilformeln[/u]: \nANNA -> auau \n            -> aauu \n\n   c) [u]Teilformeln -> Ganzformel[/u]: \nuaua und \nuuaa und \nnunu und \nnnuu        -> NNNA \n\nZum Beispiel folgt aus: "Einige p sind q." (Auuu, piq)\n-->p (auau)\n-->q (aauu).\n\n[Und unmittelbare Schlüsse auf derselben (dyadischen) Stufe:] \n\n   •) Ganzformel -> Ganzformel \nSubalternation; Konversion, Obversion, Kontraposition, Partielle Inversion, Inversion; \n   •) Ganzformel <-> Ganzformel \nKontradiktorischer Widerspruch, Konträrer Widerspruch, Subkontrarietät \n\n\n3. [u]Die dritte Stufe[/u]: \nDer Unterschied der durch gleichzeitige Anwendung der beiden logischen Prinzipien definiert wird, teilt das Vier in Acht. Jetzt überschneiden sich drei Begriffe. Es entstehen 256 Möglichkeiten, die sich alle ausschließen. Werden unbestimmte Geltungswertstellen erlaubt, entstehen mittelbare Schlüsse innerhalb einer Stufe (z. B. die traditionelle (und die vollständige traditionelle) Syllogistik): \n\nMittelbare Schlüsse innerhalb einer Stufe (über Mittelbegriff): \n\n   d) [u]Teilformeln -> Teilformel[/u]: \naauunnaa und \naunaauna           -> auaunana \n\n\n\nMittelbar innerhalb einer Stufe kann erst ab dritter Stufe geschlossen werden. Dies geschieht über einen Mittelbegriff. Dabei werden die Geltungswertstellen und die dazugehörigen Geltungswerte jeweils um den sozusagen unbeteiligten Begriff verlängert. Aus zwei Formeln (zum Beispiel kategorische Urteile), folgt eine dritte Formel (zum Beispiel ein kategorisches Urteil):\n\nMaP, SaM -> SaP (Barbara).', size_hint_y=None, font_size= dp(18))
         self.text_3.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_3.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
         self.text_3.markup = True
@@ -786,7 +868,7 @@ class Menu_introductionScreen_2(Screen):
         self.layout.add_widget(self.menu_button)
         self.menu_button.bind(on_press=self.change_screen_menu)
         
-        self.root = ScrollView(size=(Window.width, Window.height))
+        self.root = ScrollView(size_hint=(1, None), size=(Window.width, Window.height))
         self.root.add_widget(self.layout)
         self.add_widget(self.root)
         
@@ -803,7 +885,7 @@ class Menu_introductionScreen_3(Screen):
         # Make sure the height is such that there is something to scroll.
         self.layout.bind(minimum_height=self.layout.setter('height'))
         
-        self.text_1 = Label(text='[u]Das Problem der Wahrheit[/u] \n\n"Ein [...] Problem [...] der Angewandten Logik überhaupt ist das der Wahrheit, d. h. der Richtigkeit im außerformalen Sinn. \nDafür gilt: Aus wahren Prämissen können sich (formallogisch korrekt) nur wahre Konklusionen ergeben. \n Wahre Konklusionen können aber unter Umständen auch aus falschen Prämissen folgen. \nz. B. \n   Alle Steine sind Lebewesen (f) \n   [u]Alle Menschen sind Steine (f)[/u] \n   Alle Menschen sind Lebewesen (w) \n[...]" \n(Grundlagen der Strengen Logik, S.161) \n\n\n[u]Transgressives Denken[/u] \n"[...] Ist für die Zukunft zu fordern, daß transgressives Denken grundsätzlich vermieden wird? Nicht unbedingt; unbekannte Bereiche sollte man möglichst weiterer Forschung zugänglich machen. Versuche mit Widerspruchsdialektiken und Selbstlimitationskonstruktionen können vielleicht ihre fruchtbaren Aspekte haben, aber nur dann, wenn sie von einem festen Ausgangspunkt unternommen werden. Sonst gerät man in willkürliche Kombinatorik und leere Spielerei." (Grundlagen der Strengen Logik, S. 223)', size_hint_y = None, font_size= 18)
+        self.text_1 = Label(text='[u]Das Problem der Wahrheit[/u] \n\n"Ein [...] Problem [...] der Angewandten Logik überhaupt ist das der Wahrheit, d. h. der Richtigkeit im außerformalen Sinn. \nDafür gilt: Aus wahren Prämissen können sich (formallogisch korrekt) nur wahre Konklusionen ergeben. \n Wahre Konklusionen können aber unter Umständen auch aus falschen Prämissen folgen. \nz. B. \n   Alle Steine sind Lebewesen (f) \n   [u]Alle Menschen sind Steine (f)[/u] \n   Alle Menschen sind Lebewesen (w) \n[...]" \n(Grundlagen der Strengen Logik, S.161) \n\n\n[u]Transgressives Denken[/u] \n"[...] Ist für die Zukunft zu fordern, daß transgressives Denken grundsätzlich vermieden wird? Nicht unbedingt; unbekannte Bereiche sollte man möglichst weiterer Forschung zugänglich machen. Versuche mit Widerspruchsdialektiken und Selbstlimitationskonstruktionen können vielleicht ihre fruchtbaren Aspekte haben, aber nur dann, wenn sie von einem festen Ausgangspunkt unternommen werden. Sonst gerät man in willkürliche Kombinatorik und leere Spielerei." (Grundlagen der Strengen Logik, S. 223)', size_hint_y = None, font_size= dp(18))
         self.text_1.markup = True
         self.text_1.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_1.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
@@ -819,80 +901,213 @@ class Menu_introductionScreen_3(Screen):
         self.add_widget(self.root)"""
         
 class Menu_conclusion_introductionScreen(Screen):
-    pass
+    tabelle2text = StringProperty('Überblick - Verlängerte\ndyadische Formeln')
+    tabelle_1b_text = StringProperty('Überblick - traditionelle\nSyllogistik')
+    tabelle_2_text = StringProperty('Überblick - vollständige\nSyllogistik')
 
-class Table_overviewScreen(Screen):
+
+    def __init__(self, **kwargs):
+        super(RelativeLayout, self).__init__(**kwargs)
+
+class Table_overviewScreen_1b(Screen):
 
     def change_screen_menu(self, *args):
         self.parent.current = 'menu'
- 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        
-        self.layout = GridLayout(cols= 9, pos_hint= {'y': .075}, size_hint_y= .925)
-        
-        list_text = ['M•P,', 'SaM', 'SäM', 'SeM', 'SëM', 'SiM', 'SïM', 'SoM', 'SöM',
-                     'S•M', ' ', ' ', ' ', '<=>', ' ', '<=>', ' ', ' ',
-                     '->S•P', ' ', ' ', ' ', 'MeS', ' ', 'MiS', ' ', ' ',
-                     'MaP', 'a', 'i', 'ö', 'ë', 'i', '-', '-', 'ö',
-                     ' ', '->i', ' ', ' ', '->o', ' ', ' ', ' ', ' ',
-                     ' ', '->ï', ' ', ' ', '->ö', ' ', ' ', ' ', ' ',
-                     'MäP', 'ï', 'ä', 'e', 'o', '-', 'ï', 'o', '-',
-                     ' ', ' ', '->i', '->o', ' ', ' ', ' ', ' ', ' ',
-                     ' ', ' ', '->ï', '->ö', ' ', ' ', ' ', ' ', ' ',
-                     'MeP', 'e', 'o', 'ï', 'ä', 'o', '-', '-', 'ï',
-                     ' ', '->o', ' ', ' ', '->i', ' ', ' ', ' ', ' ',
-                     ' ', '->ö', ' ', ' ', '->ï', ' ', ' ', ' ', ' ',
-                     'MëP', 'ö', 'ë', 'a', 'i', '-', 'ö', 'i', '-',
-                     '<=>', ' ', '->o', '->i', ' ', ' ', ' ', ' ', ' ',
-                     'PeM', ' ', '->ö', '->ï', ' ', ' ', ' ', ' ', ' ',
-                     'MiP', '-', 'i', 'ö', '-', '-', '-', '-', '-',
-                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-                     'MïP', 'ï', '-', '-', 'o', '-', '-', '-', '-',
-                     '<=>', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-                     'PiM', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-                     'MoP', '-', 'o', 'ï', '-', '-', '-', '-', '-',
-                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-                     'MöP', 'ö', '-', '-', 'i', '-', '-', '-', '-',
-                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
-        
-        for r in range(1,244):
-            lbl = Button(color= (0, 0, 0, 1), background_normal= '', text=(list_text[r-1]))
-            self.layout.add_widget(lbl)
 
-            if r==2 or r==3 or r==4 or r==5 or r==6 or r==7 or r==8 or r==9 or\
-            r==11 or r==12 or r==13 or r==14 or r==15 or r==16 or r==17 or r==18 or\
-            r==20 or r==21 or r==22 or r==23 or r==24 or r==25 or r==26 or r==27 or\
-            r==28 or r==37 or r==46 or r==55 or r==64 or r==73 or r==82 or r==91 or\
-            r==100 or r==109 or r==118 or r==127 or r==136 or r==145 or r==154 or r==163 or\
-            r==172 or r==181 or r==190 or r==199 or r==208 or r==217 or r==226 or r==235:
-                lbl.background_color=(.7, .6, 1, 1) #synthetic judges
+    def change_screen_tabelle_completes_syllogistic_screen(self, *args):
+        self.parent.current = 'table_overview'
+
+    def __init__(self, **kwargs):
+        super(RelativeLayout, self).__init__(**kwargs)
+        
+        self.layout = GridLayout(cols= 10, pos_hint= {'y': .15}, size_hint_y= .85)
+        
+        list_text = [' ', ' ', ' ', ' ', ' ', '2x', ' ', '2x', ' ', ' ',
+                     ' ', ' ', 'SaM', 'MaS', 'X', 'SeM', 'X', 'SiM', 'SoM', 'MoS',
+                     ' ', ' ', ' ', ' ', ' ', '<=>', ' ', '<=>', ' ', ' ',
+                     ' ', ' ', ' ', ' ', ' ', 'MeS', ' ', 'MiS', ' ', ' ',
+                     ' ', 'MaP', 'a', 'i', '-', '-', '-', 'i', '-', '-',
+                     ' ', ' ', '->i', ' ', '-', ' ', ' ', ' ', ' ', ' ',
+                     ' ', ' ', '-', ' ', '-', ' ', ' ', ' ', ' ', ' ',
+                     ' ', 'PaM', '-', '-', '-', 'e', '-', '-', 'o', '-',
+                     ' ', ' ', ' ', '->i', ' ', '-', ' ', ' ', ' ', ' ',
+                     ' ', ' ', ' ', '-', ' ', '->o', ' ', ' ', ' ', ' ',
+                     ' ', 'MeP', 'e', 'o', '-', '-', '-', 'o', '-', '-',
+                     '2x', '<=>', '-', ' ', '-', ' ', ' ', ' ', ' ', ' ',
+                     ' ', 'PeM', '->o', ' ', '-', ' ', ' ', ' ', ' ', ' ',
+                     ' ', 'X', '-', '-', '-', '-', '-', '-', '-', '-',
+                     ' ', ' ', ' ', '-', ' ', '-', ' ', ' ', ' ', ' ',
+                     ' ', ' ', ' ', '-', ' ', '-', ' ', ' ', ' ', ' ',
+                     ' ', 'MiP', '-', 'i', '-', '-', '-', '-', '-', '-',
+                     '2x', '<=>', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     ' ', 'PiM', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     ' ', 'X', '-', '-', '-', '-', '-', '-', '-', '-',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     ' ', 'MoP', '-', 'o', '-', '-', '-', '-', '-', '-',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     ' ', 'PoM', '-', '-', '-', '-', '-', '-', '-', '-',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+        
+        for r in range(280):
+            
+            if r!= 0 and r!=1 and r!=10 and r!=11 and r!=20 and r!=21 and r!=30 and r!=31:
+                    
+                lbl = CustomLabel(color= (0, 0, 0, 1), text=(list_text[r]))
+                self.layout.add_widget(lbl)
+
+                if r==3+9 or r==4+9 or r==15 or r==17 or r==9+9 or r==19 or\
+                r==12+10 or r==13+10 or r==25 or r==27 or r==18+10 or r==29 or\
+                r==21+11 or r==22+11 or r==35 or r==37 or r==27+11 or r==39 or\
+                r==28+12+1 or r==37+13+1 or r==46+14+1 or r==55+15+1 or r==64+16+1 or r==73+17+1 or r==82+18+1 or r==91+19+1 or\
+                r==100+20+1 or r==136+24+1 or r==145+25+1 or r==154+26+1 or\
+                r==190+30+1 or r==199+31+1 or r==208+32+1 or r==217+33+1 or r==226+34+1 or r==235+35+1:
+                    lbl.background_color=[.7, .6, 1, 1] #synthetic judges
                 
-            elif r==29 or r==30 or r==31 or r==32 or r==33 or r==34 or r==35 or r==36 or\
-            r==56 or r==57 or r==58 or r==59 or r==60 or r==61 or r==62 or r==63 or\
-            r==83 or r==84 or r==85 or r==86 or r==87 or r==88 or r==89 or r==90 or\
-            r==110 or r==111 or r==112 or r==113 or r==114 or r==115 or r==116 or r==117 or\
-            r==137 or r==138 or r==139 or r==140 or r==141 or r==142 or r==143 or r==144 or\
-            r==164 or r==165 or r==166 or r==167 or r==168 or r==169 or r==170 or r==171 or\
-            r==191 or r==192 or r==193 or r==194 or r==195 or r==196 or r==197 or r==198 or\
-            r==218 or r==219 or r==220 or r==221 or r==222 or r==223 or r==224 or r==225:
-                lbl.background_color=(.2, 7, .5, 1) #conclusion judges
+                elif r==5 or r==7 or r==14 or r==24 or r==34 or r==16 or r==26 or r==36 or\
+                     r==131 or r==141 or r==151 or r==191 or r==201 or r==211 or\
+                     r==100 or r==110 or r==120 or r==160 or r==170 or r==180:
+                    lbl.background_color=[1, 0, 0, 1] #traditional synthetic changes
                 
-            elif r==38 or r==41 or r==47 or r==50 or r==66 or r==67 or r==75 or r==76 or\
-            r==92 or r==95 or r==101 or r==104 or r==120 or r==121 or r==129 or r==130:
-                lbl.background_color=(.7, 1, .2, 1) #subaltern conclusion judges
+                elif r==42 or r==43 or r==44 or r==45 or r==46 or r==47 or r==48 or r==49 or\
+                r==72 or r==73 or r==74 or r==75 or r==76 or r==77 or r==78 or r==79 or\
+                r==102 or r==103 or r==104 or r==105 or r==106 or r==107 or r==108 or r==109 or\
+                r==132 or r==133 or r==134 or r==135 or r==136 or r==137 or r==138 or r==139 or\
+                r==162 or r==163 or r==164 or r==165 or r==166 or r==167 or r==168 or r==169 or\
+                r==192 or r==193 or r==194 or r==195 or r==196 or r==197 or r==198 or r==199 or\
+                r==222 or r==223 or r==224 or r==225 or r==226 or r==227 or r==228 or r==229 or\
+                r==252 or r==253 or r==254 or r==255 or r==256 or r==257 or r==258 or r==259:
+                    lbl.background_color=[.2, 7, .5, 1] #conclusion judges
+                    
+                elif r==52 or r==62 or r==54 or r==64 or r==83 or r==93 or r==85 or r==95 or\
+                     r==112 or r==122 or r==114 or r==124 or r==143 or r==153 or r== 145 or r==155:
+                    lbl.background_color=[.7, 1, .2, 1] #subaltern conclusion judges
+            else:
+                lbl = Label(text=' ')
+                self.layout.add_widget(lbl)
+
+        self.box_layout_tabelle_completes_syllogistic_button = BoxLayout(orientation='horizontal', size_hint_y= .075, pos_hint= {'x': 0, 'y':.075})
+
+        self.tabelle_completed_syllogisitc_button = Button(text='Überblick - vollständige Syllogistik', background_normal= '', background_color=(1, 1, 1, .5),color=(0, 0, 0, 1))
+        self.box_layout_tabelle_completes_syllogistic_button.add_widget(self.tabelle_completed_syllogisitc_button)
+        self.tabelle_completed_syllogisitc_button.bind(on_press=self.change_screen_tabelle_completes_syllogistic_screen)   
 
         self.box_layout_menu_button = BoxLayout(orientation='horizontal', size_hint_y= .075)
 
         self.menu_button = Button(text='Menü', background_normal= '', background_color=(1, 1, 1, .5),color=(0, 0, 0, 1))
         self.box_layout_menu_button.add_widget(self.menu_button)
-        self.menu_button.bind(on_press=self.change_screen_menu)        
+        self.menu_button.bind(on_press=self.change_screen_menu)
+        
+        
+        size_label = .11
+        pos_hint_y = .89
+        
+        self.label_traditional_syllogistik_table = Label(text= 'Keine\nNormal-\nform', size_hint= (.2, size_label), pos_hint= {'x':0, 'y': pos_hint_y})
 
         self.add_widget(self.layout)
+        self.add_widget(self.box_layout_tabelle_completes_syllogistic_button)
         self.add_widget(self.box_layout_menu_button)
+        self.add_widget(self.label_traditional_syllogistik_table)
+
+
+class Table_overviewScreen(Screen):
+
+    def change_screen_menu(self, *args):
+        self.parent.current = 'menu'
+        
+    def change_screen_tabelle_traditional_syllogistic_screen(self, *args):
+        self.parent.current = 'table_overview_1b'
+ 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
+        self.layout = GridLayout(cols= 9, pos_hint= {'y': .15}, size_hint_y= .85)
+        
+        list_text = [' ,', 'SaM', 'SãM', 'SëM', 'SeM', 'SïM', 'SiM', 'SoM', 'SõM',
+                     ' ', ' ', ' ', ' ', '', ' ', ' ', ' ', ' ',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     'MaP', 'a', 'i', 'ë', 'õ', '-', 'i', '-', 'õ',
+                     ' ', '->i', ' ', '->õ', ' ', ' ', ' ', ' ', ' ',
+                     ' ', '->ï', ' ', '->o', ' ', ' ', ' ', ' ', ' ',
+                     'MãP', 'ï', 'ã', 'o', 'e', 'ï', '-', 'o', '-',
+                     ' ', ' ', '->i', ' ', '->õ', ' ', ' ', ' ', ' ',
+                     ' ', ' ', '->ï', ' ', '->o', ' ', ' ', ' ', ' ',
+                     'MeP', 'e', 'o', 'ã', 'ï', '-', 'o', '-', 'ï',
+                     ' ', '->õ', ' ', '->i', ' ', ' ', ' ', ' ', ' ',
+                     ' ', '->o', ' ', '->ï', ' ', ' ', ' ', ' ', ' ',
+                     'MëP', 'õ', 'ë', 'i', 'a', 'õ', '-', 'i', '-',
+                     ' ', ' ', '->õ', ' ', '->i', ' ', ' ', ' ', ' ',
+                     ' ', ' ', '->o', ' ', '->ï', ' ', ' ', ' ', ' ',
+                     'MiP', '-', 'i', '-', 'õ', '-', '-', '-', '-',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     'MïP', 'ï', '-', 'o', '-', '-', '-', '-', '-',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     'MoP', '-', 'o', '-', 'ï', '-', '-', '-', '-',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     'MõP', 'õ', '-', 'i', '-', '-', '-', '-', '-',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+                     ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+        
+        for r in range(1,244):
+            if r!= 1 and r!=10 and r!=19:
+                
+                lbl = CustomLabel(color= (0, 0, 0, 1), text=(list_text[r-1]))
+                self.layout.add_widget(lbl)
+
+                if r==2 or r==3 or r==4 or r==5 or r==6 or r==7 or r==8 or r==9 or\
+                r==11 or r==12 or r==13 or r==14 or r==15 or r==16 or r==17 or r==18 or\
+                r==20 or r==21 or r==22 or r==23 or r==24 or r==25 or r==26 or r==27 or\
+                r==28 or r==37 or r==46 or r==55 or r==64 or r==73 or r==82 or r==91 or\
+                r==100 or r==109 or r==118 or r==127 or r==136 or r==145 or r==154 or r==163 or\
+                r==172 or r==181 or r==190 or r==199 or r==208 or r==217 or r==226 or r==235:
+                    lbl.background_color=[.7, .6, 1, 1] #synthetic judges
+                    
+                elif r==29 or r==30 or r==31 or r==32 or r==33 or r==34 or r==35 or r==36 or\
+                r==56 or r==57 or r==58 or r==59 or r==60 or r==61 or r==62 or r==63 or\
+                r==83 or r==84 or r==85 or r==86 or r==87 or r==88 or r==89 or r==90 or\
+                r==110 or r==111 or r==112 or r==113 or r==114 or r==115 or r==116 or r==117 or\
+                r==137 or r==138 or r==139 or r==140 or r==141 or r==142 or r==143 or r==144 or\
+                r==164 or r==165 or r==166 or r==167 or r==168 or r==169 or r==170 or r==171 or\
+                r==191 or r==192 or r==193 or r==194 or r==195 or r==196 or r==197 or r==198 or\
+                r==218 or r==219 or r==220 or r==221 or r==222 or r==223 or r==224 or r==225:
+                    lbl.background_color=[.2, 7, .5, 1] #conclusion judges
+                    
+                elif r==38 or r==40 or r==47 or r==49 or r==66 or r==68 or r==75 or r==77 or\
+                r==92 or r==94 or r==101 or r==103 or r==120 or r==122 or r==129 or r==131:
+                    lbl.background_color=[.7, 1, .2, 1] #subaltern conclusion judges
+            else:
+                lbl = Label(text=' ')
+                self.layout.add_widget(lbl)
+
+        self.box_layout_tabelle_traditional_syllogistic_button = BoxLayout(orientation='horizontal', size_hint_y= .075, pos_hint= {'x': 0, 'y':.075})
+
+        self.tabelle_completed_traditional_button = Button(text='Überblick - traditionelle Syllogistik', background_normal= '', background_color=(1, 1, 1, .5),color=(0, 0, 0, 1))
+        self.box_layout_tabelle_traditional_syllogistic_button.add_widget(self.tabelle_completed_traditional_button)
+        self.tabelle_completed_traditional_button.bind(on_press=self.change_screen_tabelle_traditional_syllogistic_screen)   
+
+        
+        self.box_layout_menu_button = BoxLayout(orientation='horizontal', size_hint_y= .075)
+
+        self.menu_button = Button(text='Menü', background_normal= '', background_color=(1, 1, 1, .5),color=(0, 0, 0, 1))
+        self.box_layout_menu_button.add_widget(self.menu_button)
+        self.menu_button.bind(on_press=self.change_screen_menu)
+        
+        size_hint_x_variabel = .111
+        size_hint_y_variabel = .1
+        pos_hint_variable= .9
+        
+        self.label_traditional_syllogistik_table = Label(text= 'M•P\n[u]S•M[/u]\nS•P', size_hint= (size_hint_x_variabel, size_hint_y_variabel), pos_hint= {'x':0, 'y': pos_hint_variable})
+        self.label_traditional_syllogistik_table.markup = True
+
+        self.add_widget(self.layout)
+        self.add_widget(self.box_layout_tabelle_traditional_syllogistic_button)
+        self.add_widget(self.box_layout_menu_button)
+        self.add_widget(self.label_traditional_syllogistik_table)
 
 class Table_overviewScreen_2(Screen):
 
@@ -924,7 +1139,7 @@ class Table_overviewScreen_2(Screen):
                                 "CÜ'D", "C$'D",  "C&'D", "CÖ'D","C%'D", "C@'D", "CÄ'D", "C#'D"]
                 
 #1.2
-        self.layout = BoxLayout(orientation= 'horizontal', size_hint_x= 1, size_hint_y=1)
+        self.layout = BoxLayout(orientation= 'horizontal', size_hint_x = None, width= Window.height, size_hint_y=1)
         
 
         
@@ -996,7 +1211,7 @@ class Table_overviewScreen_2(Screen):
         #self.add_widget(self.layout)
         self.layout.add_widget(self.box_layout_menu_button)
 
-        self.root = ScrollView(size=(Window.width, Window.height))
+        self.root = ScrollView(size_hint= (None, 1), size=(Window.width, Window.height))
         self.root.add_widget(self.layout)
         self.add_widget(self.root)
         
@@ -1010,21 +1225,23 @@ class TrainingScreen(Screen):
     active_4_dummy = False
     
     def dyadic_name_first_formula(self, formula):
+        completedsyllogistic = self.function_completed_syllogistic_settings()#looks for setting
+
         if formula == ['a', 'u', 'n', 'a']: # traditionelle Syllogistik
             return "MaP"
         elif formula == ['n', 'a', 'a', 'u']:
             return "MeP"
-        elif formula == ['a', 'u', 'n', 'a']:
+        elif formula == ['a', 'u', 'u', 'u']:
             return "MiP"
         elif formula == ['u', 'u', 'a', 'u']:
             return "MoP"
-        elif formula == ['a', 'n', 'u', 'a']:
+        elif (completedsyllogistic == 0) and formula == ['a', 'n', 'u', 'a']:
             return "PaM"
-        elif formula == ['n', 'a', 'a', 'u']:
+        elif (completedsyllogistic == 0) and formula == ['n', 'a', 'a', 'u']:
             return "PeM"
-        elif formula == ['a', 'u', 'u', 'u']:
+        elif (completedsyllogistic == 0) and formula == ['a', 'u', 'u', 'u']:
             return "PiM"
-        elif formula == ['u', 'a', 'u', 'u']:
+        elif (completedsyllogistic == 0) and formula == ['u', 'a', 'u', 'u']:
             return "PoM"
         elif formula == ['a', 'n', 'u', 'a']:
             return "MãP" # vervollständigte Syllogistik
@@ -1043,37 +1260,37 @@ class TrainingScreen(Screen):
         elif formula == ['u', 'u', 'a', 'u']:
             return "PõM"
         elif formula == ['a', 'a', 'a', 'a']: # Dyadische Formeln
-            return "P#M"
+            return "M#P"
         elif formula == ['a', 'a', 'a', 'n']:
-            return "PÄM"
+            return "MÄP"
         elif formula == ['a', 'n', 'a', 'a']:
-            return "PÖM"
+            return "MÖP"
         elif formula == ['a', 'n', 'a', 'n']:
-            return "P&M"
+            return "M&P"
         elif formula == ['a', 'a', 'n', 'a']:
-            return "P@M"
+            return "M@P"
         elif formula == ['a', 'a', 'n', 'n']:
-            return "P%M"
+            return "M%P"
         elif formula == ['a', 'n', 'n', 'a']:
-            return "P$M"
+            return "M$P"
         elif formula == ['a', 'n', 'n', 'n']:
-            return "PÜM"
+            return "MÜP"
         elif formula == ['n', 'a', 'a', 'a']:
-            return "PÜ'M"
+            return "MÜ'P"
         elif formula == ['n', 'a', 'a', 'n']:
-            return "P$'M"
+            return "M$'P"
         elif formula == ['n', 'n', 'a', 'a']:
-            return "P%'M"
+            return "M%'P"
         elif formula == ['n', 'n', 'a', 'n']:
-            return "P@'M"
+            return "M@'P"
         elif formula == ['n', 'a', 'n', 'a']:
-            return "P&'M"
+            return "M&'P"
         elif formula == ['n', 'a', 'n', 'n']:
-            return "PÖ'M"
+            return "MÖ'P"
         elif formula == ['n', 'n', 'n', 'a']:
-            return "PÄ'M"
+            return "MÄ'P"
         elif formula == ['n', 'n', 'n', 'n']:
-            return "P#'M"
+            return "M#'P"
         elif formula == ['a', 'u', 'a', 'u']: # erweiterte Syllogistik (naheliegend)
             return "MioP"
         elif formula == ['a', 'a', 'u', 'u']:
@@ -1094,21 +1311,23 @@ class TrainingScreen(Screen):
             return " "
         
     def dyadic_name_second_formula(self, formula):
+        completedsyllogistic = self.function_completed_syllogistic_settings()#looks for setting
+        
         if formula == ['a', 'u', 'n', 'a']: # traditionelle Syllogistik
             return "SaM"
         elif formula == ['n', 'a', 'a', 'u']:
             return "SeM"
-        elif formula == ['a', 'u', 'n', 'a']:
+        elif formula == ['a', 'u', 'u', 'u']:
             return "SiM"
         elif formula == ['u', 'u', 'a', 'u']:
             return "SoM"
-        elif formula == ['a', 'n', 'u', 'a']:
+        elif (completedsyllogistic == 0) and formula == ['a', 'n', 'u', 'a']:
             return "MaS"
-        elif formula == ['n', 'a', 'a', 'u']:
+        elif (completedsyllogistic == 0) and formula == ['n', 'a', 'a', 'u']:
             return "MeS"
-        elif formula == ['a', 'u', 'u', 'u']:
+        elif (completedsyllogistic == 0) and formula == ['a', 'u', 'u', 'u']:
             return "MiS"
-        elif formula == ['u', 'a', 'u', 'u']:
+        elif (completedsyllogistic == 0) and formula == ['u', 'a', 'u', 'u']:
             return "MoS"
         elif formula == ['a', 'n', 'u', 'a']:
             return "SãM" # vervollständigte Syllogistik
@@ -1117,7 +1336,7 @@ class TrainingScreen(Screen):
         elif formula == ['u', 'u', 'u', 'a']:
             return "SïM"
         elif formula == ['u', 'a', 'u', 'u']:
-            return "MõM"
+            return "SõM"
         elif formula == ['a', 'u', 'n', 'a']:
             return "MãS"
         elif formula == ['u', 'a', 'a', 'n']:
@@ -1127,37 +1346,37 @@ class TrainingScreen(Screen):
         elif formula == ['u', 'u', 'a', 'u']:
             return "MõS"
         elif formula == ['a', 'a', 'a', 'a']: # Dyadische Formeln
-            return "M#S"
+            return "S#M"
         elif formula == ['a', 'a', 'a', 'n']:
-            return "MÄS"
+            return "SÄM"
         elif formula == ['a', 'n', 'a', 'a']:
-            return "MÖS"
+            return "SÖM"
         elif formula == ['a', 'n', 'a', 'n']:
-            return "M&S"
+            return "S&M"
         elif formula == ['a', 'a', 'n', 'a']:
-            return "M@S"
+            return "S@M"
         elif formula == ['a', 'a', 'n', 'n']:
-            return "M%S"
+            return "S%M"
         elif formula == ['a', 'n', 'n', 'a']:
-            return "M$S"
+            return "S$M"
         elif formula == ['a', 'n', 'n', 'n']:
-            return "MÜS"
+            return "SÜM"
         elif formula == ['n', 'a', 'a', 'a']:
-            return "MÜ'S"
+            return "SÜ'M"
         elif formula == ['n', 'a', 'a', 'n']:
-            return "M$'S"
+            return "S$'M"
         elif formula == ['n', 'n', 'a', 'a']:
-            return "M%'S"
+            return "S%'M"
         elif formula == ['n', 'n', 'a', 'n']:
-            return "M@'S"
+            return "S@'M"
         elif formula == ['n', 'a', 'n', 'a']:
-            return "M&'S"
+            return "S&'M"
         elif formula == ['n', 'a', 'n', 'n']:
-            return "MÖ'S"
+            return "SÖ'M"
         elif formula == ['n', 'n', 'n', 'a']:
-            return "MÄ'S"
+            return "SÄ'M"
         elif formula == ['n', 'n', 'n', 'n']:
-            return "M#'S"
+            return "S#'M"
         elif formula == ['a', 'u', 'a', 'u']: # erweiterte Syllogistik (naheliegend)
             return "SioM"
         elif formula == ['a', 'a', 'u', 'u']:
@@ -1182,18 +1401,10 @@ class TrainingScreen(Screen):
             return "SaP"
         elif formula == ['n', 'a', 'a', 'u']:
             return "SeP"
-        elif formula == ['a', 'u', 'n', 'a']:
+        elif formula == ['a', 'u', 'u', 'u']:
             return "SiP"
         elif formula == ['u', 'u', 'a', 'u']:
             return "SoP"
-        elif formula == ['a', 'n', 'u', 'a']:
-            return "PaS"
-        elif formula == ['n', 'a', 'a', 'u']:
-            return "PeS"
-        elif formula == ['a', 'u', 'u', 'u']:
-            return "PiS"
-        elif formula == ['u', 'a', 'u', 'u']:
-            return "PoS"
         elif formula == ['a', 'n', 'u', 'a']:
             return "SãP" # vervollständigte Syllogistik
         elif formula == ['u', 'a', 'a', 'n']:
@@ -1202,14 +1413,6 @@ class TrainingScreen(Screen):
             return "SïP"
         elif formula == ['u', 'a', 'u', 'u']:
             return "SõP"
-        elif formula == ['a', 'u', 'n', 'a']:
-            return "PãS"
-        elif formula == ['u', 'a', 'a', 'n']:
-            return "PëS"
-        elif formula == ['u', 'u', 'u', 'a']:
-            return "PïS"
-        elif formula == ['u', 'u', 'a', 'u']:
-            return "PõS"
         elif formula == ['a', 'a', 'a', 'a']:
             return "S#P"
         elif formula == ['a', 'a', 'a', 'n']:
@@ -1243,15 +1446,53 @@ class TrainingScreen(Screen):
         elif formula == ['n', 'n', 'n', 'n']:
             return "S#'P"
         elif formula == ['a', 'u', 'a', 'u']: # erweiterte Syllogistik
-            return "PioS"
+            return "SioP"
         elif formula == ['a', 'a', 'u', 'u']:
-            return "PiõS"
+            return "SiõP"
         elif formula == ['u', 'a', 'a', 'u']:
-            return "PoõS"
+            return "SoõP"
         elif formula == ['u', 'u', 'a', 'a']:
-            return "PoïS"
+            return "SoïP"
         elif formula == ['u', 'a', 'u', 'a']:
-            return "PõïS"
+            return "SõïP"
+        elif formula == "?":
+            return "?"
+        else:
+            return " "
+        
+    def dyadic_name_third_formula_traditional(self, formula):
+        if formula == ['a', 'u', 'n', 'a']: # traditionelle Syllogistik
+            return "SaP"
+        elif formula == ['n', 'a', 'a', 'u']:
+            return "SeP"
+        elif formula == ['a', 'u', 'u', 'u']:
+            return "SiP"
+        elif formula == ['u', 'u', 'a', 'u']:
+            return "SoP"
+        elif formula == ['a', 'n', 'u', 'a']:
+            return "(PaS)"
+        elif formula == ['n', 'a', 'a', 'u']:
+            return "(PeS)"
+        elif formula == ['a', 'u', 'u', 'u']:
+            return "(PiS)"
+        elif formula == ['u', 'a', 'u', 'u']:
+            return "(PoS)"
+        elif formula == ['a', 'n', 'u', 'a']:
+            return "(SãP)" # vervollständigte Syllogistik
+        elif formula == ['u', 'a', 'a', 'n']:
+            return "(SëP)"
+        elif formula == ['u', 'u', 'u', 'a']:
+            return "(SïP)"
+        elif formula == ['u', 'a', 'u', 'u']:
+            return "(SõP)"
+        elif formula == ['a', 'u', 'n', 'a']:
+            return "(PãS)"
+        elif formula == ['u', 'a', 'a', 'n']:
+            return "(PëS)"
+        elif formula == ['u', 'u', 'u', 'a']:
+            return "(PïS)"
+        elif formula == ['u', 'u', 'a', 'u']:
+            return "(PõS)"
         else:
             return " "
 
@@ -1277,7 +1518,7 @@ class TrainingScreen(Screen):
         elif premis_one == "PeM" and premis_two == "SaM":
             return ("Wenn kein Knollenblätterpilz essbar ist \nund alle Steinpilze essbar sind, \nso sind einige Steinpilze keine Knollenblätterpilze.")
         elif premis_one == "MaP" and premis_two == "MiS":
-            return ("Wenn für alle Dreiecke gilt, \ndass sich ein Kreis so um sie beschreiben lässt, \ndass die Eckpunkte auf dem Kreis liegen \nund wenn für alle Dreiecke gilt, \ndass sich in sie ein Kreis so beschreiben lässt, \ndass er alle drei Seiten berührt, \nso lässt sich bei einigen Figuren, \nin die sich ein Kreis beschreiben lässt, \nauch ein Kreis um diese Figur beschreiben.")
+            return ("Wenn für alle Dreiecke gilt, dass sich ein Kreis so um sie beschreiben lässt, dass die Eckpunkte auf dem Kreis liegen \nund wenn für alle Dreiecke gilt, dass sich in sie ein Kreis so beschreiben lässt, dass er alle drei Seiten berührt, \nso lässt sich bei einigen Figuren, in die sich ein Kreis beschreiben lässt, auch ein Kreis um diese Figur beschreiben.")
         elif premis_one == "MiP" and premis_two == "MaS":
             return ("Wenn einige Koniferen Weimutskiefern sind \nund alle Koniferen Nadelgehölze, \nso sind einige Nadelgehölze Weimutskiefern.")
         elif premis_one == "MeP" and premis_two == "MiS":
@@ -1309,7 +1550,7 @@ class TrainingScreen(Screen):
         elif premis_one == "MãP" and premis_two == "SãM":
             return ("Wenn kein Nicht-Mitglied Vorsitzender werden kann \nund kein Nicht-Schwimmer Mitglied ist, \nso kann kein Nicht-Schwimmer Vorsitzender werden.")
         elif premis_one == "MëP" and premis_two == "SãM":
-            return ("Wenn alle Nicht-Akademiker schlechtere Beförderungschancen haben \nund alle, die keine höhere Schule besuchten, keine Akademiker sind, \nso haben alle, die keine höhere Schule besuchten, \nschlechtere Beförderungsaussichten.")
+            return ("Wenn alle Nicht-Akademiker schlechtere Beförderungschancen haben \nund alle, die keine höhere Schule besuchten, keine Akademiker sind, \nso haben alle, die keine höhere Schule besuchten, schlechtere Beförderungsaussichten.")
         elif premis_one == "MeP" and premis_two == "SëM":
             return ("Wenn alle Primzahlen keine Quadratzahlen sind \nund nicht teilbare Zahlen Primzahlen sind, \nso sind nicht teilbare Zahlen keine Quadratzahlen.")
         elif premis_one == "MeP" and premis_two == "SeM":
@@ -1560,30 +1801,47 @@ class TrainingScreen(Screen):
             self.n_goes_into_conclusion.append([[0], [0]])
             self.n_goes_into_conclusion.append([[0], [2]])
             return ("n")
-        elif second_formula[0] == "n" and first_formula[1] == "n":
+        if second_formula[0] == "n" and first_formula[1] == "n":
             self.n_goes_into_conclusion.append([[1], [0]])
             self.n_goes_into_conclusion.append([[0], [2]])
             return ("n")
-        elif first_formula[0] == "n" and second_formula[2] == "n":
+        if first_formula[0] == "n" and second_formula[2] == "n":
             self.n_goes_into_conclusion.append([[0], [0]])
             self.n_goes_into_conclusion.append([[1], [2]])
             return ("n")
-        elif second_formula[0] == "n" and second_formula[2] == "n":
+        if second_formula[0] == "n" and second_formula[2] == "n":
             self.n_goes_into_conclusion.append([[1], [0]])
             self.n_goes_into_conclusion.append([[1], [2]])
             return ("n")
-        elif first_formula[0] == "a" and second_formula[1] == "n" and second_formula[
+        if first_formula[0] == "a" and second_formula[1] == "n" and second_formula[
             0] != "n":  # calculates potential "a"-values of first value
             self.a_goes_into_conclusion.append([[0], [0]]) # first value: first or second premis, second value: from [0] to [7]
+
+        if second_formula[0] == "a" and first_formula[2] == "n" and first_formula[0] != "n":
+            self.a_goes_into_conclusion.append([[1], [0]])
+
+        if first_formula[1] == "a" and second_formula[3] == "n" and second_formula[2] != "n":
+            self.a_goes_into_conclusion.append([[0], [2]])
+
+        if second_formula[2] == "a" and first_formula[3] == "n" and first_formula[1] != "n":
+            self.a_goes_into_conclusion.append([[1], [2]])
+
+        if first_formula[0] == "n" and first_formula[1] == "n":  # caluculates potential "n"-values of first value
+            return ("n")
+        elif second_formula[0] == "n" and first_formula[1] == "n":
+            return ("n")
+        elif first_formula[0] == "n" and second_formula[2] == "n":
+            return ("n")
+        elif second_formula[0] == "n" and second_formula[2] == "n":
+            return ("n")
+        elif first_formula[0] == "a" and second_formula[1] == "n" and second_formula[
+            0] != "n":  # calculates potential "a"-values of first value
             return ("a")
         elif second_formula[0] == "a" and first_formula[2] == "n" and first_formula[0] != "n":
-            self.a_goes_into_conclusion.append([[1], [0]])
             return ("a")
         elif first_formula[1] == "a" and second_formula[3] == "n" and second_formula[2] != "n":
-            self.a_goes_into_conclusion.append([[0], [2]])
             return ("a")
         elif second_formula[2] == "a" and first_formula[3] == "n" and first_formula[1] != "n":
-            self.a_goes_into_conclusion.append([[1], [2]])
             return ("a")
         else:  # calculates potential "u"-values of first value
             return ("u")
@@ -1592,31 +1850,48 @@ class TrainingScreen(Screen):
         if first_formula[0] == "n" and first_formula[1] == "n":  # caluculates potential "n"-values of second value
             self.n_goes_into_conclusion.append([[0], [1]])
             self.n_goes_into_conclusion.append([[0], [3]])
-            return ("n")
-        elif second_formula[1] == "n" and first_formula[1] == "n":
+
+        if second_formula[1] == "n" and first_formula[1] == "n":
             self.n_goes_into_conclusion.append([[1], [1]])
             self.n_goes_into_conclusion.append([[0], [3]])
-            return ("n")
-        elif first_formula[0] == "n" and second_formula[3] == "n":
+
+        if first_formula[0] == "n" and second_formula[3] == "n":
             self.n_goes_into_conclusion.append([[0], [1]])
             self.n_goes_into_conclusion.append([[1], [3]])
-            return ("n")
-        elif second_formula[1] == "n" and second_formula[3] == "n":
+
+        if second_formula[1] == "n" and second_formula[3] == "n":
             self.n_goes_into_conclusion.append([[1], [1]])
             self.n_goes_into_conclusion.append([[1], [3]])
+
+        if first_formula[0] == "a" and second_formula[0] == "n" and second_formula[
+            1] != "n":  # calculates potential "a"-values of second value
+            self.a_goes_into_conclusion.append([[0], [1]])
+
+        if second_formula[1] == "a" and first_formula[2] == "n" and first_formula[0] != "n":
+            self.a_goes_into_conclusion.append([[1], [1]])
+
+        if first_formula[1] == "a" and second_formula[2] == "n" and second_formula[3] != "n":
+            self.a_goes_into_conclusion.append([[0], [3]])
+
+        if second_formula[3] == "a" and first_formula[3] == "n" and first_formula[1] != "n":
+            self.a_goes_into_conclusion.append([[1], [3]])
+
+        if first_formula[0] == "n" and first_formula[1] == "n":  # caluculates potential "n"-values of second value
+            return ("n")
+        elif second_formula[1] == "n" and first_formula[1] == "n":
+            return ("n")
+        elif first_formula[0] == "n" and second_formula[3] == "n":
+            return ("n")
+        elif second_formula[1] == "n" and second_formula[3] == "n":
             return ("n")
         elif first_formula[0] == "a" and second_formula[0] == "n" and second_formula[
             1] != "n":  # calculates potential "a"-values of second value
-            self.a_goes_into_conclusion.append([[0], [1]])
             return ("a")
         elif second_formula[1] == "a" and first_formula[2] == "n" and first_formula[0] != "n":
-            self.a_goes_into_conclusion.append([[1], [1]])
             return ("a")
         elif first_formula[1] == "a" and second_formula[2] == "n" and second_formula[3] != "n":
-            self.a_goes_into_conclusion.append([[0], [3]])
             return ("a")
         elif second_formula[3] == "a" and first_formula[3] == "n" and first_formula[1] != "n":
-            self.a_goes_into_conclusion.append([[1], [3]])
             return ("a")
         else:  # calculates potential "u"-values of second value
             return ("u")
@@ -1625,30 +1900,46 @@ class TrainingScreen(Screen):
         if first_formula[2] == "n" and first_formula[3] == "n":
             self.n_goes_into_conclusion.append([[0], [4]])
             self.n_goes_into_conclusion.append([[0], [6]])
-            return ("n")
-        elif second_formula[0] == "n" and first_formula[3] == "n":
+
+        if second_formula[0] == "n" and first_formula[3] == "n":
             self.n_goes_into_conclusion.append([[1], [4]])
             self.n_goes_into_conclusion.append([[0], [6]])
-            return ("n")
-        elif first_formula[2] == "n" and second_formula[2] == "n":
+
+        if first_formula[2] == "n" and second_formula[2] == "n":
             self.n_goes_into_conclusion.append([[0], [4]])
             self.n_goes_into_conclusion.append([[1], [6]])
-            return ("n")
-        elif second_formula[0] == "n" and second_formula[2] == "n":
+
+        if second_formula[0] == "n" and second_formula[2] == "n":
             self.n_goes_into_conclusion.append([[1], [4]])
             self.n_goes_into_conclusion.append([[1], [6]])
+
+        if first_formula[2] == "a" and second_formula[1] == "n" and second_formula[0] != "n":
+            self.a_goes_into_conclusion.append([[0], [4]])
+
+        if second_formula[0] == "a" and first_formula[0] == "n" and first_formula[2] != "n":
+            self.a_goes_into_conclusion.append([[1], [4]])
+
+        if first_formula[3] == "a" and second_formula[3] == "n" and second_formula[2] != "n":
+            self.a_goes_into_conclusion.append([[0], [6]])
+
+        if second_formula[2] == "a" and first_formula[1] == "n" and first_formula[3] != "n":
+            self.a_goes_into_conclusion.append([[1], [6]])
+
+        if first_formula[2] == "n" and first_formula[3] == "n":
+            return ("n")
+        elif second_formula[0] == "n" and first_formula[3] == "n":
+            return ("n")
+        elif first_formula[2] == "n" and second_formula[2] == "n":
+            return ("n")
+        elif second_formula[0] == "n" and second_formula[2] == "n":
             return ("n")
         elif first_formula[2] == "a" and second_formula[1] == "n" and second_formula[0] != "n":
-            self.a_goes_into_conclusion.append([[0], [4]])
             return ("a")
         elif second_formula[0] == "a" and first_formula[0] == "n" and first_formula[2] != "n":
-            self.a_goes_into_conclusion.append([[1], [4]])
             return ("a")
         elif first_formula[3] == "a" and second_formula[3] == "n" and second_formula[2] != "n":
-            self.a_goes_into_conclusion.append([[0], [6]])
             return ("a")
         elif second_formula[2] == "a" and first_formula[1] == "n" and first_formula[3] != "n":
-            self.a_goes_into_conclusion.append([[1], [6]])
             return ("a")
         else:
             return ("u")
@@ -1657,30 +1948,47 @@ class TrainingScreen(Screen):
         if first_formula[2] == "n" and first_formula[3] == "n":
             self.n_goes_into_conclusion.append([[0], [5]])
             self.n_goes_into_conclusion.append([[0], [7]])
-            return ("n")
-        elif second_formula[1] == "n" and first_formula[3] == "n":
+
+        if second_formula[1] == "n" and first_formula[3] == "n":
             self.n_goes_into_conclusion.append([[1], [5]])
             self.n_goes_into_conclusion.append([[0], [7]])
-            return ("n")
-        elif first_formula[2] == "n" and second_formula[3] == "n":
+
+        if first_formula[2] == "n" and second_formula[3] == "n":
             self.n_goes_into_conclusion.append([[0], [5]])
             self.n_goes_into_conclusion.append([[1], [7]])
-            return ("n")
-        elif second_formula[1] == "n" and second_formula[3] == "n":
+
+        if second_formula[1] == "n" and second_formula[3] == "n":
             self.n_goes_into_conclusion.append([[1], [5]])
             self.n_goes_into_conclusion.append([[1], [7]])
+
+        if first_formula[2] == "a" and second_formula[0] == "n" and second_formula[1] != "n":
+            self.a_goes_into_conclusion.append([[0], [5]])
+
+        if second_formula[1] == "a" and first_formula[0] == "n" and first_formula[2] != "n":
+            self.a_goes_into_conclusion.append([[1], [5]])
+
+        if first_formula[3] == "a" and second_formula[2] == "n" and second_formula[3] != "n":
+            self.a_goes_into_conclusion.append([[0], [7]])
+
+        if second_formula[3] == "a" and first_formula[1] == "n" and first_formula[3] != "n":
+            self.a_goes_into_conclusion.append([[1], [7]])
+
+        
+        if first_formula[2] == "n" and first_formula[3] == "n":
+            return ("n")
+        elif second_formula[1] == "n" and first_formula[3] == "n":
+            return ("n")
+        elif first_formula[2] == "n" and second_formula[3] == "n":
+            return ("n")
+        elif second_formula[1] == "n" and second_formula[3] == "n":
             return ("n")
         elif first_formula[2] == "a" and second_formula[0] == "n" and second_formula[1] != "n":
-            self.a_goes_into_conclusion.append([[0], [5]])
             return ("a")
         elif second_formula[1] == "a" and first_formula[0] == "n" and first_formula[2] != "n":
-            self.a_goes_into_conclusion.append([[1], [5]])
             return ("a")
         elif first_formula[3] == "a" and second_formula[2] == "n" and second_formula[3] != "n":
-            self.a_goes_into_conclusion.append([[0], [7]])
             return ("a")
         elif second_formula[3] == "a" and first_formula[1] == "n" and first_formula[3] != "n":
-            self.a_goes_into_conclusion.append([[1], [7]])
             return ("a")
         else:
             return ("u")
@@ -1708,7 +2016,7 @@ class TrainingScreen(Screen):
         elif solution == ["u", "u", "a", "u"]:
             return "Einige S sind nicht P,\nauch bekannt als SoP"
         elif (completedsyllogistic == 0) and (self.advice_premis_1 == "anua") and (self.advice_premis_2 == "anua"): #traditionelle Syllogistik: wegen des (abgeschwächten) Schlusses "Darapti"
-            return "Some S are P,\nauch bekannt als SiP"
+            return "Einige S sind P,\nauch bekannt als SiP"
         elif (completedsyllogistic == 1) and (solution == ["a", "n", "u", "a"]): # vervollständigte Syllogistik
             return "Alle P sind S,\nauch bekannt als SãP"
         elif (completedsyllogistic == 1) and (solution == ["u", "a", "a", "n"]):
@@ -1734,6 +2042,7 @@ class TrainingScreen(Screen):
 
 
     def append_function(self, button):
+
         if foo_1 == []:
             if button == self.btn_n:
                 z = foo_1.append('n')
@@ -1894,6 +2203,7 @@ class TrainingScreen(Screen):
                 self.btn_8_p2.background_color=(1, 1, 1, 1)
         if len(foo_1) == 8:
             self.second_formula = foo_1[4:8]
+            
             self.premis_two_label.text = self.dyadic_name_second_formula(self.second_formula)
             self.btn_n.disabled = True
             self.btn_a.disabled = True
@@ -1925,13 +2235,17 @@ class TrainingScreen(Screen):
     def on_checkbox_Active_3(self, checkboxInstance, isActive):
         if isActive:
             self.lbl_active_example.text = self.syllogism_example_text
+            if self.lbl_active_example.text != "Kein Beispielsatz vorhanden.":
+                self.lbl_example_quote.text = 'Aus: "Einführung in die formale Logik", Albert Menne'
         else:
-            self.lbl_active_example.text = "AUS"
+            self.lbl_active_example.text = " "
+            self.lbl_example_quote.text = " "
         
     def on_checkbox_Active_4(self, checkboxInstance, isActive):
         global active_4_dummy
         
         active_4_dummy = isActive
+        
         
         if isActive:
             self.label_first_premis.text = self.premises_to_sentences_function_premis_one(self.my_text)
@@ -1939,6 +2253,21 @@ class TrainingScreen(Screen):
         else:
             self.label_first_premis.text = self.my_text
             self.label_second_premis.text = self.my_text2
+
+    def on_checkbox_Active_4_click(self, checkboxInstance, isActive):
+        global active_4_dummy
+        
+        active_4_dummy = isActive
+        
+        
+        if isActive:
+            self.label_first_premis.text = self.premises_to_sentences_function_premis_one(self.my_text)
+            self.label_second_premis.text = self.premises_to_sentences_function_premis_two(self.my_text2)
+            self.label_questionmark.text = self.premises_to_sentences_function_premis_three(self.dyadic_name_third_formula(self.function_output_list[3]))
+        else:
+            self.label_first_premis.text = self.my_text
+            self.label_second_premis.text = self.my_text2
+            self.label_questionmark.text = self.dyadic_name_third_formula(self.function_output_list[3])
 
     def premises_to_sentences_function_premis_one(self, my_text):
         if my_text == "MaP": # traditionelle Syllogistik
@@ -2009,6 +2338,71 @@ class TrainingScreen(Screen):
         elif my_text2 == "MõS":
             premis_two_sentence = "Einige nicht-M sind S"
         return (premis_two_sentence)
+    
+    def premises_to_sentences_function_premis_three(self, solution, *args):
+
+        completedsyllogistic = self.function_completed_syllogistic_settings()#looks for setting
+        
+        solution_sentence = ' '
+        if solution == "SaP": # traditionelle Syllogistik
+            solution_sentence = "Alle S sind P"
+        elif solution == "SeP":
+            solution_sentence = "Kein S ist P"
+        elif solution == "SiP":
+            solution_sentence = "Einige S sind P"
+        elif solution == "SoP":
+            solution_sentence = "Einige S sind nicht P"
+        elif (completedsyllogistic == 0) and solution == "PaS": # vervollständigte Syllogistik, weil Konklusion konvertiert
+            solution_sentence = "(Alle P sind S)"
+        elif (completedsyllogistic == 0) and solution == "PeS":
+            solution_sentence = "(Kein P ist S)"
+        elif (completedsyllogistic == 0) and solution == "PiS":
+            solution_sentence = "(Einige P sind S))"
+        elif (completedsyllogistic == 0) and solution == "PoS":
+            solution_sentence = "(Einige P sind nicht S)"
+        elif (completedsyllogistic == 0) and solution == "SãP":  # vervollständigte Syllogistik Zwei
+            solution_sentence = "(Alle P sind S)"
+        elif (completedsyllogistic == 0) and solution == "SëP":
+            solution_sentence = "(Alle nicht-S sind P)"
+        elif (completedsyllogistic == 0) and solution == "SïP":
+            solution_sentence = "(Einige nicht-S sind nicht P)"
+        elif (completedsyllogistic == 0) and solution == "SõP":
+            solution_sentence = "(Einige nicht-S sind P)"
+        elif (completedsyllogistic == 0) and solution == "PãS":
+            solution_sentence = "(Alle P sind S)"
+        elif (completedsyllogistic == 0) and solution == "PëS":
+            solution_sentence = "(Alle nicht-S sind P)"
+        elif (completedsyllogistic == 0) and solution == "PïS":
+            solution_sentence = "(Einige nicht-S sind nicht P)"
+        elif (completedsyllogistic == 0) and solution == "PõS":
+            solution_sentence = "(Einige nicht-S sind P)"
+        elif (completedsyllogistic == 1) and solution == "PaS": # vervollständigte Syllogistik, weil Konklusion konvertiert
+            solution_sentence = "Alle P sind S"
+        elif (completedsyllogistic == 1) and solution == "PeS":
+            solution_sentence = "Kein P ist S"
+        elif (completedsyllogistic == 1) and solution == "PiS":
+            solution_sentence = "Einige P sind S"
+        elif (completedsyllogistic == 1) and solution == "PoS":
+            solution_sentence = "Einige P sind nicht S"
+        elif (completedsyllogistic == 1) and solution == "SãP":  # vervollständigte Syllogistik Zwei
+            solution_sentence = "Alle P sind S"
+        elif (completedsyllogistic == 1) and solution == "SëP":
+            solution_sentence = "Alle nicht-S sind P"
+        elif (completedsyllogistic == 1) and solution == "SïP":
+            solution_sentence = "Einige nicht-S sind nicht P"
+        elif (completedsyllogistic == 1) and solution == "SõP":
+            solution_sentence = "Einige nicht-S sind P"
+        elif (completedsyllogistic == 1) and solution == "PãS":
+            solution_sentence = "Alle P sind S"
+        elif (completedsyllogistic == 1) and solution == "PëS":
+            solution_sentence = "Alle nicht-S sind P"
+        elif (completedsyllogistic == 1) and solution == "PïS":
+            solution_sentence = "Einige nicht-S sind nicht P"
+        elif (completedsyllogistic == 1) and solution == "PõS":
+            solution_sentence = "Einige nicht-S sind P"
+        else:
+            solution_sentence = "Kein Urteil möglich!"
+        return (solution_sentence)
 
     def change_screen_menu(self, *args):
         self.parent.current = 'menu'
@@ -2022,9 +2416,16 @@ class TrainingScreen(Screen):
         for child in dummy:
             if (child != self.active_4): #Checkbox Sentences remains
                 self.remove_widget(child)
+                
+        self.active_4.unbind(active=self.on_checkbox_Active_4_click)
+        self.active_4.bind(active=self.on_checkbox_Active_4)
+
         
         foo_1.clear()
         foo_calc.clear()
+        
+        
+        
         self.error_number_enlonged.clear()
         self.a_goes_into_conclusion.clear()
         self.n_goes_into_conclusion.clear()
@@ -2033,7 +2434,7 @@ class TrainingScreen(Screen):
         self.add_widget(self.menu_button)
         self.menu_button.bind(on_press=self.change_screen_menu)
         
-        self.settings_button = Button(text='Einstellungen', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .7})
+        self.settings_button = Button(text='Einstellungen', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .7}, font_size= dp(11))
         self.add_widget(self.settings_button)
         self.settings_button.bind(on_press=self.open_settings)
         
@@ -2065,18 +2466,20 @@ class TrainingScreen(Screen):
 
     def refresh_function(self, *args):
         global active_4_dummy
+        
+        self.function_output_list = [[[['?']]]]
 
         completedsyllogistic = self.function_completed_syllogistic_settings()#looks for setting
         particularpremis = self.function_particularpremis_settings()#looks for setting
         calculate_exercise = self.function_calculate_exercise_settings()#looks for setting
 
         if completedsyllogistic == 1:
-            a = random.randint(0, 15)
-            b = random.randint(0, 15)
+            a = random.randint(0, 7)
+            b = random.randint(0, 7)
             if particularpremis == 0: 
-                while (((a == 4) or (a == 5) or (a == 6) or (a == 7) or (a == 12) or (a == 13) or (a == 14) or (a == 15)) and ((b == 4) or (b == 5) or (b == 6) or (b == 7) or (b == 12) or (b == 13) or (b == 14) or (b == 15))):
-                    a = random.randint(0, 15)
-                    b = random.randint(0, 15)
+                while (((a == 2) or (a == 3) or (b == 6) or (b == 7)) and ((a == 2) or (a == 3) or (b == 6) or (b == 7))):
+                    a = random.randint(0, 7)
+                    b = random.randint(0, 7)
             self.refresh2_button = Button(text='Generiere!', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .8})
             self.add_widget(self.refresh2_button)
             self.refresh2_button.bind(on_press=lambda x:self.refresh_function(a, b))
@@ -2091,17 +2494,25 @@ class TrainingScreen(Screen):
             self.add_widget(self.refresh2_button)
             self.refresh2_button.bind(on_press=lambda x:self.refresh_function(a, b))
 
-        judges_premis_one = ["MaP", "MeP", "PaM", "PeM", "MiP", "MoP", "PiM", "PoM",  #traditionelle Syllogistik
-                             "MãP", "MëP",  "PãM", "PëM", "MïP", "MõP","PïM", "PõM"]  #vervollständigte Syllogistik
-        judges_premis_second = ["SaM", "SeM", "MaS", "MeS", "MiS", "MoS","SiM", "SoM", #traditionelle Syllogistik
-                                "SãM", "SëM", "MãS", "MëS", "SïM", "SõM", "MïS", "MõS"] #vervollständigte Syllogistik
+        judges_premis_one_trad = ["MaP", "MeP", "PaM", "PeM", "MiP", "MoP", "PiM", "PoM"]  #traditionelle Syllogistik
+
+        judges_premis_second_trad = ["SaM", "SeM", "MaS", "MeS", "MiS", "MoS","SiM", "SoM"] #traditionelle Syllogistik
         
+        judges_premis_one_comp = ["MaP", "MeP", "MiP", "MoP","MãP", "MëP", "MïP", "MõP"] #vervollständigte Syllogistik
+        
+        judges_premis_second_comp = ["SaM", "SeM", "SiM", "SoM", "SãM", "SëM", "SïM", "SõM"] #vervollständigte Syllogistik
 
         
-        second_formula = judges_premis_second[a]
-        self.my_text2 = second_formula
-        first_formula = judges_premis_one[b]
-        self.my_text = first_formula
+        if completedsyllogistic == 1:
+            second_formula = judges_premis_second_comp[a]
+            self.my_text2 = second_formula
+            first_formula = judges_premis_one_comp[b]
+            self.my_text = first_formula
+        else:
+            second_formula = judges_premis_second_trad[a]
+            self.my_text2 = second_formula
+            first_formula = judges_premis_one_trad[b]
+            self.my_text = first_formula
 
         self.advice_premis_1 = self.first_formula_values(first_formula)
         advice_premis_1 = self.first_formula_values(first_formula)
@@ -2113,9 +2524,9 @@ class TrainingScreen(Screen):
         syllogism_example_text = self.syllogism_example_function(self.my_text, self.my_text2, self.function_output_list[3])
         self.syllogism_example_text = syllogism_example_text
 
-        self.label_first_premis = Label(text='')
-        self.label_second_premis = Label(text='')
-        self.label_questionmark = Label(text='?')
+        self.label_first_premis = Label(text='', font_size= dp(18))
+        self.label_second_premis = Label(text='', font_size= dp(18))
+        self.label_questionmark = ConclusionLabel(text='?', font_size= dp(18))
 
         if self.active_4.active == True:
             self.label_first_premis.text = self.premises_to_sentences_function_premis_one(self.my_text)
@@ -2138,11 +2549,14 @@ class TrainingScreen(Screen):
         vertical_left_up.add_widget(self.label_questionmark)
         
         
-        horizontal_up.add_widget(Label(text='Syllogistik-\nTrainer', halign= 'center'))
+
         
-        horizontal_up.add_widget(Label(text=' '))
+        horizontal_up.add_widget(Label(text=' ', size_hint_x = .2))
+
+        self.dummy_between_questionmark_and_checkboxes = Label(text= ' ', size_hint_y= .15)
+        vertical.add_widget(self.dummy_between_questionmark_and_checkboxes)
         
-        self.boxlayout_up = BoxLayout(orientation='horizontal')
+        self.boxlayout_up = BoxLayout(orientation='horizontal', size_hint_y= .35)
         vertical.add_widget(self.boxlayout_up)
 
         self.checkboxes_BoxLayout = BoxLayout(orientation='horizontal')
@@ -2157,7 +2571,7 @@ class TrainingScreen(Screen):
         self.checkboxes_BoxLayout.add_widget(self.dummy_label_checkboxes_BoxLayout_right)
         
         
-        self.label_example = Label(text='Beispiel:')
+        self.label_example = Label(text='Beispiel')
         self.label_sentences = Label(text='Sätze')
         
         self.active_3 = CheckBox(active=False)
@@ -2168,6 +2582,9 @@ class TrainingScreen(Screen):
         self.boxlayout_Checkbox_3.add_widget(self.active_3)
         self.boxlayout_Checkbox_4.add_widget(self.label_sentences)
         self.boxlayout_Checkbox_4.add_widget(self.checkbox_4_dummy_label)
+
+        self.dummy_between_checkboxes_and_table_labels = Label(text= ' ', size_hint_y= .15)
+        vertical.add_widget(self.dummy_between_checkboxes_and_table_labels)
         
 
         self.active_3.bind(active=self.on_checkbox_Active_3)
@@ -2189,6 +2606,8 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_1.add_widget(self.s3)
         self.s4 = Label(text='~S')
         self.syllogism_box_row_1.add_widget(self.s4)
+        self.s_dummy_mid = Label(text= ' ', size_hint_x= .05)
+        self.syllogism_box_row_1.add_widget(self.s_dummy_mid)
         self.s5 = Label(text='S')
         self.syllogism_box_row_1.add_widget(self.s5)
         self.s6 = Label(text='~S')
@@ -2197,6 +2616,8 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_1.add_widget(self.s7)
         self.s8 = Label(text='~S')
         self.syllogism_box_row_1.add_widget(self.s8)
+        self.s_dummy_right = Label(text= ' ', size_hint_x= .075)
+        self.syllogism_box_row_1.add_widget(self.s_dummy_right)
 
         self.syllogism_box_row_2 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_2)
@@ -2212,6 +2633,8 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_2.add_widget(self.m3)
         self.m4 = Label(text='~M')
         self.syllogism_box_row_2.add_widget(self.m4)
+        self.m_dummy_mid = Label(text= ' ', size_hint_x= .05)
+        self.syllogism_box_row_2.add_widget(self.m_dummy_mid)
         self.m5 = Label(text='M')
         self.syllogism_box_row_2.add_widget(self.m5)
         self.m6 = Label(text='M')
@@ -2220,6 +2643,8 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_2.add_widget(self.m7)
         self.m8 = Label(text='~M')
         self.syllogism_box_row_2.add_widget(self.m8)
+        self.m_dummy_right = Label(text= ' ', size_hint_x= .075)
+        self.syllogism_box_row_2.add_widget(self.m_dummy_right)
 
         self.syllogism_box_row_3 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_3)
@@ -2235,6 +2660,8 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_3.add_widget(self.p3)
         self.p4 = Label(text='P')
         self.syllogism_box_row_3.add_widget(self.p4)
+        self.p_dummy_mid = Label(text= ' ', size_hint_x= .05)
+        self.syllogism_box_row_3.add_widget(self.p_dummy_mid)
         self.p5 = Label(text='~P')
         self.syllogism_box_row_3.add_widget(self.p5)
         self.p6 = Label(text='~P')
@@ -2243,6 +2670,8 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_3.add_widget(self.p7)
         self.p8 = Label(text='~P')
         self.syllogism_box_row_3.add_widget(self.p8)
+        self.p_dummy_right = Label(text= ' ', size_hint_x= .075)
+        self.syllogism_box_row_3.add_widget(self.p_dummy_right)
 
         self.syllogism_box_row_4 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_4)
@@ -2258,6 +2687,8 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_4.add_widget(self.btn_3_p1)
         self.btn_4_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_4_p1)
+        self.p_1_dummy_mid = Label(text= ' ', size_hint_x= .05)
+        self.syllogism_box_row_4.add_widget(self.p_1_dummy_mid)
         self.btn_5_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_5_p1)
         self.btn_6_p1 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -2266,6 +2697,8 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_4.add_widget(self.btn_7_p1)
         self.btn_8_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_8_p1)
+        self.p_1_dummy_right = Label(text= ' ', size_hint_x= .075)
+        self.syllogism_box_row_4.add_widget(self.p_1_dummy_right)
         
         self.buttons_premis_one = [self.btn_1_p1, self.btn_2_p1, self.btn_3_p1, self.btn_4_p1, \
                                    self.btn_5_p1, self.btn_6_p1, self.btn_7_p1, self.btn_8_p1]
@@ -2284,6 +2717,8 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_5.add_widget(self.btn_3_p2)
         self.btn_4_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_4_p2)
+        self.p_2_dummy_mid = Label(text= ' ', size_hint_x= .05)
+        self.syllogism_box_row_5.add_widget(self.p_2_dummy_mid)
         self.btn_5_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_5_p2)
         self.btn_6_p2 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -2292,6 +2727,8 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_5.add_widget(self.btn_7_p2)
         self.btn_8_p2 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_5.add_widget(self.btn_8_p2)
+        self.p_2_dummy_right = Label(text= ' ', size_hint_x= .075)
+        self.syllogism_box_row_5.add_widget(self.p_2_dummy_right)
         
         self.buttons_premis_two = [self.btn_1_p2, self.btn_2_p2, self.btn_3_p2, self.btn_4_p2, \
                                    self.btn_5_p2, self.btn_6_p2, self.btn_7_p2, self.btn_8_p2]
@@ -2314,6 +2751,8 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_6.add_widget(self.btn_3_c)
         self.btn_4_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_4_c)
+        self.c_dummy_mid = Label(text= ' ', size_hint_x= .05)
+        self.syllogism_box_row_6.add_widget(self.c_dummy_mid)
         self.btn_5_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_5_c)
         self.btn_6_c = Button(color= (0, 0, 0, 1), background_normal='')
@@ -2322,6 +2761,8 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_6.add_widget(self.btn_7_c)
         self.btn_8_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_8_c)
+        self.c_dummy_right = Label(text= ' ', size_hint_x= .075)
+        self.syllogism_box_row_6.add_widget(self.c_dummy_right)
         
         self.buttons_conclusion = [self.btn_1_c, self.btn_2_c, self.btn_3_c, self.btn_4_c,\
                                    self.btn_5_c, self.btn_6_c, self.btn_7_c, self.btn_8_c]
@@ -2340,6 +2781,8 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_7.add_widget(self.btn_3_s)
         self.btn_4_s = Button(color= (0, 0, 0, 1))
         self.syllogism_box_row_7.add_widget(self.btn_4_s)
+        self.so_dummy_mid = Label(text= ' ', size_hint_x= .05)
+        self.syllogism_box_row_7.add_widget(self.so_dummy_mid)
         self.btn_5_s = Button(color= (0, 0, 0, 1))
         self.syllogism_box_row_7.add_widget(self.btn_5_s)
         self.btn_6_s = Button(color= (0, 0, 0, 1))
@@ -2348,9 +2791,14 @@ class TrainingScreen(Screen):
         self.syllogism_box_row_7.add_widget(self.btn_7_s)
         self.btn_8_s = Button(color= (0, 0, 0, 1))
         self.syllogism_box_row_7.add_widget(self.btn_8_s)
+        self.so_dummy_right = Label(text= ' ', size_hint_x= .075)
+        self.syllogism_box_row_7.add_widget(self.so_dummy_right)
 
         self.buttons_solution = [self.btn_1_s, self.btn_2_s, self.btn_3_s, self.btn_4_s,\
                                  self.btn_5_s, self.btn_6_s, self.btn_7_s, self.btn_8_s]
+        
+        self.dummy_label_between_solution_and_answer_buttons_advices = Label(text= ' ', size_hint_y= .05)
+        vertical.add_widget(self.dummy_label_between_solution_and_answer_buttons_advices)
         
         self.answer_buttons_and_advices = BoxLayout(orientation='horizontal')
         vertical.add_widget(self.answer_buttons_and_advices)
@@ -2401,7 +2849,10 @@ class TrainingScreen(Screen):
                             for i, ele in enumerate(conclusion_judges):
                                 if (ele == "Einige S sind nicht P,\nauch bekannt als SoP"):
                                     conclusion_judges.pop(i)
+                    print(conclusion_judges)
+                    print(button_text)
                     conclusion_judges.remove(button_text)
+                    
                     m = random.choice(conclusion_judges)
                     button.text = m
                     button.bind(on_press=self.wrong_answer)
@@ -2409,8 +2860,11 @@ class TrainingScreen(Screen):
         self.box_advices_and_example_BoxLayout = BoxLayout(orientation='vertical')
         self.answer_buttons_and_advices.add_widget(self.box_advices_and_example_BoxLayout)
 
-        self.lbl_active_example = Label(text="Beispiel AUS", font_size= 20)
+        self.lbl_active_example = Grow_and_wrap_Label(text=" ")
         self.box_advices_and_example_BoxLayout.add_widget(self.lbl_active_example)
+        
+        self.lbl_example_quote = Grow_and_wrap_Label(text=' ', size_hint_y = .15, font_size = dp(11))
+        self.box_advices_and_example_BoxLayout.add_widget(self.lbl_example_quote)        
 
         self.box_horizontal_buttons_down = BoxLayout(orientation='horizontal', size_hint_y= .75)
         vertical.add_widget(self.box_horizontal_buttons_down)
@@ -2632,8 +3086,29 @@ class TrainingScreen(Screen):
         self.parent.current = 'menu'
 
     def click_calc(self, button):
+
+        completedsyllogistic = self.function_completed_syllogistic_settings()#looks for setting
+        
         my_text = self.conclusion_formula
-        self.solution_label.text =  self.dyadic_name_third_formula(self.function_output_list[3])
+        if (completedsyllogistic == 1):
+            self.solution_label.text = self.dyadic_name_third_formula(self.function_output_list[3])
+        elif (completedsyllogistic == 0):
+            self.solution_label.text = self.dyadic_name_third_formula_traditional(self.function_output_list[3])
+        
+        self.active_4.unbind(active=self.on_checkbox_Active_4)
+        self.active_4.bind(active=self.on_checkbox_Active_4_click)
+        
+        if self.active_4.active == True:
+            self.label_first_premis.text = self.premises_to_sentences_function_premis_one(self.my_text)
+            self.label_second_premis.text = self.premises_to_sentences_function_premis_two(self.my_text2)
+            self.label_questionmark.text = self.premises_to_sentences_function_premis_three(self.dyadic_name_third_formula(self.function_output_list[3]))
+        else:
+            self.label_first_premis.text = self.my_text
+            self.label_second_premis.text = self.my_text2
+            if (completedsyllogistic == 1):
+                self.label_questionmark.text = self.dyadic_name_third_formula(self.function_output_list[3])
+            elif (completedsyllogistic == 0):
+                self.label_questionmark.text = self.dyadic_name_third_formula_traditional(self.function_output_list[3])
         
         for r in range(len(self.a_goes_into_conclusion)):
             for s in range(8):
@@ -2725,6 +3200,9 @@ class TrainingScreen(Screen):
         
 
     def click(self,my_button2):
+        
+        completedsyllogistic = self.function_completed_syllogistic_settings()#looks for setting
+        
         my_text = self.first_formula
         first_formula = my_text
         my_text2 = self.second_formula
@@ -2733,7 +3211,21 @@ class TrainingScreen(Screen):
         advice_premis_2 = self.second_formula_values(second_formula)
         function_output_list = self.output2(my_text, my_text2)
         formulas_list_first_premis = first_formula[0:4][:]
-
+        
+        self.active_4.unbind(active=self.on_checkbox_Active_4)
+        self.active_4.bind(active=self.on_checkbox_Active_4_click)
+        
+        if self.active_4.active == True:
+            self.label_first_premis.text = self.premises_to_sentences_function_premis_one(self.my_text)
+            self.label_second_premis.text = self.premises_to_sentences_function_premis_two(self.my_text2)
+            self.label_questionmark.text = self.premises_to_sentences_function_premis_three(self.dyadic_name_third_formula(self.function_output_list[3]))
+        else:
+            self.label_first_premis.text = self.my_text
+            self.label_second_premis.text = self.my_text2
+            if (completedsyllogistic == 1):
+                self.label_questionmark.text = self.dyadic_name_third_formula(self.function_output_list[3])
+            elif (completedsyllogistic == 0):
+                self.label_questionmark.text = self.dyadic_name_third_formula_traditional(self.function_output_list[3])
 
         formulas_list = [formulas_list_first_premis, second_formula]
 
@@ -2742,7 +3234,10 @@ class TrainingScreen(Screen):
             self.function_output_list[3][2][:], self.function_output_list[3][3][:], self.function_output_list[3][2][:], self.function_output_list[3][3][:]] 
  
         self.conclusion_label.text = self.dyadic_name_third_formula(function_output_list[3])
-        self.solution_label.text =  self.dyadic_name_third_formula(self.function_output_list[3])
+        if (completedsyllogistic == 1):
+            self.solution_label.text = self.dyadic_name_third_formula(self.function_output_list[3])
+        elif (completedsyllogistic == 0):
+            self.solution_label.text = self.dyadic_name_third_formula_traditional(self.function_output_list[3])
 
         self.btn_1_c.text = function_output_list[3][0]
         self.btn_3_c.text = function_output_list[3][0]
@@ -2909,7 +3404,7 @@ class TrainingScreen(Screen):
         self.add_widget(self.active_4)
         self.active_4.bind(active=self.on_checkbox_Active_4)
 
-        self.active_4.pos_hint = {'x': .45, 'y': .6} # not beautiful code
+        self.active_4.pos_hint = {'x': .45, 'y': .633} # not beautiful code
         self.active_4.size_hint = (.1, .1)
 
         lambda x:self.clear_widgets_function
@@ -4959,6 +5454,206 @@ class Training_calculating_quiz_Screen(Screen):
 class Total_formulas_Playground_left_Screen(Screen):
     global foo_3
     foo_3 = []
+
+    def dyadic_name_first_formula(self, formula):
+        if formula == ['a', 'u', 'n', 'a']: # traditionelle Syllogistik
+            return "MaP"
+        elif formula == ['n', 'a', 'a', 'u']:
+            return "MeP"
+        elif formula == ['a', 'u', 'u', 'u']:
+            return "MiP"
+        elif formula == ['u', 'u', 'a', 'u']:
+            return "MoP"
+        elif formula == ['a', 'n', 'u', 'a']:
+            return "MãP" # vervollständigte Syllogistik
+        elif formula == ['u', 'a', 'a', 'n']:
+            return "MëP"
+        elif formula == ['u', 'u', 'u', 'a']:
+            return "MïP"
+        elif formula == ['u', 'a', 'u', 'u']:
+            return "MõP"
+        elif formula == ['a', 'a', 'a', 'a']: # Dyadische Formeln
+            return "M#P"
+        elif formula == ['a', 'a', 'a', 'n']:
+            return "MÄP"
+        elif formula == ['a', 'n', 'a', 'a']:
+            return "MÖP"
+        elif formula == ['a', 'n', 'a', 'n']:
+            return "M&P"
+        elif formula == ['a', 'a', 'n', 'a']:
+            return "M@P"
+        elif formula == ['a', 'a', 'n', 'n']:
+            return "M%P"
+        elif formula == ['a', 'n', 'n', 'a']:
+            return "M$P"
+        elif formula == ['a', 'n', 'n', 'n']:
+            return "MÜP"
+        elif formula == ['n', 'a', 'a', 'a']:
+            return "MÜ'P"
+        elif formula == ['n', 'a', 'a', 'n']:
+            return "M$'P"
+        elif formula == ['n', 'n', 'a', 'a']:
+            return "M%'P"
+        elif formula == ['n', 'n', 'a', 'n']:
+            return "M@'P"
+        elif formula == ['n', 'a', 'n', 'a']:
+            return "M&'P"
+        elif formula == ['n', 'a', 'n', 'n']:
+            return "MÖ'P"
+        elif formula == ['n', 'n', 'n', 'a']:
+            return "MÄ'P"
+        elif formula == ['n', 'n', 'n', 'n']:
+            return "M#'P"
+        elif formula == ['a', 'u', 'a', 'u']: # erweiterte Syllogistik (naheliegend)
+            return "MioP"
+        elif formula == ['a', 'a', 'u', 'u']:
+            return "MiõP"
+        elif formula == ['u', 'a', 'a', 'u']:
+            return "MoõP"
+        elif formula == ['u', 'u', 'a', 'a']:
+            return "MoïP"
+        elif formula == ['u', 'a', 'u', 'a']:
+            return "MõïP"
+        elif formula == ['a', 'u', 'a', 'a']: # erweiterte Syllogistik (sogar)
+            return "MioïP"
+        elif formula == ['a', 'a', 'u', 'a']:
+            return "MiõïP"
+        elif formula == ['a', 'a', 'a', 'a']:
+            return "MiõoïP"
+        else:
+            return " "
+        
+    def dyadic_name_second_formula(self, formula):
+        if formula == ['a', 'u', 'n', 'a']: # traditionelle Syllogistik
+            return "SaM"
+        elif formula == ['n', 'a', 'a', 'u']:
+            return "SeM"
+        elif formula == ['a', 'u', 'u', 'u']:
+            return "SiM"
+        elif formula == ['u', 'u', 'a', 'u']:
+            return "SoM"
+        elif formula == ['a', 'n', 'u', 'a']:
+            return "SãM" # vervollständigte Syllogistik
+        elif formula == ['u', 'a', 'a', 'n']:
+            return "SëM"
+        elif formula == ['u', 'u', 'u', 'a']:
+            return "SïM"
+        elif formula == ['u', 'a', 'u', 'u']:
+            return "SõM"
+        elif formula == ['a', 'a', 'a', 'a']: # Dyadische Formeln
+            return "S#M"
+        elif formula == ['a', 'a', 'a', 'n']:
+            return "SÄM"
+        elif formula == ['a', 'n', 'a', 'a']:
+            return "SÖM"
+        elif formula == ['a', 'n', 'a', 'n']:
+            return "S&M"
+        elif formula == ['a', 'a', 'n', 'a']:
+            return "S@M"
+        elif formula == ['a', 'a', 'n', 'n']:
+            return "S%M"
+        elif formula == ['a', 'n', 'n', 'a']:
+            return "S$M"
+        elif formula == ['a', 'n', 'n', 'n']:
+            return "SÜM"
+        elif formula == ['n', 'a', 'a', 'a']:
+            return "SÜ'M"
+        elif formula == ['n', 'a', 'a', 'n']:
+            return "S$'M"
+        elif formula == ['n', 'n', 'a', 'a']:
+            return "S%'M"
+        elif formula == ['n', 'n', 'a', 'n']:
+            return "S@'M"
+        elif formula == ['n', 'a', 'n', 'a']:
+            return "S&'M"
+        elif formula == ['n', 'a', 'n', 'n']:
+            return "SÖ'M"
+        elif formula == ['n', 'n', 'n', 'a']:
+            return "SÄ'M"
+        elif formula == ['n', 'n', 'n', 'n']:
+            return "S#'M"
+        elif formula == ['a', 'u', 'a', 'u']: # erweiterte Syllogistik (naheliegend)
+            return "SioM"
+        elif formula == ['a', 'a', 'u', 'u']:
+            return "SiõM"
+        elif formula == ['u', 'a', 'a', 'u']:
+            return "SoõM"
+        elif formula == ['u', 'u', 'a', 'a']:
+            return "SoïM"
+        elif formula == ['u', 'a', 'u', 'a']:
+            return "SõïM"
+        elif formula == ['a', 'u', 'a', 'a']: # erweiterte Syllogistik (sogar)
+            return "SioïM"
+        elif formula == ['a', 'a', 'u', 'a']:
+            return "SiõïM"
+        elif formula == ['a', 'a', 'a', 'a']:
+            return "SiõoïM"
+        else:
+            return " "
+        
+    def dyadic_name_third_formula(self, formula):
+        if formula == ['a', 'u', 'n', 'a']: # traditionelle Syllogistik
+            return "SaP"
+        elif formula == ['n', 'a', 'a', 'u']:
+            return "SeP"
+        elif formula == ['a', 'u', 'u', 'u']:
+            return "SiP"
+        elif formula == ['u', 'u', 'a', 'u']:
+            return "SoP"
+        elif formula == ['a', 'n', 'u', 'a']:
+            return "SãP" # vervollständigte Syllogistik
+        elif formula == ['u', 'a', 'a', 'n']:
+            return "SëP"
+        elif formula == ['u', 'u', 'u', 'a']:
+            return "SïP"
+        elif formula == ['u', 'a', 'u', 'u']:
+            return "SõP"
+        elif formula == ['a', 'a', 'a', 'a']:
+            return "S#P"
+        elif formula == ['a', 'a', 'a', 'n']:
+            return "SÄP"
+        elif formula == ['a', 'n', 'a', 'a']:
+            return "SÖP"
+        elif formula == ['a', 'n', 'a', 'n']:
+            return "S&P"
+        elif formula == ['a', 'a', 'n', 'a']:
+            return "S@P"
+        elif formula == ['a', 'a', 'n', 'n']:
+            return "S%P"
+        elif formula == ['a', 'n', 'n', 'a']:
+            return "S$P"
+        elif formula == ['a', 'n', 'n', 'n']:
+            return "SÜP"
+        elif formula == ['n', 'a', 'a', 'a']:
+            return "SÜ'P"
+        elif formula == ['n', 'a', 'a', 'n']:
+            return "S$'P"
+        elif formula == ['n', 'n', 'a', 'a']:
+            return "S%'P"
+        elif formula == ['n', 'n', 'a', 'n']:
+            return "S@'P"
+        elif formula == ['n', 'a', 'n', 'a']:
+            return "S&'P"
+        elif formula == ['n', 'a', 'n', 'n']:
+            return "SÖ'P"
+        elif formula == ['n', 'n', 'n', 'a']:
+            return "SÄ'P"
+        elif formula == ['n', 'n', 'n', 'n']:
+            return "S#'P"
+        elif formula == ['a', 'u', 'a', 'u']: # erweiterte Syllogistik
+            return "SioP"
+        elif formula == ['a', 'a', 'u', 'u']:
+            return "SiõP"
+        elif formula == ['u', 'a', 'a', 'u']:
+            return "SoõP"
+        elif formula == ['u', 'u', 'a', 'a']:
+            return "SoïP"
+        elif formula == ['u', 'a', 'u', 'a']:
+            return "SõïP"
+        elif formula == "?":
+            return "?"
+        else:
+            return " "
     
     def input_first_formula(self):
         first_formula = input("First logical formula:")
@@ -5229,44 +5924,189 @@ class Total_formulas_Playground_left_Screen(Screen):
         else: #calculates potential "u"-values of eighth value
             return("u")
 
+    def total_formula_deduction_first_value_a_contradiction(self, first_formula,second_formula,third_formula):
+        if first_formula[0] == "a" and (second_formula[1] == "n" or third_formula[1] == "n") and second_formula[0] == "n":    #calculates potential "a"-values of first value
+            self.error_number_enlonged.append([[0], [0]])
+        if first_formula[0] == "a" and (third_formula[1] == "n" or second_formula[1] == "n") and third_formula[0] == "n":
+            self.error_number_enlonged.append([[0], [0]])
+        if second_formula[0] == "a" and (first_formula[2] == "n" or third_formula[2]) and first_formula[0] == "n":
+            self.error_number_enlonged.append([[1], [0]])
+        if second_formula[0] == "a" and (third_formula[2] == "n" or first_formula[2] == "n") and third_formula[0] == "n":
+            self.error_number_enlonged.append([[1], [0]])
+        if third_formula[0] == "a" and (first_formula[1] == "n" or second_formula[2]) and first_formula[0] == "n":
+            self.error_number_enlonged.append([[2], [0]])
+        if third_formula[0] == "a" and (second_formula[2] == "n" or first_formula[1] == "n") and second_formula[0] == "n":
+            self.error_number_enlonged.append([[2], [0]])
+
+    def total_formula_deduction_second_value_a_contradiction(self, first_formula,second_formula,third_formula):
+        if first_formula[0] == "a" and (second_formula[0] == "n" or third_formula[0] == "n") and second_formula[1] == "n":    #calculates potential "a"-values of second value
+            self.error_number_enlonged.append([[0], [1]])
+        if first_formula[0] == "a" and (third_formula[0] == "n" or second_formula[0] == "n") and third_formula[1] == "n":
+            self.error_number_enlonged.append([[0], [1]])
+        if second_formula[1] == "a" and (first_formula[2] == "n" or third_formula[3] == "n") and first_formula[0] == "n":
+            self.error_number_enlonged.append([[1], [1]])
+        if second_formula[1] == "a" and (third_formula[3] == "n" or first_formula[2] == "n") and third_formula[1] == "n":
+            self.error_number_enlonged.append([[1], [1]])
+        if third_formula[1] == "a" and (first_formula[1] == "n" or second_formula[3] == "n") and first_formula[0] == "n":
+            self.error_number_enlonged.append([[2], [1]])
+        if third_formula[1] == "a" and (second_formula[3] == "n" or first_formula[1] == "n") and second_formula[1] == "n":
+            self.error_number_enlonged.append([[2], [1]])
+
+    def total_formula_deduction_third_value_a_contradiction(self, first_formula,second_formula,third_formula):
+        if first_formula[1] == "a" and (second_formula[3] == "n" or third_formula[1] == "n") and second_formula[2] == "n":    #calculates potential "a"-values of third value
+            self.error_number_enlonged.append([[0], [2]])
+        if first_formula[1] == "a" and (third_formula[1] == "n" or second_formula[3] == "n") and third_formula[0] == "n":
+            self.error_number_enlonged.append([[0], [2]])
+        if second_formula[2] == "a" and (first_formula[3] == "n" or third_formula[2] == "n") and first_formula[1] == "n":
+            self.error_number_enlonged.append([[1], [2]])
+        if second_formula[2] == "a" and (third_formula[2] == "n" or first_formula[3] == "n") and third_formula[0] == "n":
+            self.error_number_enlonged.append([[1], [2]])
+        if third_formula[0] == "a" and (first_formula[0] == "n" or second_formula[0] == "n") and first_formula[1] == "n":
+            self.error_number_enlonged.append([[2], [2]])
+        if third_formula[0] == "a" and (second_formula[0] == "n" or first_formula[0] == "n") and second_formula[2] == "n":
+            self.error_number_enlonged.append([[2], [2]])
+
+    def total_formula_deduction_fourth_value_a_contradiction(self, first_formula,second_formula,third_formula):
+        if first_formula[1] == "a" and (second_formula[2] == "n" or third_formula[0] == "n") and second_formula[3] == "n":    #calculates potential "a"-values of fourth value
+            self.error_number_enlonged.append([[0], [3]])
+        if first_formula[1] == "a" and (third_formula[0] == "n" or second_formula[2] == "n") and third_formula[1] == "n":
+            self.error_number_enlonged.append([[0], [3]])
+        if second_formula[3] == "a" and (first_formula[3] == "n" or third_formula[3] == "n") and first_formula[1] == "n":
+            self.error_number_enlonged.append([[1], [3]])
+        if second_formula[3] == "a" and (third_formula[3] == "n" or first_formula[3] == "n") and third_formula[1] == "n":
+            self.error_number_enlonged.append([[1], [3]])
+        if third_formula[1] == "a" and (first_formula[0] == "n" or second_formula[1] == "n") and first_formula[1] == "n":
+            self.error_number_enlonged.append([[2], [3]])
+        if third_formula[1] == "a" and (second_formula[1] == "n" or first_formula[0] == "n") and second_formula[3] == "n":
+            self.error_number_enlonged.append([[2], [3]])
+        
+    def total_formula_deduction_fifth_value_a_contradiction(self, first_formula,second_formula,third_formula):
+        if first_formula[2] == "a" and (second_formula[1] == "n" or third_formula[3] == "n") and second_formula[2] == "n":    #calculates potential "a"-values of fifth value
+            self.error_number_enlonged.append([[0], [4]])
+        if first_formula[2] == "a" and (third_formula[3] == "n" or second_formula[1] == "n") and third_formula[2] == "n":
+            self.error_number_enlonged.append([[0], [4]])
+        if second_formula[0] == "a" and (first_formula[0] == "n" or third_formula[0] == "n") and first_formula[2] == "n":
+            self.error_number_enlonged.append([[1], [4]])
+        if second_formula[0] == "a" and (third_formula[0] == "n" or first_formula[0] == "n") and third_formula[2] == "n":
+            self.error_number_enlonged.append([[1], [4]])
+        if third_formula[2] == "a" and (first_formula[3] == "n" or second_formula[2] == "n") and first_formula[2] == "n":
+            self.error_number_enlonged.append([[2], [4]])
+        if third_formula[2] == "a" and (second_formula[2] == "n" or first_formula[3] == "n") and second_formula[0] == "n":
+            self.error_number_enlonged.append([[2], [4]])
+
+    def total_formula_deduction_sixth_value_a_contradiction(self, first_formula,second_formula,third_formula):
+        if first_formula[2] == "a" and (second_formula[0] == "n" or third_formula[2] == "n") and second_formula[1] == "n":    #calculates potential "a"-values of sixth value
+            self.error_number_enlonged.append([[0], [5]])
+        if first_formula[2] == "a" and (third_formula[2] == "n" or second_formula[0] == "n") and third_formula[3] == "n":
+            self.error_number_enlonged.append([[0], [5]])
+        if second_formula[1] == "a" and (first_formula[0] == "n" or third_formula[1] == "n") and first_formula[2] == "n":
+            self.error_number_enlonged.append([[1], [5]])
+        if second_formula[1] == "a" and (third_formula[1] == "n" or first_formula[0] == "n") and third_formula[3] == "n":
+            self.error_number_enlonged.append([[1], [5]])
+        if third_formula[3] == "a" and (first_formula[3] == "n" or second_formula[3] == "n") and first_formula[2] == "n":
+            self.error_number_enlonged.append([[2], [5]])
+        if third_formula[3] == "a" and (second_formula[3] == "n" or first_formula[3] == "n") and second_formula[1] == "n":
+            self.error_number_enlonged.append([[2], [5]])
+        
+    def total_formula_deduction_seventh_value_a_contradiction(self, first_formula,second_formula,third_formula):
+        if first_formula[3] == "a" and (second_formula[3] == "n" or third_formula[3] == "n") and second_formula[2] == "n":    #calculates potential "a"-values of sixth value
+            self.error_number_enlonged.append([[0], [6]])
+        if first_formula[3] == "a" and (third_formula[3] == "n" or second_formula[3] == "n") and third_formula[2] == "n":
+            self.error_number_enlonged.append([[0], [6]])
+        if second_formula[2] == "a" and (first_formula[1] == "n" or third_formula[0] == "n") and first_formula[3] == "n":
+            self.error_number_enlonged.append([[1], [6]])
+        if second_formula[2] == "a" and (third_formula[0] == "n" or first_formula[1] == "n") and third_formula[2] == "n":
+            self.error_number_enlonged.append([[1], [6]])
+        if third_formula[2] == "a" and (first_formula[2] == "n" or second_formula[0] == "n") and first_formula[3] == "n":
+            self.error_number_enlonged.append([[2], [6]])
+        if third_formula[2] == "a" and (second_formula[0] == "n" or first_formula[2] == "n") and second_formula[2] == "n":
+            self.error_number_enlonged.append([[2], [6]])
+        
+    def total_formula_deduction_eighth_value_a_contradiction(self, first_formula,second_formula,third_formula):
+        if first_formula[3] == "a" and (second_formula[2] == "n" or third_formula[2] == "n") and second_formula[3] == "n":    #calculates potential "a"-values of eighth value
+            self.error_number_enlonged.append([[0], [7]])
+        if first_formula[3] == "a" and (third_formula[2] == "n" or second_formula[2] == "n") and third_formula[3] == "n":
+            self.error_number_enlonged.append([[0], [7]])
+        if second_formula[3] == "a" and (first_formula[1] == "n" or third_formula[1] == "n") and first_formula[3] == "n":
+            self.error_number_enlonged.append([[1], [7]])
+        if second_formula[3] == "a" and (third_formula[1] == "n" or first_formula[1] == "n") and third_formula[3] == "n":
+            self.error_number_enlonged.append([[1], [7]])
+        if third_formula[3] == "a" and (first_formula[2] == "n" or second_formula[1] == "n") and first_formula[3] == "n":
+            self.error_number_enlonged.append([[2], [7]])
+        if third_formula[3] == "a" and (second_formula[1] == "n" or first_formula[2] == "n") and second_formula[3] == "n":
+            self.error_number_enlonged.append([[2], [7]])
+
     def syllogism_contradiction_test(self, first_formula, second_formula, third_formula):
+        self.error_number_enlonged = []
+        
         conclusion = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         conclusion[0] = self.total_formula_deduction_first_value_n(first_formula, second_formula, third_formula)
         conclusion[1] = self.total_formula_deduction_first_value_a(first_formula, second_formula, third_formula)
         if conclusion[0] == 'n' and conclusion[1] == 'a':
-            return (1)
+            self.total_formula_deduction_first_value_a_contradiction(first_formula, second_formula, third_formula)
         conclusion[2] = self.total_formula_deduction_second_value_n(first_formula, second_formula, third_formula)
         conclusion[3] = self.total_formula_deduction_second_value_a(first_formula, second_formula, third_formula)
         if conclusion[2] == 'n' and conclusion[3] == 'a':
-            return (1)
+            self.total_formula_deduction_second_value_a_contradiction(first_formula, second_formula, third_formula)
         conclusion[4] = self.total_formula_deduction_third_value_n(first_formula, second_formula, third_formula)
         conclusion[5] = self.total_formula_deduction_third_value_a(first_formula, second_formula, third_formula)
         if conclusion[4] == 'n' and conclusion[5] == 'a':
-            return (1)
+            self.total_formula_deduction_third_value_a_contradiction(first_formula, second_formula, third_formula)
         conclusion[6] = self.total_formula_deduction_fourth_value_n(first_formula, second_formula, third_formula)
         conclusion[7] = self.total_formula_deduction_fourth_value_a(first_formula, second_formula, third_formula)
         if conclusion[6] == 'n' and conclusion[7] == 'a':
-            return (1)
+            self.total_formula_deduction_fourth_value_a_contradiction(first_formula, second_formula, third_formula)
         conclusion[8] = self.total_formula_deduction_fifth_value_n(first_formula, second_formula, third_formula)
         conclusion[9] = self.total_formula_deduction_fifth_value_a(first_formula, second_formula, third_formula)
         if conclusion[8] == 'n' and conclusion[9] == 'a':
-            return (1)
+            self.total_formula_deduction_fifth_value_a_contradiction(first_formula, second_formula, third_formula)
         conclusion[10] = self.total_formula_deduction_sixth_value_n(first_formula, second_formula, third_formula)
         conclusion[11] = self.total_formula_deduction_sixth_value_a(first_formula, second_formula, third_formula)
         if conclusion[10] == 'n' and conclusion[11] == 'a':
-            return (1)
+            self.total_formula_deduction_sixth_value_a_contradiction(first_formula, second_formula, third_formula)
         conclusion[12] = self.total_formula_deduction_seventh_value_n(first_formula, second_formula, third_formula)
         conclusion[13] = self.total_formula_deduction_seventh_value_a(first_formula, second_formula, third_formula)
         if conclusion[12] == 'n' and conclusion[13] == 'a':
-            return (1)
+            self.total_formula_deduction_seventh_value_a_contradiction(first_formula, second_formula, third_formula)
         conclusion[14] = self.total_formula_deduction_eighth_value_n(first_formula, second_formula, third_formula)
         conclusion[15] = self.total_formula_deduction_eighth_value_a(first_formula, second_formula, third_formula)
         if conclusion[14] == 'n' and conclusion[15] == 'a':
-            return (1)
+            self.total_formula_deduction_eighth_value_a_contradiction(first_formula, second_formula, third_formula)
+        if (len(self.error_number_enlonged) != 0):
+            return self.error_number_enlonged[:]
         else:
-            return (0)
+            return ([0])
 
     def total_formula_deduction_first_value(self, first_formula,second_formula,third_formula):
+
+        if first_formula[0] == "n":    #caluculates potential "n"-values of first value
+            self.n_goes_into_conclusion.append([[0], [0]])
+
+        if second_formula[0] == "n":
+            self.n_goes_into_conclusion.append([[1], [0]])
+
+        if third_formula[0] == "n":
+            self.n_goes_into_conclusion.append([[2], [0]])
+
+        if first_formula[0] == "a" and second_formula[1] == "n":    #calculates potential "a"-values of first value
+            self.a_goes_into_conclusion.append([[0], [0]])
+
+        if first_formula[0] == "a" and third_formula[1] == "n":
+            self.a_goes_into_conclusion.append([[0], [0]])
+
+        if second_formula[0] == "a" and first_formula[2] == "n":
+            self.a_goes_into_conclusion.append([[1], [0]])
+
+        if second_formula[0] == "a" and third_formula[2] == "n":
+            self.a_goes_into_conclusion.append([[1], [0]])
+
+        if third_formula[0] == "a" and first_formula[1] == "n":
+            self.a_goes_into_conclusion.append([[2], [0]])
+
+        if third_formula[0] == "a" and second_formula[2] == "n":
+            self.a_goes_into_conclusion.append([[2], [0]])
+
+
         if first_formula[0] == "n":    #caluculates potential "n"-values of first value
             return("n")
         elif second_formula[0] == "n":
@@ -5289,6 +6129,35 @@ class Total_formulas_Playground_left_Screen(Screen):
             return("u")
 
     def total_formula_deduction_second_value(self, first_formula,second_formula,third_formula):
+
+        if first_formula[0] == "n":    #caluculates potential "n"-values of second value
+            self.n_goes_into_conclusion.append([[0], [1]])
+
+        if second_formula[1] == "n":
+            self.n_goes_into_conclusion.append([[1], [1]])
+
+        if third_formula[1] == "n":
+            self.n_goes_into_conclusion.append([[2], [1]])
+
+        if first_formula[0] == "a" and second_formula[0] == "n":    #calculates potential "a"-values of second value
+            self.a_goes_into_conclusion.append([[0], [1]])
+
+        if first_formula[0] == "a" and third_formula[0] == "n":
+            self.a_goes_into_conclusion.append([[0], [1]])
+
+        if second_formula[1] == "a" and first_formula[2] == "n":
+            self.a_goes_into_conclusion.append([[1], [1]])
+
+        if second_formula[1] == "a" and third_formula[3] == "n":
+            self.a_goes_into_conclusion.append([[1], [1]])
+
+        if third_formula[1] == "a" and first_formula[1] == "n":
+            self.a_goes_into_conclusion.append([[2], [1]])
+
+        if third_formula[1] == "a" and second_formula[3] == "n":
+            self.a_goes_into_conclusion.append([[2], [1]])
+            
+
         if first_formula[0] == "n":    #caluculates potential "n"-values of second value
             return("n")
         elif second_formula[1] == "n":
@@ -5311,6 +6180,35 @@ class Total_formulas_Playground_left_Screen(Screen):
             return("u")
 
     def total_formula_deduction_third_value(self, first_formula,second_formula,third_formula):
+
+        if first_formula[1] == "n":    #caluculates potential "n"-values of third value
+            self.n_goes_into_conclusion.append([[0], [2]])
+
+        if second_formula[2] == "n":
+            self.n_goes_into_conclusion.append([[1], [2]])
+
+        if third_formula[0] == "n":
+            self.n_goes_into_conclusion.append([[2], [2]])
+
+        if first_formula[1] == "a" and second_formula[3] == "n":    #calculates potential "a"-values of third value
+            self.a_goes_into_conclusion.append([[0], [2]])
+
+        if first_formula[1] == "a" and third_formula[1] == "n":
+            self.a_goes_into_conclusion.append([[0], [2]])
+
+        if second_formula[2] == "a" and first_formula[3] == "n":
+            self.a_goes_into_conclusion.append([[1], [2]])
+
+        if second_formula[2] == "a" and third_formula[2] == "n":
+            self.a_goes_into_conclusion.append([[1], [2]])
+
+        if third_formula[0] == "a" and first_formula[0] == "n":
+            self.a_goes_into_conclusion.append([[2], [2]])
+
+        if third_formula[0] == "a" and second_formula[0] == "n":
+            self.a_goes_into_conclusion.append([[2], [2]])
+            
+
         if first_formula[1] == "n":    #caluculates potential "n"-values of third value
             return("n")
         elif second_formula[2] == "n":
@@ -5333,6 +6231,35 @@ class Total_formulas_Playground_left_Screen(Screen):
             return("u")
 
     def total_formula_deduction_fourth_value(self, first_formula,second_formula,third_formula):
+    
+        if first_formula[1] == "n":    #caluculates potential "n"-values of fourth value
+            self.n_goes_into_conclusion.append([[0], [3]])
+
+        if second_formula[3] == "n":
+            self.n_goes_into_conclusion.append([[1], [3]])
+
+        if third_formula[1] == "n":
+            self.n_goes_into_conclusion.append([[2], [3]])
+
+        if first_formula[1] == "a" and second_formula[2] == "n":    #calculates potential "a"-values of fourth value
+            self.a_goes_into_conclusion.append([[0], [3]])
+
+        if first_formula[1] == "a" and third_formula[0] == "n":
+            self.a_goes_into_conclusion.append([[0], [3]])
+
+        if second_formula[3] == "a" and first_formula[3] == "n":
+            self.a_goes_into_conclusion.append([[1], [3]])
+
+        if second_formula[3] == "a" and third_formula[3] == "n":
+            self.a_goes_into_conclusion.append([[1], [3]])
+
+        if third_formula[1] == "a" and first_formula[0] == "n":
+            self.a_goes_into_conclusion.append([[2], [3]])
+
+        if third_formula[1] == "a" and second_formula[1] == "n":
+            self.a_goes_into_conclusion.append([[2], [3]])
+
+
         if first_formula[1] == "n":    #caluculates potential "n"-values of fourth value
             return("n")
         elif second_formula[3] == "n":
@@ -5355,6 +6282,35 @@ class Total_formulas_Playground_left_Screen(Screen):
             return("u")
 
     def total_formula_deduction_fifth_value(self, first_formula,second_formula,third_formula):
+
+        if first_formula[2] == "n":    #caluculates potential "n"-values of fifth value
+            self.n_goes_into_conclusion.append([[0], [4]])
+
+        if second_formula[0] == "n":
+            self.n_goes_into_conclusion.append([[1], [4]])
+
+        if third_formula[2] == "n":
+            self.n_goes_into_conclusion.append([[2], [4]])
+
+        if first_formula[2] == "a" and second_formula[1] == "n":    #calculates potential "a"-values of fifth value
+            self.a_goes_into_conclusion.append([[0], [4]])
+
+        if first_formula[2] == "a" and third_formula[3] == "n":
+            self.a_goes_into_conclusion.append([[0], [4]])
+
+        if second_formula[0] == "a" and first_formula[0] == "n":
+            self.a_goes_into_conclusion.append([[1], [4]])
+
+        if second_formula[0] == "a" and third_formula[0] == "n":
+            self.a_goes_into_conclusion.append([[1], [4]])
+
+        if third_formula[2] == "a" and first_formula[3] == "n":
+            self.a_goes_into_conclusion.append([[2], [4]])
+
+        if third_formula[2] == "a" and second_formula[2] == "n":
+            self.a_goes_into_conclusion.append([[2], [4]])
+
+
         if first_formula[2] == "n":    #caluculates potential "n"-values of fifth value
             return("n")
         elif second_formula[0] == "n":
@@ -5377,6 +6333,35 @@ class Total_formulas_Playground_left_Screen(Screen):
             return("u")
 
     def total_formula_deduction_sixth_value(self, first_formula,second_formula,third_formula):
+
+        if first_formula[2] == "n":    #caluculates potential "n"-values of sixth value
+            self.n_goes_into_conclusion.append([[0], [5]])
+
+        if second_formula[1] == "n":
+            self.n_goes_into_conclusion.append([[1], [5]])
+
+        if third_formula[3] == "n":
+            self.n_goes_into_conclusion.append([[2], [5]])
+
+        if first_formula[2] == "a" and second_formula[0] == "n":    #calculates potential "a"-values of sixth value
+            self.a_goes_into_conclusion.append([[0], [5]])
+
+        if first_formula[2] == "a" and third_formula[2] == "n":
+            self.a_goes_into_conclusion.append([[0], [5]])
+
+        if second_formula[1] == "a" and first_formula[0] == "n":
+            self.a_goes_into_conclusion.append([[1], [5]])
+
+        if second_formula[1] == "a" and third_formula[1] == "n":
+            self.a_goes_into_conclusion.append([[1], [5]])
+
+        if third_formula[3] == "a" and first_formula[3] == "n":
+            self.a_goes_into_conclusion.append([[2], [5]])
+
+        if third_formula[3] == "a" and second_formula[3] == "n":
+            self.a_goes_into_conclusion.append([[2], [5]])
+
+
         if first_formula[2] == "n":    #caluculates potential "n"-values of sixth value
             return("n")
         elif second_formula[1] == "n":
@@ -5399,6 +6384,35 @@ class Total_formulas_Playground_left_Screen(Screen):
             return("u")
 
     def total_formula_deduction_seventh_value(self, first_formula,second_formula,third_formula):
+
+        if first_formula[3] == "n":    #caluculates potential "n"-values of sixth value
+            self.n_goes_into_conclusion.append([[0], [6]])
+
+        if second_formula[2] == "n":
+            self.n_goes_into_conclusion.append([[1], [6]])
+
+        if third_formula[2] == "n":
+            self.n_goes_into_conclusion.append([[2], [6]])
+
+        if first_formula[3] == "a" and second_formula[3] == "n":    #calculates potential "a"-values of sixth value
+            self.a_goes_into_conclusion.append([[0], [6]])
+
+        if first_formula[3] == "a" and third_formula[3] == "n":
+            self.a_goes_into_conclusion.append([[0], [6]])
+
+        if second_formula[2] == "a" and first_formula[1] == "n":
+            self.a_goes_into_conclusion.append([[1], [6]])
+
+        if second_formula[2] == "a" and third_formula[0] == "n":
+            self.a_goes_into_conclusion.append([[1], [6]])
+
+        if third_formula[2] == "a" and first_formula[2] == "n":
+            self.a_goes_into_conclusion.append([[2], [6]])
+
+        if third_formula[2] == "a" and second_formula[0] == "n":
+            self.a_goes_into_conclusion.append([[2], [6]])
+
+
         if first_formula[3] == "n":    #caluculates potential "n"-values of sixth value
             return("n")
         elif second_formula[2] == "n":
@@ -5421,6 +6435,35 @@ class Total_formulas_Playground_left_Screen(Screen):
             return("u")
 
     def total_formula_deduction_eighth_value(self, first_formula,second_formula,third_formula):
+
+        if first_formula[3] == "n":    #caluculates potential "n"-values of eighth value
+            self.n_goes_into_conclusion.append([[0], [7]])
+
+        if second_formula[3] == "n":
+            self.n_goes_into_conclusion.append([[1], [7]])
+
+        if third_formula[3] == "n":
+            self.n_goes_into_conclusion.append([[2], [7]])
+
+        if first_formula[3] == "a" and second_formula[2] == "n":    #calculates potential "a"-values of eighth value
+            self.a_goes_into_conclusion.append([[0], [7]])
+
+        if first_formula[3] == "a" and third_formula[2] == "n":
+            self.a_goes_into_conclusion.append([[0], [7]])
+
+        if second_formula[3] == "a" and first_formula[1] == "n":
+            self.a_goes_into_conclusion.append([[1], [7]])
+
+        if second_formula[3] == "a" and third_formula[1] == "n":
+            self.a_goes_into_conclusion.append([[1], [7]])
+
+        if third_formula[3] == "a" and first_formula[2] == "n":
+            self.a_goes_into_conclusion.append([[2], [7]])
+
+        if third_formula[3] == "a" and second_formula[1] == "n":
+            self.a_goes_into_conclusion.append([[2], [7]])
+
+
         if first_formula[3] == "n":    #caluculates potential "n"-values of eighth value
             return("n")
         elif second_formula[3] == "n":
@@ -5443,6 +6486,9 @@ class Total_formulas_Playground_left_Screen(Screen):
             return("u")
 
     def syllogism_solution(self, first_formula,second_formula, third_formula):
+        self.a_goes_into_conclusion = []
+        self.n_goes_into_conclusion = []
+        
         conclusion = [0,0,0,0,0,0,0,0]
         conclusion[0] = self.total_formula_deduction_first_value(first_formula,second_formula, third_formula)
         conclusion[1] = self.total_formula_deduction_second_value(first_formula,second_formula, third_formula)
@@ -5469,83 +6515,6 @@ class Total_formulas_Playground_left_Screen(Screen):
         if foo_3 == []:
             if button == self.btn_n:
                 z = foo_3.append('n')
-                self.btn_1_p1.text ='n'
-                self.btn_1_p1.background_color=(1, 0, 0, 1)
-                self.btn_2_p1.text ='n'
-                self.btn_2_p1.background_color=(1, 0, 0, 1)
-            elif button == self.btn_a:
-                z = foo_3.append('a')
-                self.btn_1_p1.text ='a'
-                self.btn_1_p1.background_color=(0, 1, 0, 1)
-                self.btn_2_p1.text ='a'
-                self.btn_2_p1.background_color=(0, 1, 0, 1)
-            elif button == self.btn_u:
-                z = foo_3.append('u')
-                self.btn_1_p1.text ='u'
-                self.btn_1_p1.background_color=(1, 1, 1, 1)
-                self.btn_2_p1.text ='u'
-                self.btn_2_p1.background_color=(1, 1, 1, 1)
-        elif len(foo_3) == 1:
-            if button == self.btn_n:
-                z = foo_3.append('n')
-                self.btn_3_p1.text ='n'
-                self.btn_3_p1.background_color=(1, 0, 0, 1)
-                self.btn_4_p1.text ='n'
-                self.btn_4_p1.background_color=(1, 0, 0, 1)
-            elif button == self.btn_a:
-                z = foo_3.append('a')
-                self.btn_3_p1.text ='a'
-                self.btn_3_p1.background_color=(0, 1, 0, 1)
-                self.btn_4_p1.text ='a'
-                self.btn_4_p1.background_color=(0, 1, 0, 1)
-            elif button == self.btn_u:
-                z = foo_3.append('u')
-                self.btn_3_p1.text ='u'
-                self.btn_3_p1.background_color=(1, 1, 1, 1)
-                self.btn_4_p1.text ='u'
-                self.btn_4_p1.background_color=(1, 1, 1, 1)
-        elif len(foo_3) == 2:
-            if button == self.btn_n:
-                z = foo_3.append('n')
-                self.btn_5_p1.text ='n'
-                self.btn_5_p1.background_color=(1, 0, 0, 1)
-                self.btn_6_p1.text ='n'
-                self.btn_6_p1.background_color=(1, 0, 0, 1)
-            elif button == self.btn_a:
-                z = foo_3.append('a')
-                self.btn_5_p1.text ='a'
-                self.btn_5_p1.background_color=(0, 1, 0, 1)
-                self.btn_6_p1.text ='a'
-                self.btn_6_p1.background_color=(0, 1, 0, 1)
-            elif button == self.btn_u:
-                z = foo_3.append('u')
-                self.btn_5_p1.text ='u'
-                self.btn_5_p1.background_color=(1, 1, 1, 1)
-                self.btn_6_p1.text ='u'
-                self.btn_6_p1.background_color=(1, 1, 1, 1)
-        elif len(foo_3) == 3:
-            if button == self.btn_n:
-                z = foo_3.append('n')
-                self.btn_7_p1.text ='n'
-                self.btn_7_p1.background_color=(1, 0, 0, 1)
-                self.btn_8_p1.text ='n'
-                self.btn_8_p1.background_color=(1, 0, 0, 1)
-            elif button == self.btn_a:
-                z = foo_3.append('a')
-                self.btn_7_p1.text ='a'
-                self.btn_7_p1.background_color=(0, 1, 0, 1)
-                self.btn_8_p1.text ='a'
-                self.btn_8_p1.background_color=(0, 1, 0, 1)
-            elif button == self.btn_u:
-                z = foo_3.append('u')
-                self.btn_7_p1.text ='u'
-                self.btn_7_p1.background_color=(1, 1, 1, 1)
-                self.btn_8_p1.text ='u'
-                self.btn_8_p1.background_color=(1, 1, 1, 1)
-        elif len(foo_3) == 4:
-            self.first_formula = foo_3
-            if button == self.btn_n:
-                z = foo_3.append('n')
                 self.btn_1_p2.text ='n'
                 self.btn_1_p2.background_color=(1, 0, 0, 1)
                 self.btn_5_p2.text ='n'
@@ -5562,7 +6531,7 @@ class Total_formulas_Playground_left_Screen(Screen):
                 self.btn_1_p2.background_color=(1, 1, 1, 1)
                 self.btn_5_p2.text ='u'
                 self.btn_5_p2.background_color=(1, 1, 1, 1)
-        elif len(foo_3) == 5:
+        elif len(foo_3) == 1:
             if button == self.btn_n:
                 z = foo_3.append('n')
                 self.btn_2_p2.text ='n'
@@ -5581,7 +6550,7 @@ class Total_formulas_Playground_left_Screen(Screen):
                 self.btn_2_p2.background_color=(1, 1, 1, 1)
                 self.btn_6_p2.text ='u'
                 self.btn_6_p2.background_color=(1, 1, 1, 1)
-        elif len(foo_3) == 6:
+        elif len(foo_3) == 2:
             if button == self.btn_n:
                 z = foo_3.append('n')
                 self.btn_3_p2.text ='n'
@@ -5600,27 +6569,116 @@ class Total_formulas_Playground_left_Screen(Screen):
                 self.btn_3_p2.background_color=(1, 1, 1, 1)
                 self.btn_7_p2.text ='u'
                 self.btn_7_p2.background_color=(1, 1, 1, 1)
-        elif len(foo_3) == 7:
+        elif len(foo_3) == 3:
             if button == self.btn_n:
                 z = foo_3.append('n')
                 self.btn_4_p2.text ='n'
                 self.btn_4_p2.background_color=(1, 0, 0, 1)
                 self.btn_8_p2.text ='n'
                 self.btn_8_p2.background_color=(1, 0, 0, 1)
+                self.second_formula = foo_3
+                self.premis_two_label.text = self.dyadic_name_second_formula(self.second_formula)
             elif button == self.btn_a:
                 z = foo_3.append('a')
                 self.btn_4_p2.text ='a'
                 self.btn_4_p2.background_color=(0, 1, 0, 1)
                 self.btn_8_p2.text ='a'
                 self.btn_8_p2.background_color=(0, 1, 0, 1)
+                self.second_formula = foo_3
+                self.premis_two_label.text = self.dyadic_name_second_formula(self.second_formula)
             elif button == self.btn_u:
                 z = foo_3.append('u')
                 self.btn_4_p2.text ='u'
                 self.btn_4_p2.background_color=(1, 1, 1, 1)
                 self.btn_8_p2.text ='u'
                 self.btn_8_p2.background_color=(1, 1, 1, 1)
+                self.second_formula = foo_3
+                self.premis_two_label.text = self.dyadic_name_second_formula(self.second_formula)
+        elif len(foo_3) == 4:
+            self.second_formula = foo_3
+            if button == self.btn_n:
+                z = foo_3.append('n')
+                self.btn_1_p1.text ='n'
+                self.btn_1_p1.background_color=(1, 0, 0, 1)
+                self.btn_2_p1.text ='n'
+                self.btn_2_p1.background_color=(1, 0, 0, 1)
+            elif button == self.btn_a:
+                z = foo_3.append('a')
+                self.btn_1_p1.text ='a'
+                self.btn_1_p1.background_color=(0, 1, 0, 1)
+                self.btn_2_p1.text ='a'
+                self.btn_2_p1.background_color=(0, 1, 0, 1)
+            elif button == self.btn_u:
+                z = foo_3.append('u')
+                self.btn_1_p1.text ='u'
+                self.btn_1_p1.background_color=(1, 1, 1, 1)
+                self.btn_2_p1.text ='u'
+                self.btn_2_p1.background_color=(1, 1, 1, 1)
+        elif len(foo_3) == 5:
+            if button == self.btn_n:
+                z = foo_3.append('n')
+                self.btn_3_p1.text ='n'
+                self.btn_3_p1.background_color=(1, 0, 0, 1)
+                self.btn_4_p1.text ='n'
+                self.btn_4_p1.background_color=(1, 0, 0, 1)
+            elif button == self.btn_a:
+                z = foo_3.append('a')
+                self.btn_3_p1.text ='a'
+                self.btn_3_p1.background_color=(0, 1, 0, 1)
+                self.btn_4_p1.text ='a'
+                self.btn_4_p1.background_color=(0, 1, 0, 1)
+            elif button == self.btn_u:
+                z = foo_3.append('u')
+                self.btn_3_p1.text ='u'
+                self.btn_3_p1.background_color=(1, 1, 1, 1)
+                self.btn_4_p1.text ='u'
+                self.btn_4_p1.background_color=(1, 1, 1, 1)
+        elif len(foo_3) == 6:
+            if button == self.btn_n:
+                z = foo_3.append('n')
+                self.btn_5_p1.text ='n'
+                self.btn_5_p1.background_color=(1, 0, 0, 1)
+                self.btn_6_p1.text ='n'
+                self.btn_6_p1.background_color=(1, 0, 0, 1)
+            elif button == self.btn_a:
+                z = foo_3.append('a')
+                self.btn_5_p1.text ='a'
+                self.btn_5_p1.background_color=(0, 1, 0, 1)
+                self.btn_6_p1.text ='a'
+                self.btn_6_p1.background_color=(0, 1, 0, 1)
+            elif button == self.btn_u:
+                z = foo_3.append('u')
+                self.btn_5_p1.text ='u'
+                self.btn_5_p1.background_color=(1, 1, 1, 1)
+                self.btn_6_p1.text ='u'
+                self.btn_6_p1.background_color=(1, 1, 1, 1)
+        elif len(foo_3) == 7:
+            if button == self.btn_n:
+                z = foo_3.append('n')
+                self.btn_7_p1.text ='n'
+                self.btn_7_p1.background_color=(1, 0, 0, 1)
+                self.btn_8_p1.text ='n'
+                self.btn_8_p1.background_color=(1, 0, 0, 1)
+                self.first_formula = foo_3[4:8]
+                self.premis_one_label.text = self.dyadic_name_first_formula(self.first_formula)
+            elif button == self.btn_a:
+                z = foo_3.append('a')
+                self.btn_7_p1.text ='a'
+                self.btn_7_p1.background_color=(0, 1, 0, 1)
+                self.btn_8_p1.text ='a'
+                self.btn_8_p1.background_color=(0, 1, 0, 1)
+                self.first_formula = foo_3[4:8]
+                self.premis_one_label.text = self.dyadic_name_first_formula(self.first_formula)
+            elif button == self.btn_u:
+                z = foo_3.append('u')
+                self.btn_7_p1.text ='u'
+                self.btn_7_p1.background_color=(1, 1, 1, 1)
+                self.btn_8_p1.text ='u'
+                self.btn_8_p1.background_color=(1, 1, 1, 1)
+                self.first_formula = foo_3[4:8]
+                self.premis_one_label.text = self.dyadic_name_first_formula(self.first_formula)
         elif len(foo_3) == 8:
-            self.second_formula = foo_3[4:8]
+            self.first_formula = foo_3[4:8]
             if button == self.btn_n:
                 z = foo_3.append('n')
                 self.btn_1_p3.text ='n'
@@ -5684,18 +6742,24 @@ class Total_formulas_Playground_left_Screen(Screen):
                 self.btn_6_p3.background_color=(1, 0, 0, 1)
                 self.btn_8_p3.text ='n'
                 self.btn_8_p3.background_color=(1, 0, 0, 1)
+                self.third_formula = foo_3[8:12]
+                self.premis_three_label.text = self.dyadic_name_third_formula(self.third_formula)
             elif button == self.btn_a:
                 z = foo_3.append('a')
                 self.btn_6_p3.text ='a'
                 self.btn_6_p3.background_color=(0, 1, 0, 1)
                 self.btn_8_p3.text ='a'
                 self.btn_8_p3.background_color=(0, 1, 0, 1)
+                self.third_formula = foo_3[8:12]
+                self.premis_three_label.text = self.dyadic_name_third_formula(self.third_formula)
             elif button == self.btn_u:
                 z = foo_3.append('u')
                 self.btn_6_p3.text ='u'
                 self.btn_6_p3.background_color=(1, 1, 1, 1)
                 self.btn_8_p3.text ='u'
                 self.btn_8_p3.background_color=(1, 1, 1, 1)
+                self.third_formula = foo_3[8:12]
+                self.premis_three_label.text = self.dyadic_name_third_formula(self.third_formula)
         if len(foo_3) == 12:
             self.third_formula = foo_3[8:12]
             self.btn_n.disabled = True
@@ -5707,6 +6771,14 @@ class Total_formulas_Playground_left_Screen(Screen):
     def clear_widgets_function(self, *args):
         self.clear_widgets()
         foo_3.clear()
+
+        self.a_goes_into_conclusion = []
+        self.n_goes_into_conclusion = []
+        self.error_number_enlonged = []
+        
+        self.a_goes_into_conclusion.clear()
+        self.n_goes_into_conclusion.clear()
+        self.error_number_enlonged.clear()
         
         self.refresh2_button = Button(text='Generiere!', size_hint=(.2, .1), pos_hint={'x': .8, 'y': .8})
         self.add_widget(self.refresh2_button)
@@ -5725,6 +6797,9 @@ class Total_formulas_Playground_left_Screen(Screen):
         my_text3 = self.third_formula
         
         function_output_list = self.output2(my_text, my_text2, my_text3)
+        
+        
+
         
         if function_output_list[0][0] != 'u':
             function_output_list_upper_value_one = function_output_list[0][0].upper()
@@ -5766,8 +6841,23 @@ class Total_formulas_Playground_left_Screen(Screen):
         else:
             function_output_list_upper_value_eight = function_output_list[0][7]
 
-        if function_output_list[1] == 1:
-            self.conclusion_label.text = "Contradiction!"
+        if function_output_list[1] != [0]:
+            self.conclusion_label.text = "Widerspruch!"
+            for r in range(len(function_output_list[1])):
+                for s in range(8):
+                    if function_output_list[1][r][0][0] == 0 and function_output_list[1][r][1][0] == s:
+                        self.buttons_solution[s].background_color = (0, 0, 1, 1)
+                        self.buttons_solution[s].text = str(s+1)
+                        self.buttons_premis_one[s].underline = True
+                    if function_output_list[1][r][0][0] == 1 and function_output_list[1][r][1][0] == s:
+                        self.buttons_solution[s].background_color = (0, 0, 1, 1)
+                        self.buttons_solution[s].text = str(s+1)
+                        self.buttons_premis_two[s].underline = True
+                    if function_output_list[1][r][0][0] == 2 and function_output_list[1][r][1][0] == s:
+                        self.buttons_solution[s].background_color = (0, 0, 1, 1)
+                        self.buttons_solution[s].text = str(s+1)
+                        self.buttons_premis_three[s].underline = True
+
         else:
             self.btn_1_c.text = function_output_list_upper_value_one
             self.btn_2_c.text = function_output_list_upper_value_two
@@ -5849,6 +6939,26 @@ class Total_formulas_Playground_left_Screen(Screen):
             elif function_output_list[0][7] == 'u':
                 self.btn_8_c.background_color=(1, 1, 1, 1)
                 self.btn_8_c.background_color=(1, 1, 1, 1)
+                
+        
+        if function_output_list[1] == [0]:
+            for r in range(len(self.a_goes_into_conclusion)):
+                for s in range(8):
+                    if self.a_goes_into_conclusion[r][0][0] == 0 and self.a_goes_into_conclusion[r][1][0] == s:
+                        self.buttons_premis_one[s].underline = True
+                    if self.a_goes_into_conclusion[r][0][0] == 1 and self.a_goes_into_conclusion[r][1][0] == s:
+                        self.buttons_premis_two[s].underline = True
+                    if self.a_goes_into_conclusion[r][0][0] == 2 and self.a_goes_into_conclusion[r][1][0] == s:
+                        self.buttons_premis_three[s].underline = True
+            for r in range(len(self.n_goes_into_conclusion)):
+                for s in range(8):
+                    if self.n_goes_into_conclusion[r][0][0] == 0 and self.n_goes_into_conclusion[r][1][0] == s:
+                        self.buttons_premis_one[s].underline = True
+                    if self.n_goes_into_conclusion[r][0][0] == 1 and self.n_goes_into_conclusion[r][1][0] == s:
+                        self.buttons_premis_two[s].underline = True
+                    if self.n_goes_into_conclusion[r][0][0] == 2 and self.n_goes_into_conclusion[r][1][0] == s:
+                        self.buttons_premis_three[s].underline = True
+
                 
     def refresh_function(self, button):
         
@@ -5936,10 +7046,38 @@ class Total_formulas_Playground_left_Screen(Screen):
         self.p8 = Label(text='~P')
         self.syllogism_box_row_3.add_widget(self.p8)
 
+
+
+        self.syllogism_box_row_5 = BoxLayout(orientation='horizontal')
+        self.syllogism_box_col_1.add_widget(self.syllogism_box_row_5)
+        
+        self.premis_two_label = Label(text='1. Formel', size_hint_x = 2.5, font_name = 'my_custom_font')
+        self.syllogism_box_row_5.add_widget(self.premis_two_label)
+
+        self.btn_1_p2 = Button(color= (0, 0, 0, 1), background_normal='')
+        self.syllogism_box_row_5.add_widget(self.btn_1_p2)
+        self.btn_2_p2 = Button(color= (0, 0, 0, 1), background_normal='')
+        self.syllogism_box_row_5.add_widget(self.btn_2_p2)
+        self.btn_3_p2 = Button(color= (0, 0, 0, 1), background_normal='')
+        self.syllogism_box_row_5.add_widget(self.btn_3_p2)
+        self.btn_4_p2 = Button(color= (0, 0, 0, 1), background_normal='')
+        self.syllogism_box_row_5.add_widget(self.btn_4_p2)
+        self.btn_5_p2 = Button(color= (0, 0, 0, 1), background_normal='')
+        self.syllogism_box_row_5.add_widget(self.btn_5_p2)
+        self.btn_6_p2 = Button(color= (0, 0, 0, 1), background_normal='')
+        self.syllogism_box_row_5.add_widget(self.btn_6_p2)
+        self.btn_7_p2 = Button(color= (0, 0, 0, 1), background_normal='')
+        self.syllogism_box_row_5.add_widget(self.btn_7_p2)
+        self.btn_8_p2 = Button(color= (0, 0, 0, 1), background_normal='')
+        self.syllogism_box_row_5.add_widget(self.btn_8_p2)
+        
+        self.buttons_premis_two = [self.btn_1_p2, self.btn_2_p2, self.btn_3_p2, self.btn_4_p2, \
+                                   self.btn_5_p2, self.btn_6_p2, self.btn_7_p2, self.btn_8_p2]
+
         self.syllogism_box_row_4 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_4)
         
-        self.premis_one_label = Label(text='1. Formel', size_hint_x = 2.5)
+        self.premis_one_label = Label(text='2. Formel', size_hint_x = 2.5, font_name = 'my_custom_font')
         self.syllogism_box_row_4.add_widget(self.premis_one_label)
 
         self.btn_1_p1 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -5959,33 +7097,14 @@ class Total_formulas_Playground_left_Screen(Screen):
         self.btn_8_p1 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_4.add_widget(self.btn_8_p1)
 
-        self.syllogism_box_row_5 = BoxLayout(orientation='horizontal')
-        self.syllogism_box_col_1.add_widget(self.syllogism_box_row_5)
-        
-        self.premis_two_label = Label(text='2. Formel', size_hint_x = 2.5)
-        self.syllogism_box_row_5.add_widget(self.premis_two_label)
+        self.buttons_premis_one = [self.btn_1_p1, self.btn_2_p1, self.btn_3_p1, self.btn_4_p1, \
+                                   self.btn_5_p1, self.btn_6_p1, self.btn_7_p1, self.btn_8_p1]
 
-        self.btn_1_p2 = Button(color= (0, 0, 0, 1), background_normal='')
-        self.syllogism_box_row_5.add_widget(self.btn_1_p2)
-        self.btn_2_p2 = Button(color= (0, 0, 0, 1), background_normal='')
-        self.syllogism_box_row_5.add_widget(self.btn_2_p2)
-        self.btn_3_p2 = Button(color= (0, 0, 0, 1), background_normal='')
-        self.syllogism_box_row_5.add_widget(self.btn_3_p2)
-        self.btn_4_p2 = Button(color= (0, 0, 0, 1), background_normal='')
-        self.syllogism_box_row_5.add_widget(self.btn_4_p2)
-        self.btn_5_p2 = Button(color= (0, 0, 0, 1), background_normal='')
-        self.syllogism_box_row_5.add_widget(self.btn_5_p2)
-        self.btn_6_p2 = Button(color= (0, 0, 0, 1), background_normal='')
-        self.syllogism_box_row_5.add_widget(self.btn_6_p2)
-        self.btn_7_p2 = Button(color= (0, 0, 0, 1), background_normal='')
-        self.syllogism_box_row_5.add_widget(self.btn_7_p2)
-        self.btn_8_p2 = Button(color= (0, 0, 0, 1), background_normal='')
-        self.syllogism_box_row_5.add_widget(self.btn_8_p2)
 
         self.syllogism_box_row_6 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_6)
         
-        self.premis_three_label = Label(text='3. Formel', size_hint_x = 2.5)
+        self.premis_three_label = Label(text='3. Formel', size_hint_x = 2.5, font_name = 'my_custom_font')
         self.syllogism_box_row_6.add_widget(self.premis_three_label)
 
         self.btn_1_p3 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -6005,12 +7124,15 @@ class Total_formulas_Playground_left_Screen(Screen):
         self.btn_8_p3 = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_8_p3)
         
+        self.buttons_premis_three = [self.btn_1_p3, self.btn_2_p3, self.btn_3_p3, self.btn_4_p3, \
+                                   self.btn_5_p3, self.btn_6_p3, self.btn_7_p3, self.btn_8_p3]
+        
         self.syllogism_box_col_1.add_widget(Label(text= ' ', size_hint_y= .2))
 
         self.syllogism_box_row_6 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_6)
         
-        self.conclusion_label = Label(text='Ganzformel', size_hint_x = 2.5)
+        self.conclusion_label = Label(text='Ganzformel', size_hint_x = 2.5, font_size = dp(11))
         self.syllogism_box_row_6.add_widget(self.conclusion_label)
 
         self.btn_1_c = Button(color= (0, 0, 0, 1), background_normal='')
@@ -6029,6 +7151,9 @@ class Total_formulas_Playground_left_Screen(Screen):
         self.syllogism_box_row_6.add_widget(self.btn_7_c)
         self.btn_8_c = Button(color= (0, 0, 0, 1), background_normal='')
         self.syllogism_box_row_6.add_widget(self.btn_8_c)
+
+        self.buttons_solution = [self.btn_1_c, self.btn_2_c, self.btn_3_c, self.btn_4_c,\
+                                 self.btn_5_c, self.btn_6_c, self.btn_7_c, self.btn_8_c]
 
         self.syllogism_box_col_2 = BoxLayout(orientation='vertical')
         vertical.add_widget(self.syllogism_box_col_2)
@@ -6071,6 +7196,114 @@ class Total_formulas_Playground_left_Screen(Screen):
 class Total_formulas_Playground_right_Screen(Screen):
     global foo_4
     foo_4 = []
+
+    def dyadic_name_third_formula(self, formula):
+        if formula == ['a', 'a', 'a', 'a']:
+            return "S#P"
+        elif formula == ['a', 'a', 'a', 'n']:
+            return "SÄP"
+        elif formula == ['a', 'n', 'a', 'a']:
+            return "SÖP"
+        elif formula == ['a', 'n', 'a', 'n']:
+            return "S&P"
+        elif formula == ['a', 'a', 'n', 'a']:
+            return "S@P"
+        elif formula == ['a', 'a', 'n', 'n']:
+            return "S%P"
+        elif formula == ['a', 'n', 'n', 'a']:
+            return "S$P"
+        elif formula == ['a', 'n', 'n', 'n']:
+            return "SÜP"
+        elif formula == ['n', 'a', 'a', 'a']:
+            return "SÜ'P"
+        elif formula == ['n', 'a', 'a', 'n']:
+            return "S$'P"
+        elif formula == ['n', 'n', 'a', 'a']:
+            return "S%'P"
+        elif formula == ['n', 'n', 'a', 'n']:
+            return "S@'P"
+        elif formula == ['n', 'a', 'n', 'a']:
+            return "S&'P"
+        elif formula == ['n', 'a', 'n', 'n']:
+            return "SÖ'P"
+        elif formula == ['n', 'n', 'n', 'a']:
+            return "SÄ'P"
+        elif formula == ['n', 'n', 'n', 'n']:
+            return "S#'P"
+        else:
+            return " "
+
+    def dyadic_name_first_formula(self, formula):
+        if formula == ['a', 'a', 'a', 'a']: # Dyadische Formeln
+            return "M#P"
+        elif formula == ['a', 'a', 'a', 'n']:
+            return "MÄP"
+        elif formula == ['a', 'n', 'a', 'a']:
+            return "MÖP"
+        elif formula == ['a', 'n', 'a', 'n']:
+            return "M&P"
+        elif formula == ['a', 'a', 'n', 'a']:
+            return "M@P"
+        elif formula == ['a', 'a', 'n', 'n']:
+            return "M%P"
+        elif formula == ['a', 'n', 'n', 'a']:
+            return "M$P"
+        elif formula == ['a', 'n', 'n', 'n']:
+            return "MÜP"
+        elif formula == ['n', 'a', 'a', 'a']:
+            return "MÜ'P"
+        elif formula == ['n', 'a', 'a', 'n']:
+            return "M$'P"
+        elif formula == ['n', 'n', 'a', 'a']:
+            return "M%'P"
+        elif formula == ['n', 'n', 'a', 'n']:
+            return "M@'P"
+        elif formula == ['n', 'a', 'n', 'a']:
+            return "M&'P"
+        elif formula == ['n', 'a', 'n', 'n']:
+            return "MÖ'P"
+        elif formula == ['n', 'n', 'n', 'a']:
+            return "MÄ'P"
+        elif formula == ['n', 'n', 'n', 'n']:
+            return "M#'P"
+        else:
+            return " "
+        
+    def dyadic_name_second_formula(self, formula):
+        if formula == ['a', 'a', 'a', 'a']: # Dyadische Formeln
+            return "S#M"
+        elif formula == ['a', 'a', 'a', 'n']:
+            return "SÄM"
+        elif formula == ['a', 'n', 'a', 'a']:
+            return "SÖM"
+        elif formula == ['a', 'n', 'a', 'n']:
+            return "S&M"
+        elif formula == ['a', 'a', 'n', 'a']:
+            return "S@M"
+        elif formula == ['a', 'a', 'n', 'n']:
+            return "S%M"
+        elif formula == ['a', 'n', 'n', 'a']:
+            return "S$M"
+        elif formula == ['a', 'n', 'n', 'n']:
+            return "SÜM"
+        elif formula == ['n', 'a', 'a', 'a']:
+            return "SÜ'M"
+        elif formula == ['n', 'a', 'a', 'n']:
+            return "S$'M"
+        elif formula == ['n', 'n', 'a', 'a']:
+            return "S%'M"
+        elif formula == ['n', 'n', 'a', 'n']:
+            return "S@'M"
+        elif formula == ['n', 'a', 'n', 'a']:
+            return "S&'M"
+        elif formula == ['n', 'a', 'n', 'n']:
+            return "SÖ'M"
+        elif formula == ['n', 'n', 'n', 'a']:
+            return "SÄ'M"
+        elif formula == ['n', 'n', 'n', 'n']:
+            return "S#'M"
+        else:
+            return " "
     
     def first_formula_deduction_first_value(self, total_formula):
         if total_formula[0] == "n" and total_formula[4] == "n":
@@ -6149,15 +7382,15 @@ class Total_formulas_Playground_right_Screen(Screen):
         second_formula = [0, 0, 0, 0]
         third_formula = [0, 0, 0, 0]
         
-        first_formula[0] = self.first_formula_deduction_first_value(total_formula)
-        first_formula[1] = self.first_formula_deduction_second_value(total_formula)
-        first_formula[2] = self.first_formula_deduction_third_value(total_formula)
-        first_formula[3] = self.first_formula_deduction_fourth_value(total_formula)
+        second_formula[0] = self.first_formula_deduction_first_value(total_formula)
+        second_formula[1] = self.first_formula_deduction_second_value(total_formula)
+        second_formula[2] = self.first_formula_deduction_third_value(total_formula)
+        second_formula[3] = self.first_formula_deduction_fourth_value(total_formula)
         
-        second_formula[0] = self.second_formula_deduction_first_value(total_formula)
-        second_formula[1] = self.second_formula_deduction_second_value(total_formula)
-        second_formula[2] = self.second_formula_deduction_third_value(total_formula)
-        second_formula[3] = self.second_formula_deduction_fourth_value(total_formula)
+        first_formula[0] = self.second_formula_deduction_first_value(total_formula)
+        first_formula[1] = self.second_formula_deduction_second_value(total_formula)
+        first_formula[2] = self.second_formula_deduction_third_value(total_formula)
+        first_formula[3] = self.second_formula_deduction_fourth_value(total_formula)
         
         third_formula[0] = self.third_formula_deduction_first_value(total_formula)
         third_formula[1] = self.third_formula_deduction_second_value(total_formula)
@@ -6298,26 +7531,32 @@ class Total_formulas_Playground_right_Screen(Screen):
 
     def click(self,my_button2):
         my_text = self.total_formula
+        
+
 
         function_output_list = self.analyize_solution(my_text)
+        
+        self.premis_two_label.text = self.dyadic_name_first_formula(function_output_list[0])
+        self.premis_one_label.text = self.dyadic_name_second_formula(function_output_list[1])
+        self.premis_three_label.text = self.dyadic_name_third_formula(function_output_list[2])
 
-        self.btn_1_p1.text = function_output_list[0][0]
-        self.btn_2_p1.text = function_output_list[0][0]
-        self.btn_3_p1.text = function_output_list[0][1]
-        self.btn_4_p1.text = function_output_list[0][1]
-        self.btn_5_p1.text = function_output_list[0][2]
-        self.btn_6_p1.text = function_output_list[0][2]
-        self.btn_7_p1.text = function_output_list[0][3]
-        self.btn_8_p1.text = function_output_list[0][3]
+        self.btn_1_p2.text = function_output_list[0][0]
+        self.btn_2_p2.text = function_output_list[0][0]
+        self.btn_3_p2.text = function_output_list[0][1]
+        self.btn_4_p2.text = function_output_list[0][1]
+        self.btn_5_p2.text = function_output_list[0][2]
+        self.btn_6_p2.text = function_output_list[0][2]
+        self.btn_7_p2.text = function_output_list[0][3]
+        self.btn_8_p2.text = function_output_list[0][3]
 
-        self.btn_1_p2.text = function_output_list[1][0]
-        self.btn_2_p2.text = function_output_list[1][1]
-        self.btn_3_p2.text = function_output_list[1][2]
-        self.btn_4_p2.text = function_output_list[1][3]
-        self.btn_5_p2.text = function_output_list[1][0]
-        self.btn_6_p2.text = function_output_list[1][1]
-        self.btn_7_p2.text = function_output_list[1][2]
-        self.btn_8_p2.text = function_output_list[1][3]
+        self.btn_1_p1.text = function_output_list[1][0]
+        self.btn_2_p1.text = function_output_list[1][1]
+        self.btn_3_p1.text = function_output_list[1][2]
+        self.btn_4_p1.text = function_output_list[1][3]
+        self.btn_5_p1.text = function_output_list[1][0]
+        self.btn_6_p1.text = function_output_list[1][1]
+        self.btn_7_p1.text = function_output_list[1][2]
+        self.btn_8_p1.text = function_output_list[1][3]
         
         self.btn_1_p3.text = function_output_list[2][0]
         self.btn_2_p3.text = function_output_list[2][1]
@@ -6329,86 +7568,86 @@ class Total_formulas_Playground_right_Screen(Screen):
         self.btn_8_p3.text = function_output_list[2][3]
 
         if function_output_list[0][0] == 'n':
-            self.btn_1_p1.background_color=(1, 0, 0, 1)
-            self.btn_1_p1.background_color=(1, 0, 0, 1)
-            self.btn_2_p1.background_color=(1, 0, 0, 1)
-            self.btn_2_p1.background_color=(1, 0, 0, 1)
+            self.btn_1_p2.background_color=(1, 0, 0, 1)
+            self.btn_1_p2.background_color=(1, 0, 0, 1)
+            self.btn_2_p2.background_color=(1, 0, 0, 1)
+            self.btn_2_p2.background_color=(1, 0, 0, 1)
         elif function_output_list[0][0] == 'a':
-            self.btn_1_p1.background_color=(0, 1, 0, 1)
-            self.btn_1_p1.background_color=(0, 1, 0, 1)
-            self.btn_2_p1.background_color=(0, 1, 0, 1)
-            self.btn_2_p1.background_color=(0, 1, 0, 1)
+            self.btn_1_p2.background_color=(0, 1, 0, 1)
+            self.btn_1_p2.background_color=(0, 1, 0, 1)
+            self.btn_2_p2.background_color=(0, 1, 0, 1)
+            self.btn_2_p2.background_color=(0, 1, 0, 1)
         if function_output_list[0][1] == 'n':
-            self.btn_3_p1.background_color=(1, 0, 0, 1)
-            self.btn_3_p1.background_color=(1, 0, 0, 1)
-            self.btn_4_p1.background_color=(1, 0, 0, 1)
-            self.btn_4_p1.background_color=(1, 0, 0, 1)
+            self.btn_3_p2.background_color=(1, 0, 0, 1)
+            self.btn_3_p2.background_color=(1, 0, 0, 1)
+            self.btn_4_p2.background_color=(1, 0, 0, 1)
+            self.btn_4_p2.background_color=(1, 0, 0, 1)
         elif function_output_list[0][1] == 'a':
-            self.btn_3_p1.background_color=(0, 1, 0, 1)
-            self.btn_3_p1.background_color=(0, 1, 0, 1)
-            self.btn_4_p1.background_color=(0, 1, 0, 1)
-            self.btn_4_p1.background_color=(0, 1, 0, 1)
+            self.btn_3_p2.background_color=(0, 1, 0, 1)
+            self.btn_3_p2.background_color=(0, 1, 0, 1)
+            self.btn_4_p2.background_color=(0, 1, 0, 1)
+            self.btn_4_p2.background_color=(0, 1, 0, 1)
         if function_output_list[0][2] == 'n':
-            self.btn_5_p1.background_color=(1, 0, 0, 1)
-            self.btn_5_p1.background_color=(1, 0, 0, 1)
-            self.btn_6_p1.background_color=(1, 0, 0, 1)
-            self.btn_6_p1.background_color=(1, 0, 0, 1)
+            self.btn_5_p2.background_color=(1, 0, 0, 1)
+            self.btn_5_p2.background_color=(1, 0, 0, 1)
+            self.btn_6_p2.background_color=(1, 0, 0, 1)
+            self.btn_6_p2.background_color=(1, 0, 0, 1)
         elif function_output_list[0][2] == 'a':
-            self.btn_5_p1.background_color=(0, 1, 0, 1)
-            self.btn_5_p1.background_color=(0, 1, 0, 1)
-            self.btn_6_p1.background_color=(0, 1, 0, 1)
-            self.btn_6_p1.background_color=(0, 1, 0, 1)
+            self.btn_5_p2.background_color=(0, 1, 0, 1)
+            self.btn_5_p2.background_color=(0, 1, 0, 1)
+            self.btn_6_p2.background_color=(0, 1, 0, 1)
+            self.btn_6_p2.background_color=(0, 1, 0, 1)
         if function_output_list[0][3] == 'n':
-            self.btn_7_p1.background_color=(1, 0, 0, 1)
-            self.btn_7_p1.background_color=(1, 0, 0, 1)
-            self.btn_8_p1.background_color=(1, 0, 0, 1)
-            self.btn_8_p1.background_color=(1, 0, 0, 1)
+            self.btn_7_p2.background_color=(1, 0, 0, 1)
+            self.btn_7_p2.background_color=(1, 0, 0, 1)
+            self.btn_8_p2.background_color=(1, 0, 0, 1)
+            self.btn_8_p2.background_color=(1, 0, 0, 1)
         elif function_output_list[0][3] == 'a':
-            self.btn_7_p1.background_color=(0, 1, 0, 1)
-            self.btn_7_p1.background_color=(0, 1, 0, 1)
-            self.btn_8_p1.background_color=(0, 1, 0, 1)
-            self.btn_8_p1.background_color=(0, 1, 0, 1)
+            self.btn_7_p2.background_color=(0, 1, 0, 1)
+            self.btn_7_p2.background_color=(0, 1, 0, 1)
+            self.btn_8_p2.background_color=(0, 1, 0, 1)
+            self.btn_8_p2.background_color=(0, 1, 0, 1)
 
         if function_output_list[1][0] == 'n':
-            self.btn_1_p2.background_color=(1, 0, 0, 1)
-            self.btn_1_p2.background_color=(1, 0, 0, 1)
-            self.btn_5_p2.background_color=(1, 0, 0, 1)
-            self.btn_5_p2.background_color=(1, 0, 0, 1)
+            self.btn_1_p1.background_color=(1, 0, 0, 1)
+            self.btn_1_p1.background_color=(1, 0, 0, 1)
+            self.btn_5_p1.background_color=(1, 0, 0, 1)
+            self.btn_5_p1.background_color=(1, 0, 0, 1)
         elif function_output_list[1][0] == 'a':
-            self.btn_1_p2.background_color=(0, 1, 0, 1)
-            self.btn_1_p2.background_color=(0, 1, 0, 1)
-            self.btn_5_p2.background_color=(0, 1, 0, 1)
-            self.btn_5_p2.background_color=(0, 1, 0, 1)
+            self.btn_1_p1.background_color=(0, 1, 0, 1)
+            self.btn_1_p1.background_color=(0, 1, 0, 1)
+            self.btn_5_p1.background_color=(0, 1, 0, 1)
+            self.btn_5_p1.background_color=(0, 1, 0, 1)
         if function_output_list[1][1] == 'n':
-            self.btn_2_p2.background_color=(1, 0, 0, 1)
-            self.btn_2_p2.background_color=(1, 0, 0, 1)
-            self.btn_6_p2.background_color=(1, 0, 0, 1)
-            self.btn_6_p2.background_color=(1, 0, 0, 1)
+            self.btn_2_p1.background_color=(1, 0, 0, 1)
+            self.btn_2_p1.background_color=(1, 0, 0, 1)
+            self.btn_6_p1.background_color=(1, 0, 0, 1)
+            self.btn_6_p1.background_color=(1, 0, 0, 1)
         elif function_output_list[1][1] == 'a':
-            self.btn_2_p2.background_color=(0, 1, 0, 1)
-            self.btn_2_p2.background_color=(0, 1, 0, 1)
-            self.btn_6_p2.background_color=(0, 1, 0, 1)
-            self.btn_6_p2.background_color=(0, 1, 0, 1)
+            self.btn_2_p1.background_color=(0, 1, 0, 1)
+            self.btn_2_p1.background_color=(0, 1, 0, 1)
+            self.btn_6_p1.background_color=(0, 1, 0, 1)
+            self.btn_6_p1.background_color=(0, 1, 0, 1)
         if function_output_list[1][2] == 'n':
-            self.btn_3_p2.background_color=(1, 0, 0, 1)
-            self.btn_3_p2.background_color=(1, 0, 0, 1)
-            self.btn_7_p2.background_color=(1, 0, 0, 1)
-            self.btn_7_p2.background_color=(1, 0, 0, 1)
+            self.btn_3_p1.background_color=(1, 0, 0, 1)
+            self.btn_3_p1.background_color=(1, 0, 0, 1)
+            self.btn_7_p1.background_color=(1, 0, 0, 1)
+            self.btn_7_p1.background_color=(1, 0, 0, 1)
         elif function_output_list[1][2] == 'a':
-            self.btn_3_p2.background_color=(0, 1, 0, 1)
-            self.btn_3_p2.background_color=(0, 1, 0, 1)
-            self.btn_7_p2.background_color=(0, 1, 0, 1)
-            self.btn_7_p2.background_color=(0, 1, 0, 1)
+            self.btn_3_p1.background_color=(0, 1, 0, 1)
+            self.btn_3_p1.background_color=(0, 1, 0, 1)
+            self.btn_7_p1.background_color=(0, 1, 0, 1)
+            self.btn_7_p1.background_color=(0, 1, 0, 1)
         if function_output_list[1][3] == 'n':
-            self.btn_4_p2.background_color=(1, 0, 0, 1)
-            self.btn_4_p2.background_color=(1, 0, 0, 1)
-            self.btn_8_p2.background_color=(1, 0, 0, 1)
-            self.btn_8_p2.background_color=(1, 0, 0, 1)
+            self.btn_4_p1.background_color=(1, 0, 0, 1)
+            self.btn_4_p1.background_color=(1, 0, 0, 1)
+            self.btn_8_p1.background_color=(1, 0, 0, 1)
+            self.btn_8_p1.background_color=(1, 0, 0, 1)
         elif function_output_list[1][3] == 'a':
-            self.btn_4_p2.background_color=(0, 1, 0, 1)
-            self.btn_4_p2.background_color=(0, 1, 0, 1)
-            self.btn_8_p2.background_color=(0, 1, 0, 1)
-            self.btn_8_p2.background_color=(0, 1, 0, 1)
+            self.btn_4_p1.background_color=(0, 1, 0, 1)
+            self.btn_4_p1.background_color=(0, 1, 0, 1)
+            self.btn_8_p1.background_color=(0, 1, 0, 1)
+            self.btn_8_p1.background_color=(0, 1, 0, 1)
 
         if function_output_list[2][0] == 'n':
             self.btn_1_p3.background_color=(1, 0, 0, 1)
@@ -6541,7 +7780,7 @@ class Total_formulas_Playground_right_Screen(Screen):
         self.syllogism_box_row_6 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_6)
         
-        self.conclusion_label = Label(text='Ganzformel', size_hint_x = 2.5)
+        self.conclusion_label = Label(text='Ganzf.', size_hint_x = 2.5)
         self.syllogism_box_row_6.add_widget(self.conclusion_label)
 
         self.btn_1_c = Button(color= (0, 0, 0, 1), background_normal='')
@@ -6569,7 +7808,7 @@ class Total_formulas_Playground_right_Screen(Screen):
         self.syllogism_box_row_4 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_4)
         
-        self.premis_one_label = Label(text='1. Formel', size_hint_x = 2.5)
+        self.premis_one_label = Label(text='1. Formel', size_hint_x = 2.5, font_name = 'my_custom_font')
         self.syllogism_box_row_4.add_widget(self.premis_one_label)
 
         self.btn_1_p1 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -6592,7 +7831,7 @@ class Total_formulas_Playground_right_Screen(Screen):
         self.syllogism_box_row_5 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_5)
         
-        self.premis_two_label = Label(text='2. Formel', size_hint_x = 2.5)
+        self.premis_two_label = Label(text='2. Formel', size_hint_x = 2.5, font_name = 'my_custom_font')
         self.syllogism_box_row_5.add_widget(self.premis_two_label)
 
         self.btn_1_p2 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -6615,7 +7854,7 @@ class Total_formulas_Playground_right_Screen(Screen):
         self.syllogism_box_row_6 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_6)
         
-        self.premis_three_label = Label(text='3. Formel', size_hint_x = 2.5)
+        self.premis_three_label = Label(text='3. Formel', size_hint_x = 2.5, font_name = 'my_custom_font')
         self.syllogism_box_row_6.add_widget(self.premis_three_label)
 
         self.btn_1_p3 = Button(color= (0, 0, 0, 1), background_normal='')
@@ -6695,16 +7934,24 @@ class TransformationsScreen(Screen):
         return (inital_judge)
 
     def output_judge_fn(self, solution):
-        if solution == ['A', 'u', 'N', 'A']:
-            return "\n\nAll S are P,\nalso known as SaP"
-        elif solution == ['A', 'u', 'u', 'u']:
-            return "\n\nSome S are P,\nalso known as SiP"
-        elif solution == ['N', 'A', 'A', 'u']:
-            return "\n\nNo S is P,\nalso known as SeP"
-        elif solution == ['u', 'u', 'A', 'u']:
-            return "\n\nSome S are no P,\nalso known as SoP"
+        if solution == ["A", "u", "N", "A"]: # traditionelle Syllogistik
+            return "Alle S sind P,\nauch bekannt als SaP"
+        elif solution == ["A", "u", "u", "u"]:
+            return "Einige S sind P,\nauch bekannt als SiP"
+        elif solution == ["N", "A", "A", "u"]:
+            return "Kein S ist P,\nauch bekannt als SeP"
+        elif solution == ["u", "u", "A", "u"]:
+            return "Einige S sind nicht P,\nauch bekannt als SoP"
+        elif solution == ["A", "N", "u", "A"]: # vervollständigte Syllogistik
+            return "Alle P sind S,\nauch bekannt als SãP"
+        elif solution == ["u", "A", "A", "N"]:
+            return "Kein P ist S,\nauch bekannt als SëP"
+        elif solution == ["u", "u", "u", "A"]:
+            return "Einige ~S sind ~P,\nauch bekannt als SïP"
+        elif solution == ["u", "A", "u", "u"]:
+            return "Einige P sind nicht S,\nauch bekannt als SõP"
         else:
-            return ("\n\nNo traditional\njudge!")
+            return ("Kein (erlaubtes) Urteil möglich!")
 
     def append_function(self, button):
         if foo_5 == []:
@@ -6826,7 +8073,7 @@ class TransformationsScreen(Screen):
         self.syllogism_box_row_3 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_3)
 
-        self.conclusion_label_text = Label(text='Ursprüngliches Urteil', size_hint_x = 2.5)
+        self.conclusion_label_text = Label(text='Ursprünglich', size_hint_x = 2.5)
         self.syllogism_box_row_3.add_widget(self.conclusion_label_text)
 
         self.btn_1_inital_judge = Button(color= (0, 0, 0, 1), background_normal='')
@@ -6846,7 +8093,7 @@ class TransformationsScreen(Screen):
         self.syllogism_box_row_4 = BoxLayout(orientation='horizontal')
         self.syllogism_box_col_1.add_widget(self.syllogism_box_row_4)
 
-        self.transformed_judge_label = Label(text='Transformiertes Urteil', size_hint_x = 2.5)
+        self.transformed_judge_label = Label(text='Transformiert', size_hint_x = 2.5)
         self.syllogism_box_row_4.add_widget(self.transformed_judge_label)
 
         self.btn_1_transformed_judge = Button(color= (0, 0, 0, 1), background_normal='')
@@ -7049,9 +8296,8 @@ class Sat_Screen(Screen):
         
         self.layout = GridLayout(cols=1, spacing=13, size_hint_x=1.3, size_hint_y=None)
         # Make sure the height is such that there is something to scroll.
-        self.layout.bind(minimum_height=self.layout.setter('height'))
         
-        self.text_1 = Label(text='(x \u00F3 y \u00F3 z) \u00F2 (\u00ACx \u00F3 y \u00F3 \u00ACz) \u00F2 \n(\u00ACx \u00F3 \u00ACy \u00F3 z) \u00F2 (\u00ACx \u00F3 \u00ACy \u00F3 \u00ACz)', font_name= 'my_custom_font', size_hint_y = None, font_size= 18)
+        self.text_1 = Label(text='(x \u00F3 y \u00F3 z) \u00F2 (\u00ACx \u00F3 y \u00F3 \u00ACz) \u00F2 (\u00ACx \u00F3 \u00ACy \u00F3 z) \u00F2 (\u00ACx \u00F3 \u00ACy \u00F3 \u00ACz) \n', font_name= 'my_custom_font', size_hint_y = None, font_size= dp(18))
         self.text_1.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.text_1.bind(width=lambda instance, value: setattr(instance, 'text_size', (value, None)))
         self.layout.add_widget(self.text_1)
@@ -7108,13 +8354,7 @@ class Sat_Screen(Screen):
             self.col_x.add_widget(self.head_3)
             for k in range(4):
                 self.value = CustomLabel(text= self.values_list[count_1], color = (0, 0, 0, 1),  font_name= 'my_custom_font')
-                if count_1 == 4 or count_1 == 5 or count_1 == 6 or count_1 == 7 or\
-                   count_1 == 12 or count_1 == 13 or count_1 == 14 or count_1 == 15 or\
-                   count_1 == 20 or count_1 == 21 or count_1 == 22 or count_1 == 23 or\
-                   count_1 == 24 or count_1 == 25 or count_1 == 26 or count_1 == 27:
-                    self.value.background_color = [.9, 1, .9, 1]
-                else:
-                    self.value.background_color = [.3, 1, .3, 1]
+                self.value.background_color = [.3, 1, .3, 1]
                 count_1 = count_1 + 1
                 self.col_x.add_widget(self.value)
                 if (j+1 == 2) or (j+1 == 4) or (j+1 == 6) or (j+1 == 7):
@@ -7199,6 +8439,7 @@ class TestApp(App):
         sm.add_widget(Menu_introductionScreen_3(name='menu_introduction_3'))
         sm.add_widget(Menu_conclusion_introductionScreen(name='menu_conclusion_introduction'))
         sm.add_widget(Table_overviewScreen(name='table_overview'))
+        sm.add_widget(Table_overviewScreen_1b(name='table_overview_1b'))
         sm.add_widget(Table_overviewScreen_2(name='table_overview_2'))
         sm.add_widget(TrainingScreen(name='training'))
         sm.add_widget(Training_calculating_quiz_Screen(name='calculating_quiz'))
