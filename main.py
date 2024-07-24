@@ -352,7 +352,7 @@ Builder.load_string("""
             font_size: dp(27)
             on_press:
                 import webbrowser
-                webbrowser.open('https://de.wikiversity.org/w/index.php?title=Projekt:Beweis_f%C3%BCr_P_ungleich_NP_von_Thomas_K%C3%A4fer&oldid=930414')
+                webbrowser.open('https://de.wikiversity.org/w/index.php?title=Projekt:Beweis_f%C3%BCr_P_ungleich_NP_von_Thomas_K%C3%A4fer&oldid=938807')
         Button:
             text: 'SAT'
             font_size: dp(27)
