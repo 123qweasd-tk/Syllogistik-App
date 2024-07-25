@@ -622,7 +622,6 @@ class Menu_introductionScreen_1(Screen):
         window_one = screen_manager.get_screen('calculating_quiz')
         self.triadic_formulas_list = window_one.test
         
-        
         self.box_layout_introduction_formulas_2 = BoxLayout(orientation='horizontal', size_hint_y=None)
         self.layout.add_widget(self.box_layout_introduction_formulas_2)
         
@@ -642,15 +641,15 @@ class Menu_introductionScreen_1(Screen):
                 self.syllogism_box_3_col_0.add_widget(self.formula_BCD_label)
             else:
                 if self.triadic_formulas_list[i][2][0] != [] and self.triadic_formulas_list[i][2][1] != []:
-                    self.formula_BCD_label = Label(text= str(triadic_formula[1][0])+', '+str(triadic_formula[1][1])+', '+str(triadic_formula[1][2])+', '+str(triadic_formula[2][0][0])+', '+str(triadic_formula[2][1][0]), font_name='my_custom_font')
+                    self.formula_BCD_label = Label(text= str(triadic_formula[1][1])+', '+str(triadic_formula[1][0])+', '+str(triadic_formula[1][2])+', '+str(triadic_formula[2][0][0])+', '+str(triadic_formula[2][1][0]), font_name='my_custom_font')
                     self.syllogism_box_3_col_0.add_widget(self.formula_BCD_label)
                 elif self.triadic_formulas_list[i][2][1] != []:
-                    self.formula_BCD_label = Label(text= str(triadic_formula[1][0])+', '+str(triadic_formula[1][1])+', '+str(triadic_formula[1][2])+', '+str(triadic_formula[2][0][0]), font_name='my_custom_font')
+                    self.formula_BCD_label = Label(text= str(triadic_formula[1][1])+', '+str(triadic_formula[1][0])+', '+str(triadic_formula[1][2])+', '+str(triadic_formula[2][0][0]), font_name='my_custom_font')
                     self.syllogism_box_3_col_0.add_widget(self.formula_BCD_label)
                 else:
-                    self.formula_BCD_label = Label(text= str(triadic_formula[1][0])+', '+str(triadic_formula[1][1])+', '+str(triadic_formula[1][2]), font_name='my_custom_font')
+                    self.formula_BCD_label = Label(text= str(triadic_formula[1][1])+', '+str(triadic_formula[1][0])+', '+str(triadic_formula[1][2]), font_name='my_custom_font')
                     self.syllogism_box_3_col_0.add_widget(self.formula_BCD_label)
-        
+
         b_list = []
         for b in range(4):
             b_list.append('B')
@@ -1131,6 +1130,8 @@ class Table_overviewScreen_2(Screen):
         screen_manager = self.manager
         window_one = screen_manager.get_screen('calculating_quiz')
         self.enlonged_list = window_one.enlonged_list
+        #self.triadic_formulas_list = window_one.test
+
 
         self.dyadic_formulas_list_2 = ['B#C', 'BÄC', 'BÖC', 'B&C', 'B@C', 'B%C', 'B$C', 'BÜC',\
                                 "BÜ'C", "B$'C", "B%'C", "B@'C", "B&'C", "BÖ'C", "BÄ'C", "B#'C"]
@@ -1174,26 +1175,38 @@ class Table_overviewScreen_2(Screen):
             #self.label_test = Label(text= self.dyadic_formulas_list[k], font_name= 'my_custom_font')
             #self.col_x.add_widget(self.label_test)
 
+
+#In the following raute-comments for counting in total-formula list
+
             for i in range(len(self.enlonged_list)):
-                #print(self.enlonged_list[i][0])
             
                 if self.enlonged_list[i][0][1] == self.dyadic_formulas_list_2[j]:
                     for k in range(len(self.dyadic_formulas_list_2)):
                         if self.enlonged_list[i][0][0] == self.dyadic_formulas_list[k]:
                             count_1 = count_1 + 1
                             
-                            #print(self.enlonged_list[i])
                             if self.enlonged_list[i][1][1] != [0]:
                                 self.label_test_2 = CustomLabel_red(text= str(len(self.enlonged_list[i][1][1])), font_name= 'my_custom_font')
+                                #self.col_x.add_widget(self.label_test_2)
                             elif self.enlonged_list[i][0][2] == None:
                                 self.label_test_2 = CustomLabel(text= 'u', background_color = [1, .3, .3, 1], font_name= 'my_custom_font')
+                                #self.col_x.add_widget(self.label_test_2)
                             elif self.enlonged_list[i][1][0].count('u') > 0 and self.enlonged_list[i][0][2] != None:
                                 self.label_test_2 = CustomLabel(text= str(self.enlonged_list[i][0][2]), background_color = [.3, 1, .3, .7], font_name= 'my_custom_font')
+                                #self.col_x.add_widget(self.label_test_2)
+                            #else:
+                                #for o, triadic_formula in enumerate(self.triadic_formulas_list):
+                                    #if triadic_formula[1] != 0:
+                                        #if (triadic_formula[1][0] == self.enlonged_list[i][0][0]) and (triadic_formula[1][1] == self.enlonged_list[i][0][1]) and (triadic_formula[1][2] == self.enlonged_list[i][0][2]):
+                                            #self.label_test_2 = CustomLabel_green(text= str(o+1))
+                                            #print(triadic_formula[1][0])
+                                            #print(self.enlonged_list[i][0][0])
+                                            #self.col_x.add_widget(self.label_test_2)
+
                             else:
                                 self.label_test_2 = CustomLabel_green(text= str(self.enlonged_list[i][0][2]), font_name= 'my_custom_font', color= (0, 0, 0, 1))
                             self.col_x.add_widget(self.label_test_2)
-                            
-                            #print(count_1, j, k, self.enlonged_list[i])
+
 
 
         
@@ -2850,8 +2863,6 @@ class TrainingScreen(Screen):
                             for i, ele in enumerate(conclusion_judges):
                                 if (ele == "Einige S sind nicht P,\nauch bekannt als SoP"):
                                     conclusion_judges.pop(i)
-                    print(conclusion_judges)
-                    print(button_text)
                     conclusion_judges.remove(button_text)
                     
                     m = random.choice(conclusion_judges)
@@ -5321,8 +5332,8 @@ class Training_calculating_quiz_Screen(Screen):
                                                             
                                                             if (solution_and_contradiction_test[0].count('u') == 0 or solution_and_contradiction_test[0].count('u') == 1 or solution_and_contradiction_test[0].count('u') == 2) and (len(self.error_number) == 0):
                                                                 
-                                                                first_formula = self.dyadic_name_fn(self.first_formula, 1)
-                                                                second_formula = self.dyadic_name_fn(self.second_formula, 2)
+                                                                first_formula = self.dyadic_name_fn(self.first_formula, 2)
+                                                                second_formula = self.dyadic_name_fn(self.second_formula, 1)
                                                                 third_formula = self.dyadic_name_fn(self.third_formula, 3)
                                                                 count = count + 1
                                                                 
