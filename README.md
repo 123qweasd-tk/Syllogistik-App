@@ -1,10 +1,8 @@
 # Syllogism-Training-App
-An introduction, learning app for Strict-Syllogism content (in Python)
+Eine Einführungs-App für Strenge Syllogistik und weiteren Inhalt. 
 
-This Project is aimed to get launched as an app for android devices or other devices too.
+Erstausgabe: https://github.com/123qweasd-tk/Syllogism-Training-App/releases/tag/v.0.1.0-alpha
 
-The learning outcome is to get familiar with syllogistic content and in touch with ((Strict)) Logic (stated by Walther Brüning in his german book ''Grundlagen der Strengen Logik'' [1996]).
+(Das Projekt wurde vorläufig vorzeitig beendet.)
 
-https://en.wikipedia.org/w/index.php?oldid=842329272#Strict_syllogistic
-
-The code is in this phase far away of good; The author is a coding beginner.
+Inhalt nach: "Grundlagen der Strengen Logik" (Walther Brüning).
