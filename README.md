@@ -1,4 +1,4 @@
-# Syllogism-Training-App
+# Syllogistik-App
 Eine Einführungs-App für Strenge Syllogistik und weiteren Inhalt. 
 
 Erstausgabe: https://github.com/123qweasd-tk/Syllogism-Training-App/releases/tag/v.0.1.0-alpha
