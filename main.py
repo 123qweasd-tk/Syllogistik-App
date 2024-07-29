@@ -359,6 +359,18 @@ Builder.load_string("""
             on_press: root.manager.current = 'sat'
             background_normal: ''
             background_color: 1, 0, .5, .3
+        Button:
+            text: 'Tabelle π - 1. Annäherung'
+            font_size: dp(27)
+            on_press: root.manager.current = 'pi_screen'
+            background_normal: ''
+            background_color: 1, 0, .5, .3
+        Button:
+            text: 'Tabelle e - 1. Annäherung'
+            font_size: dp(27)
+            on_press: root.manager.current = 'e_screen'
+            background_normal: ''
+            background_color: 1, 0, .5, .3
     Button:
         text: "Menü"
         on_press: root.manager.current = 'menu'
@@ -366,6 +378,12 @@ Builder.load_string("""
         pos_hint: {"x":0.8,"y":0.9}
 
 <Sat_Screen>:
+
+<Pi_Screen>:
+
+<E_Screen>:
+
+
 
 """)
 
@@ -1150,7 +1168,7 @@ class Table_overviewScreen_2(Screen):
         self.figure_one_box = BoxLayout(orientation= 'vertical', size_hint_y= 1, size_hint_x=1)
         self.col_1.add_widget(self.figure_one_box)
         
-        self.first_figure_label_one = Label(text= 'B§C,', font_name= 'my_custom_font')
+        self.first_figure_label_one = Label(text= 'B§C', font_name= 'my_custom_font')
         self.figure_one_box.add_widget(self.first_figure_label_one)
         self.first_figure_label_two = Label(text= '[u]C§D[/u]', font_name= 'my_custom_font')
         self.first_figure_label_two.markup = True
@@ -2270,10 +2288,11 @@ class TrainingScreen(Screen):
 
     def on_checkbox_Active_4_click(self, checkboxInstance, isActive):
         global active_4_dummy
-        
+
+        completedsyllogistic = self.function_completed_syllogistic_settings()#looks for setting
+
         active_4_dummy = isActive
-        
-        
+
         if isActive:
             self.label_first_premis.text = self.premises_to_sentences_function_premis_one(self.my_text)
             self.label_second_premis.text = self.premises_to_sentences_function_premis_two(self.my_text2)
@@ -2281,7 +2300,11 @@ class TrainingScreen(Screen):
         else:
             self.label_first_premis.text = self.my_text
             self.label_second_premis.text = self.my_text2
-            self.label_questionmark.text = self.dyadic_name_third_formula(self.function_output_list[3])
+            if (completedsyllogistic == 1):
+                self.label_questionmark.text = self.dyadic_name_third_formula(self.function_output_list[3])
+            elif (completedsyllogistic == 0):
+                self.label_questionmark.text = self.dyadic_name_third_formula_traditional(self.function_output_list[3])
+
 
     def premises_to_sentences_function_premis_one(self, my_text):
         if my_text == "MaP": # traditionelle Syllogistik
@@ -8437,6 +8460,246 @@ class Sat_Screen(Screen):
         self.add_widget(self.scatter)
 
 
+class Pi_Screen(Screen):
+
+    def change_screen_menu(self, *args):
+        self.parent.current = 'menu'
+        
+        
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
+        #self.layout = GridLayout(cols= 9, pos_hint= {'y': .075}, size_hint_y= .925)
+
+        #function call to initalise first, to be able to access variable triadic_formulas_list in this function
+        Clock.schedule_once(self.do_stuff)
+        
+        
+        #table "BCD, ~BCD, B~CD, ~B~CD, BC~D, ~BC~D, B~C~D, ~B~C~D":
+        
+    def do_stuff(self, *args):
+
+        screen_manager = self.manager
+        window_one = screen_manager.get_screen('calculating_quiz')
+        self.enlonged_list = window_one.enlonged_list
+
+        self.dyadic_formulas_list_2 = ['B#C', 'BÄC', 'BÖC', 'B&C', 'B@C', 'B%C', 'B$C', 'BÜC',\
+                                "BÜ'C", "B$'C", "B%'C", "B@'C", "B&'C", "BÖ'C", "BÄ'C", "B#'C"]
+
+        self.dyadic_formulas_list = ['C#D', 'CÄD', 'C@D', 'C%D', 'CÖD', 'C&D', 'C$D', 'CÜD',\
+                                "CÜ'D", "C$'D",  "C&'D", "CÖ'D","C%'D", "C@'D", "CÄ'D", "C#'D"]
+                
+#1.2
+        self.layout = BoxLayout(orientation= 'horizontal', size_hint_x = None, width= Window.height, size_hint_y=1)
+        
+
+        
+        self.col_1 = BoxLayout(orientation= 'vertical', size_hint_y= 1, size_hint_x=1)
+        self.layout.add_widget(self.col_1)
+        
+        self.figure_one_box = BoxLayout(orientation= 'vertical', size_hint_y= 1, size_hint_x=1)
+        self.col_1.add_widget(self.figure_one_box)
+        
+        self.first_figure_label_one = Label(text= '256:', font_name= 'my_custom_font')
+        self.figure_one_box.add_widget(self.first_figure_label_one)
+        
+        self.first_figure_label_two = Label(text= '[u]81[/u]', font_name= 'my_custom_font')
+        self.first_figure_label_two.markup = True
+        self.figure_one_box.add_widget(self.first_figure_label_two)
+        self.first_figure_label_three = Label(text= '=3,16...', font_name= 'my_custom_font')
+        self.figure_one_box.add_widget(self.first_figure_label_three)
+        
+        
+        
+        for i in range(len(self.dyadic_formulas_list)):
+            self.label_test = Label(text= self.dyadic_formulas_list[i], font_name= 'my_custom_font')
+            self.col_1.add_widget(self.label_test)
+        
+        count_1 = 0
+        
+        for j in range(len(self.dyadic_formulas_list)):
+
+            self.col_x = BoxLayout(orientation= 'vertical', size_hint_y= 1, size_hint_x=1)
+            self.layout.add_widget(self.col_x)
+            self.c_d = Label(text= self.dyadic_formulas_list_2[j], font_name= 'my_custom_font')
+            self.col_x.add_widget(self.c_d)
+            #self.label_test = Label(text= self.dyadic_formulas_list[k], font_name= 'my_custom_font')
+            #self.col_x.add_widget(self.label_test)
+
+
+#In the following raute-comments for counting in total-formula list
+
+            for i in range(len(self.enlonged_list)):
+            
+                if self.enlonged_list[i][0][1] == self.dyadic_formulas_list_2[j]:
+                    for k in range(len(self.dyadic_formulas_list_2)):
+                        if self.enlonged_list[i][0][0] == self.dyadic_formulas_list[k]:
+                            
+                            if self.enlonged_list[i][1][1] != [0]:
+                                self.label_test_2 = CustomLabel_red(text= ' ', font_name= 'my_custom_font')
+                                #self.col_x.add_widget(self.label_test_2)
+                            elif self.enlonged_list[i][0][2] == None:
+                                self.label_test_2 = CustomLabel(text= 'u', background_color = [1, .3, .3, 1], font_name= 'my_custom_font')
+                                #self.col_x.add_widget(self.label_test_2)
+                            elif self.enlonged_list[i][1][0].count('u') > 0 and self.enlonged_list[i][0][2] != None:
+                                self.label_test_2 = CustomLabel(text= str(self.enlonged_list[i][0][2]), background_color = [.3, 1, .3, .7], font_name= 'my_custom_font')
+                                #self.col_x.add_widget(self.label_test_2)
+                            #else:
+                                #for o, triadic_formula in enumerate(self.triadic_formulas_list):
+                                    #if triadic_formula[1] != 0:
+                                        #if (triadic_formula[1][0] == self.enlonged_list[i][0][0]) and (triadic_formula[1][1] == self.enlonged_list[i][0][1]) and (triadic_formula[1][2] == self.enlonged_list[i][0][2]):
+                                            #self.label_test_2 = CustomLabel_green(text= str(o+1))
+                                            #print(triadic_formula[1][0])
+                                            #print(self.enlonged_list[i][0][0])
+                                            #self.col_x.add_widget(self.label_test_2)
+
+                            else:
+                                count_1 = count_1 + 1
+                                self.label_test_2 = CustomLabel_green(text= str(count_1), font_name= 'my_custom_font', color= (0, 0, 0, 1))
+
+                            self.col_x.add_widget(self.label_test_2)
+
+
+
+        
+        #for r, bd in enumerate(self.dyadic_formulas_list):
+        #    lbl = Label(text= bd, font_name = 'my_custom_font')
+        #for r in range(1,244):
+        #    lbl = Button(color= (0, 0, 0, 1), background_normal= '', text=(list_text[r-1]), font_name= 'my_custom_font')
+        #    self.layout.add_widget(lbl)
+        
+        self.box_layout_menu_button = BoxLayout(orientation='horizontal')
+
+        self.menu_button = Button(text='Menü', background_normal= '', background_color=(1, 1, 1, .5),color=(0, 0, 0, 1))
+        self.box_layout_menu_button.add_widget(self.menu_button)
+        self.menu_button.bind(on_press=self.change_screen_menu)        
+
+        #self.add_widget(self.layout)
+        self.layout.add_widget(self.box_layout_menu_button)
+
+        self.root = ScrollView(size_hint= (None, 1), size=(Window.width, Window.height))
+        self.root.add_widget(self.layout)
+        self.add_widget(self.root)
+
+class E_Screen(Screen):
+    
+
+    def change_screen_menu(self, *args):
+        self.parent.current = 'menu'
+        
+        
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
+        #self.layout = GridLayout(cols= 9, pos_hint= {'y': .075}, size_hint_y= .925)
+
+        #function call to initalise first, to be able to access variable triadic_formulas_list in this function
+        Clock.schedule_once(self.do_stuff)
+        
+        
+        #table "BCD, ~BCD, B~CD, ~B~CD, BC~D, ~BC~D, B~C~D, ~B~C~D":
+        
+    def do_stuff(self, *args):
+        screen_manager = self.manager
+        window_one = screen_manager.get_screen('calculating_quiz')
+        self.enlonged_list = window_one.enlonged_list
+
+        self.dyadic_formulas_list_2 = ['B#C', 'BÄC', 'BÖC', 'B&C', 'B@C', 'B%C', 'B$C', 'BÜC',\
+                                "BÜ'C", "B$'C", "B%'C", "B@'C", "B&'C", "BÖ'C", "BÄ'C", "B#'C"]
+
+        self.dyadic_formulas_list = ['C#D', 'CÄD', 'C@D', 'C%D', 'CÖD', 'C&D', 'C$D', 'CÜD',\
+                                "CÜ'D", "C$'D",  "C&'D", "CÖ'D","C%'D", "C@'D", "CÄ'D", "C#'D"]
+                
+#1.2
+        self.layout = BoxLayout(orientation= 'horizontal', size_hint_x = None, width= Window.height, size_hint_y=1)
+        
+
+        
+        self.col_1 = BoxLayout(orientation= 'vertical', size_hint_y= 1, size_hint_x=1)
+        self.layout.add_widget(self.col_1)
+        
+        self.figure_one_box = BoxLayout(orientation= 'vertical', size_hint_y= 1, size_hint_x=1)
+        self.col_1.add_widget(self.figure_one_box)
+        
+        self.first_figure_label_one = Label(text= '256:', font_name= 'my_custom_font')
+
+        self.figure_one_box.add_widget(self.first_figure_label_one)
+
+        self.first_figure_label_two = Label(text= '[u]93,8...[/u]', font_name= 'my_custom_font')
+        self.first_figure_label_two.markup = True
+        self.figure_one_box.add_widget(self.first_figure_label_two)
+        self.first_figure_label_three = Label(text= '=2,72...', font_name= 'my_custom_font')
+        self.figure_one_box.add_widget(self.first_figure_label_three)
+        
+        
+        
+        for i in range(len(self.dyadic_formulas_list)):
+            self.label_test = Label(text= self.dyadic_formulas_list[i], font_name= 'my_custom_font')
+            self.col_1.add_widget(self.label_test)
+        
+        count_1 = 0
+        
+        for j in range(len(self.dyadic_formulas_list)):
+
+            self.col_x = BoxLayout(orientation= 'vertical', size_hint_y= 1, size_hint_x=1)
+            self.layout.add_widget(self.col_x)
+            self.c_d = Label(text= self.dyadic_formulas_list_2[j], font_name= 'my_custom_font')
+            self.col_x.add_widget(self.c_d)
+            #self.label_test = Label(text= self.dyadic_formulas_list[k], font_name= 'my_custom_font')
+            #self.col_x.add_widget(self.label_test)
+
+
+#In the following raute-comments for counting in total-formula list
+
+            for i in range(len(self.enlonged_list)):
+            
+                if self.enlonged_list[i][0][1] == self.dyadic_formulas_list_2[j]:
+                    for k in range(len(self.dyadic_formulas_list_2)):
+                        if self.enlonged_list[i][0][0] == self.dyadic_formulas_list[k]:
+                            
+                            if self.enlonged_list[i][1][1] != [0]:
+                                self.label_test_2 = CustomLabel_red(text= ' ', font_name= 'my_custom_font')
+                                #self.col_x.add_widget(self.label_test_2)
+                            elif self.enlonged_list[i][0][2] == None:
+                                self.label_test_2 = CustomLabel(text= '0,5', background_color = [1, .3, .3, 1], font_name= 'my_custom_font')
+                                #self.col_x.add_widget(self.label_test_2)
+                            elif self.enlonged_list[i][1][0].count('u') == 2 and self.enlonged_list[i][0][2] != None:
+                                self.label_test_2 = CustomLabel(text= '0,75', background_color = [.3, 1, .3, .7], font_name= 'my_custom_font')
+                            elif self.enlonged_list[i][1][0].count('u') == 3 and self.enlonged_list[i][0][2] != None:
+                                self.label_test_2 = CustomLabel(text= '2/3', background_color = [.3, 1, .3, .7], font_name= 'my_custom_font')
+
+                            #else:
+                                #for o, triadic_formula in enumerate(self.triadic_formulas_list):
+                                    #if triadic_formula[1] != 0:
+                                        #if (triadic_formula[1][0] == self.enlonged_list[i][0][0]) and (triadic_formula[1][1] == self.enlonged_list[i][0][1]) and (triadic_formula[1][2] == self.enlonged_list[i][0][2]):
+                                            #self.label_test_2 = CustomLabel_green(text= str(o+1))
+                                            #print(triadic_formula[1][0])
+                                            #print(self.enlonged_list[i][0][0])
+                                            #self.col_x.add_widget(self.label_test_2)
+
+                            else:
+                                self.label_test_2 = CustomLabel_green(text= '1', font_name= 'my_custom_font', color= (0, 0, 0, 1))
+                            self.col_x.add_widget(self.label_test_2)
+    
+        #for r, bd in enumerate(self.dyadic_formulas_list):
+        #    lbl = Label(text= bd, font_name = 'my_custom_font')
+        #for r in range(1,244):
+        #    lbl = Button(color= (0, 0, 0, 1), background_normal= '', text=(list_text[r-1]), font_name= 'my_custom_font')
+        #    self.layout.add_widget(lbl)
+        
+        self.box_layout_menu_button = BoxLayout(orientation='horizontal')
+
+        self.menu_button = Button(text='Menü', background_normal= '', background_color=(1, 1, 1, .5),color=(0, 0, 0, 1))
+        self.box_layout_menu_button.add_widget(self.menu_button)
+        self.menu_button.bind(on_press=self.change_screen_menu)        
+
+        #self.add_widget(self.layout)
+        self.layout.add_widget(self.box_layout_menu_button)
+
+        self.root = ScrollView(size_hint= (None, 1), size=(Window.width, Window.height))
+        self.root.add_widget(self.layout)
+        self.add_widget(self.root)
+
 class TestApp(App):
     
     def build(self):
@@ -8463,6 +8726,8 @@ class TestApp(App):
         sm.add_widget(TransformationsScreen(name='transformations'))
         sm.add_widget(RessourcesScreen(name='ressources'))
         sm.add_widget(Sat_Screen(name='sat'))
+        sm.add_widget(Pi_Screen(name='pi_screen'))
+        sm.add_widget(E_Screen(name='e_screen'))
         self.use_kivy_settings = False
         return sm
     
