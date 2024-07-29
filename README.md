@@ -5,4 +5,4 @@ Erstausgabe: https://github.com/123qweasd-tk/Syllogism-Training-App/releases/tag
 
 (Das Projekt wurde vorläufig vorzeitig beendet.)
 
-Inhalt nach: "Grundlagen der Strengen Logik" (Walther Brüning).
+Inhalt hauptsächlich nach: "Grundlagen der Strengen Logik" (Walther Brüning).
