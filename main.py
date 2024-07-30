@@ -2503,6 +2503,8 @@ class TrainingScreen(Screen):
 
     def refresh_function(self, *args):
         global active_4_dummy
+
+
         
         self.function_output_list = [[[['?']]]]
 
@@ -2564,6 +2566,8 @@ class TrainingScreen(Screen):
         self.label_first_premis = Label(text='', font_size= dp(18))
         self.label_second_premis = Label(text='', font_size= dp(18))
         self.label_questionmark = ConclusionLabel(text='?', font_size= dp(18))
+
+        self.active_4.bind(active=self.on_checkbox_Active_4)
 
         if self.active_4.active == True:
             self.label_first_premis.text = self.premises_to_sentences_function_premis_one(self.my_text)
@@ -3437,7 +3441,7 @@ class TrainingScreen(Screen):
 
         self.active_4 = CheckBox(active=False)
         self.add_widget(self.active_4)
-        self.active_4.bind(active=self.on_checkbox_Active_4)
+
 
         self.active_4.pos_hint = {'x': .45, 'y': .633} # not beautiful code
         self.active_4.size_hint = (.1, .1)
