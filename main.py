@@ -652,8 +652,6 @@ class Menu_introductionScreen_1(Screen):
         self.syllogism_box_3_col_0.add_widget(self.p_3_0)
         self.m_3_0 = Label(text=' ')
         self.syllogism_box_3_col_0.add_widget(self.m_3_0)
-        
-        print(self.triadic_formulas_list)
 
         for i, triadic_formula in enumerate(self.triadic_formulas_list):
             if self.triadic_formulas_list[i][1] == 0:
