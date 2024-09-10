@@ -652,17 +652,17 @@ class Menu_introductionScreen_1(Screen):
         self.syllogism_box_3_col_0.add_widget(self.p_3_0)
         self.m_3_0 = Label(text=' ')
         self.syllogism_box_3_col_0.add_widget(self.m_3_0)
-        
+
         for i, triadic_formula in enumerate(self.triadic_formulas_list):
             if self.triadic_formulas_list[i][1] == 0:
                 self.formula_BCD_label = Label(text= 'B§C§D '+str(i+1), font_name='my_custom_font')
                 self.syllogism_box_3_col_0.add_widget(self.formula_BCD_label)
             else:
-                if self.triadic_formulas_list[i][2][0] != [] and self.triadic_formulas_list[i][2][1] != []:
-                    self.formula_BCD_label = Label(text= str(triadic_formula[1][1])+', '+str(triadic_formula[1][0])+', '+str(triadic_formula[1][2])+', '+str(triadic_formula[2][0][0])+', '+str(triadic_formula[2][1][0]), font_name='my_custom_font')
-                    self.syllogism_box_3_col_0.add_widget(self.formula_BCD_label)
-                elif self.triadic_formulas_list[i][2][1] != []:
+                if self.triadic_formulas_list[i][2][1] == [] and self.triadic_formulas_list[i][2][0] != []:
                     self.formula_BCD_label = Label(text= str(triadic_formula[1][1])+', '+str(triadic_formula[1][0])+', '+str(triadic_formula[1][2])+', '+str(triadic_formula[2][0][0]), font_name='my_custom_font')
+                    self.syllogism_box_3_col_0.add_widget(self.formula_BCD_label)
+                elif self.triadic_formulas_list[i][2][0] != [] and self.triadic_formulas_list[i][2][1] != []:
+                    self.formula_BCD_label = Label(text= str(triadic_formula[1][1])+', '+str(triadic_formula[1][0])+', '+str(triadic_formula[1][2])+', '+str(triadic_formula[2][0][0])+', '+str(triadic_formula[2][1][0]), font_name='my_custom_font')
                     self.syllogism_box_3_col_0.add_widget(self.formula_BCD_label)
                 else:
                     self.formula_BCD_label = Label(text= str(triadic_formula[1][1])+', '+str(triadic_formula[1][0])+', '+str(triadic_formula[1][2]), font_name='my_custom_font')
@@ -1185,7 +1185,6 @@ class Table_overviewScreen_2(Screen):
         count_1 = 0
         
         for j in range(len(self.dyadic_formulas_list)):
-
             self.col_x = BoxLayout(orientation= 'vertical', size_hint_y= 1, size_hint_x=1)
             self.layout.add_widget(self.col_x)
             self.c_d = Label(text= self.dyadic_formulas_list_2[j], font_name= 'my_custom_font')
@@ -1197,7 +1196,6 @@ class Table_overviewScreen_2(Screen):
 #In the following raute-comments for counting in total-formula list
 
             for i in range(len(self.enlonged_list)):
-            
                 if self.enlonged_list[i][0][1] == self.dyadic_formulas_list_2[j]:
                     for k in range(len(self.dyadic_formulas_list_2)):
                         if self.enlonged_list[i][0][0] == self.dyadic_formulas_list[k]:
@@ -8761,5 +8759,6 @@ LabelBase.register(name='my_custom_font',
 
 if __name__ == '__main__':
     TestApp().run()
+
 
 
