@@ -6,4 +6,5 @@ Zum Herunterladen (für Android): https://github.com/123qweasd-tk/Syllogistik-Ap
 Inhalt hauptsächlich nach: "Grundlagen der Strengen Logik" (Walther Brüning).
 
 Warum es gerade 61 Elementarteilchen gibt:
+
 https://de.wikipedia.org/w/index.php?title=Walther_Br%C3%BCning&oldid=248547895
